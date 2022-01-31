@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <assert.h>
-#include <errno.h>
+
 #include "OS_DEFINES.h"
 
 virtual_disk_t disk;
@@ -80,23 +76,28 @@ void read_block(block_t *bloc,int pos)
 }
 
 /*fonction convertissant un nombre entier sous forme de block*/
-void convert_int_to_block(block_t* block,int nombre)
+void convert_int_to_block(block_t* block,uint nombre)
 {
 
-  block->data[0]=nombre%256;
-  nombre/=256;
+
   int i=0;
   while(nombre>=256)
   {
-    block->data[++i]=nombre%256;
+    block->data[i]=nombre%256;
     nombre/=256;
+    i++;
+  }
+  block->data[i]=nombre%256;
+  for(i=i+1;i<4;i++)
+  {
+    block->data[i]=0;
   }
 
 }
 
 
 /*fonction convertissant un block sous forme d'entier */
-void convert_block_to_int(block_t block,int *nombre)
+void convert_block_to_int(block_t block,uint *nombre)
 {
   *nombre=0;
   for(int i=0;i<4;i++)
@@ -108,7 +109,7 @@ void convert_block_to_int(block_t block,int *nombre)
 void gestion_ouverture(FILE *f,char rep)
 {
   if(f==NULL){
-    perror(rep);
+    perror(&rep);
     exit(1);
   }
 }
@@ -117,7 +118,7 @@ void gestion_ouverture(FILE *f,char rep)
   la table d'inode et la table des utilisateurs seront initialisées ultérieurement*/
 void init_disk_sos(char rep)
 {
-  disk.storage=fopen(rep,"wb+");
+  disk.storage=fopen(&rep,"wb+");
   gestion_ouverture(disk.storage,rep);
   disk.super_block.number_of_files=0;
   disk.super_block.number_of_users=0;
@@ -127,7 +128,7 @@ void init_disk_sos(char rep)
 
 
 
-int main(int argc, char const *argv[]) {
+/*int main(int argc, char const *argv[]) {
   block_t bloc;
   int beez=1025;
   disk.storage=fopen(argv[1],"wb+");
@@ -136,4 +137,4 @@ int main(int argc, char const *argv[]) {
   print_block(&bloc);
   fclose(disk.storage);
   return 0;
-}
+}*/
