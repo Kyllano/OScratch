@@ -79,7 +79,7 @@ void read_block(block_t *bloc,int pos)
 }
 
 /*fonction convertissant un nombre entier sous forme de block*/
-void convert_int_to_block(block_t block,int nombre)
+void convert_int_to_block(block_t* block,int nombre)
 {
 
   block->data[0]=nombre%256;
@@ -100,7 +100,7 @@ void convert_block_to_int(block_t block,int *nombre)
   *nombre=0;
   for(int i=0;i<4;i++)
   {
-    *nombre+=pow(256,i)*block[i];
+    *nombre+=pow(256,i)*block.data[i];
   }
 }
 
