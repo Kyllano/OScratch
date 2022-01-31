@@ -103,26 +103,28 @@ void write_inodes_table(){
 /*fonction réinitialisant une inode*/
 void clear_inode(int indice)
 {
-  disk.inodes[j].size=0;
-  disk.inodes[j].uid=0;
-  disk.inodes[j].uright=0;
-  disk.inodes[j].oright=0;
-  disk.inodes[j].nblock=0;
-  disk.inodes[j].first_byte=0;
+  disk.inodes[indice].size=0;
+  disk.inodes[indice].uid=0;
+  disk.inodes[indice].uright=0;
+  disk.inodes[indice].oright=0;
+  disk.inodes[indice].nblock=0;
+  disk.inodes[indice].first_byte=0;
 }
+
+
 
 /*fonction permettant de compacter la table d'inode*/
 void delete_inode(int indice){
   int j=indice+1;
   while(j<10 && disk.inodes[j].size!=0)
   {
-    &disk.inodes[j-1].filename=&disk.inodes[j].filename;
+    strcpy(disk.inodes[j-1].filename,disk.inodes[j].filename);
     disk.inodes[j-1].size=disk.inodes[j].size;
     disk.inodes[j-1].uid=disk.inodes[j].uid;
     disk.inodes[j-1].uright=disk.inodes[j].uright;
     disk.inodes[j-1].oright=disk.inodes[j].oright;
-    &disk.inodes[j-1].ctimestamp=&disk.inodes[j].ctimestamp;
-    &disk.inodes[j-1].mtimestamp=&disk.inodes[j].mtimestamp;
+    strcpy(disk.inodes[j-1].ctimestamp,disk.inodes[j].ctimestamp);
+    strcpy(disk.inodes[j-1].mtimestamp,disk.inodes[j].mtimestamp);
     disk.inodes[j-1].nblock=disk.inodes[j].nblock;
     disk.inodes[j-1].first_byte=disk.inodes[j].first_byte;
   }
@@ -131,7 +133,7 @@ void delete_inode(int indice){
 
 
 /*tests*/
-/*int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) {
   block_t block1,block2;
   disk.storage=fopen(argv[1],"wb+");
   fseek(disk.storage,49,SEEK_SET);
@@ -142,4 +144,4 @@ void delete_inode(int indice){
   read_inodes_table();
   fclose(disk.storage);
   return 0;
-}*/
+}
