@@ -128,6 +128,9 @@ void delete_inode(int indice){
     disk.inodes[j-1].nblock=disk.inodes[j].nblock;
     disk.inodes[j-1].first_byte=disk.inodes[j].first_byte;
   }
+  if(j<10){
+    clear_inode(j);
+  }
 
 }
 
