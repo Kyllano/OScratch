@@ -8,6 +8,7 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <math.h>
 #include "sha256.h"
 #include "sha256_utils.h"
 
@@ -32,7 +33,6 @@
 //= 27 en blocs = 8 blocs de filename+6 uint+timestamps
 
 
-extern virtual_disk_t disk;  // la variable globale de disk
 
 typedef unsigned int uint; // même taille que int
 typedef unsigned char uchar; // 8 bits non signés = octet
@@ -98,14 +98,18 @@ typedef struct cmd_s{
     int nbArgs; // nombre d'arguments
 } cmd_t;
 
+extern virtual_disk_t disk;  // la variable globale de disk
 
 //couche 1
 void print_block(block_t *bloc);
+void shutoff_save();
 void compute_nblock(int nb_bytes,int *nb_blocs);
 void write_block(block_t *bloc,int pos);
 void read_block(block_t *bloc,int pos);
-int long_binary_digit(int nombre);
-void write_int(int nombre,int pos);
+void convert_int_to_block(block_t* block,uint nombre);
+void convert_block_to_int(block_t block,uint *nombre);
+void gestion_ouverture(FILE *f,char* path);
+void init_disk_sos(char* path);
 
 //couche 2
 void read_int_block(block_t block,int *pos,uint *buff);
@@ -117,5 +121,6 @@ void write_inodes_table();
 void clear_inode(int indice);
 void delete_inode(int indice);
 void write_super_block();
+void read_super_block();
 
 #endif // OS_DEFINES

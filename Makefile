@@ -1,5 +1,5 @@
 CC=gcc
-OPT=-Wall
+OPT=-Wall -lm
 EXEC=OScratch
 
 all : $(EXEC)
@@ -18,7 +18,7 @@ main.o: main.c
 
 #link main avec liste et element
 $(EXEC): couche_1.o couche_2.o main.o
-	$(CC) couche_1.o couche_2.o main.o -o $(EXEC)
+	$(CC) couche_1.o couche_2.o main.o -o $(EXEC) -lm
 
 #option du makefile
 clean:

@@ -1,4 +1,3 @@
-
 #include "OS_DEFINES.h"
 
 /* fonction permettant d'afficher le contenu d'un bloc */
@@ -104,20 +103,20 @@ void convert_block_to_int(block_t block,uint *nombre)
   }
 }
 
-void gestion_ouverture(FILE *f,char rep)
+void gestion_ouverture(FILE *f,char* path)
 {
   if(f==NULL){
-    perror(&rep);
+    perror(path);
     exit(1);
   }
 }
 
 /*fonction initialisant la structure de données disk
   la table d'inode et la table des utilisateurs seront initialisées ultérieurement*/
-void init_disk_sos(char rep)
+void init_disk_sos(char* path)
 {
-  disk.storage=fopen(&rep,"wb+");
-  gestion_ouverture(disk.storage,rep);
+  disk.storage=fopen(path,"rb+");
+  gestion_ouverture(disk.storage,path);
   disk.super_block.number_of_files=0;
   disk.super_block.number_of_users=0;
   disk.super_block.nb_blocks_used=0;
