@@ -145,11 +145,7 @@ void read_super_block(){
 	block_t block;
 	int pos = 0;
 	read_int_block(block, &pos, &disk.super_block.number_of_files);
-	printf("%d\n", disk.super_block.number_of_files);
 	read_int_block(block, &pos, &disk.super_block.number_of_users);
-	printf("%d\n", disk.super_block.number_of_users);
 	read_int_block(block, &pos, &disk.super_block.nb_blocks_used );
-	printf("%d\n", disk.super_block.nb_blocks_used);
 	read_int_block(block, &pos, &disk.super_block.first_free_byte);
-	printf("%d\n", disk.super_block.first_free_byte);
 }
