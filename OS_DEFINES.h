@@ -30,6 +30,9 @@
 #define INODE_SIZE FILENAME_MAX_SIZE/BLOCK_SIZE+6+(TIMESTAMP_SIZE*2)/BLOCK_SIZE
 //= 27 en blocs = 8 blocs de filename+6 uint+timestamps
 
+
+extern virtual_disk_t disk;  // la variable globale de disk
+
 typedef unsigned int uint; // même taille que int
 typedef unsigned char uchar; // 8 bits non signés = octet
 
@@ -95,21 +98,15 @@ typedef struct cmd_s{
 } cmd_t;
 
 
+//couche 1
 void print_block(block_t *bloc);
-
-
 void compute_nblock(int nb_bytes,int *nb_blocs);
-
-
 void write_block(block_t *bloc,int pos);
-
-
 void read_block(block_t *bloc,int pos);
-
-
 int long_binary_digit(int nombre);
-
-
 void write_int(int nombre,int pos);
+
+//couche 2
+void write_super_block();
 
 #endif // OS_DEFINES

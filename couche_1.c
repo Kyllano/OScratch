@@ -4,8 +4,6 @@
 #include <assert.h>
 #include "OS_DEFINES.h"
 
-virtual_disk_t disk;
-
 /* fonction permettant d'afficher le contenu d'un bloc */
 void print_block(block_t *bloc)
 {
@@ -124,15 +122,3 @@ void init_disk_sos(char rep)
   disk.super_block.first_free_byte=0;
 }
 
-
-
-int main(int argc, char const *argv[]) {
-  block_t bloc;
-  int beez=1025;
-  disk.storage=fopen(argv[1],"wb+");
-  write_int(beez,105);
-  read_block(&bloc,105);
-  print_block(&bloc);
-  fclose(disk.storage);
-  return 0;
-}
