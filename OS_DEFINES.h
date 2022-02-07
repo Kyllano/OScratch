@@ -32,7 +32,7 @@
 #define INODE_SIZE FILENAME_MAX_SIZE/BLOCK_SIZE+6+(TIMESTAMP_SIZE*2)/BLOCK_SIZE
 //= 27 en blocs = 8 blocs de filename+6 uint+timestamps
 
-
+//ptdr test
 
 typedef unsigned int uint; // même taille que int
 typedef unsigned char uchar; // 8 bits non signés = octet
