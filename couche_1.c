@@ -1,3 +1,4 @@
+
 #include "OS_DEFINES.h"
 
 /* fonction permettant d'afficher le contenu d'un bloc */
@@ -16,7 +17,7 @@ void shutoff_save(){
     fseek(disk.storage, INODES_START, SEEK_SET);
 
     for (int i=0; i<disk.super_block.number_of_files; i++){ //i : indice de l'inode
-        //     champ                        taille bloc nombre de blocs     stream
+        //     champ                       taille bloc nombre de blocs     stream
         fwrite(disk.inodes[i].filename,    BLOCK_SIZE, FILENAME_MAX_SIZE,  disk.storage);
         fwrite(&disk.inodes[i].size,       BLOCK_SIZE, 1,                  disk.storage);
         fwrite(&disk.inodes[i].uid,        BLOCK_SIZE, 1,                  disk.storage);
@@ -103,20 +104,20 @@ void convert_block_to_int(block_t block,uint *nombre)
   }
 }
 
-void gestion_ouverture(FILE *f,char* path)
+void gestion_ouverture(FILE *f,char rep)
 {
   if(f==NULL){
-    perror(path);
+    perror(&rep);
     exit(1);
   }
 }
 
 /*fonction initialisant la structure de données disk
   la table d'inode et la table des utilisateurs seront initialisées ultérieurement*/
-void init_disk_sos(char* path)
+void init_disk_sos(char rep)
 {
-  disk.storage=fopen(path,"rb+");
-  gestion_ouverture(disk.storage,path);
+  disk.storage=fopen(&rep,"wb+");
+  gestion_ouverture(disk.storage,rep);
   disk.super_block.number_of_files=0;
   disk.super_block.number_of_users=0;
   disk.super_block.nb_blocks_used=0;

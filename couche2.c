@@ -1,7 +1,12 @@
+
 #include "OS_DEFINES.h"
 
+virtual_disk_t disk;
 
-// fonction permettant de lire un block et de le convertir en int
+
+/**
+  * \brief fonction permettant de lire un block et de le convertir en int
+  */
 void read_int_block(block_t block,int *pos,uint *buff)
 {
   read_block(&block,*pos);
@@ -10,7 +15,9 @@ void read_int_block(block_t block,int *pos,uint *buff)
 }
 
 
-// fonction permettant d'écrire un entier sous forme de block
+/**
+  *\brief fonction permettant d'écrire un entier sous forme de block
+  */
 void write_int_block(block_t block,int *pos,uint *buff)
 {
   convert_int_to_block(&block,*buff);
@@ -20,35 +27,40 @@ void write_int_block(block_t block,int *pos,uint *buff)
 }
 
 
-/* Victor : Selon moi on devrait intégrer à la fonction le calcul de la taille totale */
-// fonction permettant de lire une multitude de blocks
-void read_mult_blocks(char *buff,int taille_totale,int *pos)
+/*
+ *\brief fonction permettant de lire une multitude de blocks
+ */
+void read_mult_blocks(char *buff,int taille_block,int *pos)
 {
   errno=0;
-  fread(buff,taille_totale,1,disk.storage);
+  fread(buff,taille_block,1,disk.storage);
   if(errno!=0){
     perror("Erreur de lecture");
     exit(errno);
   }
-  *pos+=taille_totale;
+  *pos+=taille_block;
+
 }
 
 
-/* Victor : Idem*/
-// fonction permettant d'écrire une multitude de blocks
-void write_mult_blocks(char *buff,int taille_totale,int *pos)
+/*
+ *\brief fonction permettant d'écrire une multitude de blocks
+ */
+void write_mult_blocks(char *buff,int taille_block,int *pos)
 {
   errno=0;
-  fwrite(buff,taille_totale,1,disk.storage);
+  fwrite(buff,taille_block,1,disk.storage);
   if(errno!=0){
     perror("Erreur d'écriture");
     exit(errno);
   }
-  *pos+=taille_totale;
+  *pos+=taille_block;
 }
 
 
-// fonction permettant de lire la table d'inodes stockée dans le fichier disque pour initialiser la table
+/*
+ *\brief fonction permettant de lire la table d'inodes stockée dans le fichier disque
+ */
 void read_inodes_table(){
   int j=0,pos=INODES_START;block_t block;
   fseek(disk.storage,INODES_START,SEEK_SET);
@@ -64,10 +76,11 @@ void read_inodes_table(){
     read_int_block(block,&pos,&disk.inodes[j].nblock);
     read_int_block(block,&pos,&disk.inodes[j].first_byte);
     j++;
+
   }
 }
 
-// fonction permettant d'écrire la table d'inodes dans le fichier disque
+/*fonction permettant d'écrire la table d'inodes dans le fichier disque*/
 void write_inodes_table(){
   int j=0,pos=INODES_START;block_t block;
   fseek(disk.storage,INODES_START,SEEK_SET);
@@ -87,7 +100,7 @@ void write_inodes_table(){
   }
 }
 
-// fonction réinitialisant une inode
+/*fonction réinitialisant une inode*/
 void clear_inode(int indice)
 {
   disk.inodes[indice].size=0;
@@ -100,7 +113,7 @@ void clear_inode(int indice)
 
 
 
-// fonction permettant de compacter la table d'inode
+/*fonction permettant de compacter la table d'inode*/
 void delete_inode(int indice){
   int j=indice+1;
   while(j<10 && disk.inodes[j].size!=0)
@@ -121,9 +134,17 @@ void delete_inode(int indice){
 
 }
 
-void write_super_block(){
-    write_block(disk.super_block.number_of_files, 0);
-    write_block(disk.super_block.number_of_users, 1);
-    write_block(disk.super_block.nb_blocks_used , 2);
-    write_block(disk.super_block.first_free_byte, 3);
+
+/*tests*/
+int main(int argc, char const *argv[]) {
+  block_t block1,block2;
+  disk.storage=fopen(argv[1],"wb+");
+  fseek(disk.storage,49,SEEK_SET);
+  convert_int_to_block(&block1,4096);
+  write_block(&block1,49);
+  read_block(&block2,49);
+  print_block(&block2);
+  read_inodes_table();
+  fclose(disk.storage);
+  return 0;
 }
