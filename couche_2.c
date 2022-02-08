@@ -1,3 +1,9 @@
+/*! \file couche_2.c
+    \brief  fichier regroupant les fonctions de la couche 2
+    \author CHEVALLIER Guilhem, ALI-CHERIF Keylan, JUAN Victor
+    \date 8 février 2022
+*/
+
 #include "OS_DEFINES.h"
 
 
@@ -24,9 +30,9 @@ void write_int_block(block_t block,int *pos,uint *buff)
 // fonction permettant de lire une multitude de blocks
 void read_mult_blocks(char *buff,int taille_totale,int *pos)
 {
-  errno=0;
+  errno = 0;
   fread(buff,taille_totale,1,disk.storage);
-  if(errno!=0){
+  if (errno!=0) {
     perror("Erreur de lecture");
     exit(errno);
   }
@@ -38,9 +44,9 @@ void read_mult_blocks(char *buff,int taille_totale,int *pos)
 // fonction permettant d'écrire une multitude de blocks
 void write_mult_blocks(char *buff,int taille_totale,int *pos)
 {
-  errno=0;
+  errno = 0;
   fwrite(buff,taille_totale,1,disk.storage);
-  if(errno!=0){
+  if (errno!=0) {
     perror("Erreur d'écriture");
     exit(errno);
   }
@@ -50,7 +56,9 @@ void write_mult_blocks(char *buff,int taille_totale,int *pos)
 
 // fonction permettant de lire la table d'inodes stockée dans le fichier disque pour initialiser la table
 void read_inodes_table(){
-  int j=0,pos=INODES_START;block_t block;
+  int j=0;
+  int pos=INODES_START;
+  block_t block;
   fseek(disk.storage,INODES_START,SEEK_SET);
   while(j<10 && !feof(disk.storage))
   {
@@ -69,7 +77,9 @@ void read_inodes_table(){
 
 // fonction permettant d'écrire la table d'inodes dans le fichier disque
 void write_inodes_table(){
-  int j=0,pos=INODES_START;block_t block;
+  int j=0;
+  int pos=INODES_START;
+  block_t block;
   fseek(disk.storage,INODES_START,SEEK_SET);
   while(j<10 && disk.inodes[j].size!=0)
   {
@@ -115,7 +125,7 @@ void delete_inode(int indice){
     disk.inodes[j-1].nblock=disk.inodes[j].nblock;
     disk.inodes[j-1].first_byte=disk.inodes[j].first_byte;
   }
-  if(j<10){
+  if (j<10){
     clear_inode(j);
   }
 

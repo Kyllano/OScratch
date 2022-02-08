@@ -1,3 +1,9 @@
+/*! \file couche_1.c
+    \brief  fichier regroupant les fonctions de la couche 1
+    \author CHEVALLIER Guilhem, ALI-CHERIF Keylan, JUAN Victor
+    \date 8 février 2022
+*/
+
 
 #include "OS_DEFINES.h"
 
@@ -34,11 +40,13 @@ void shutoff_save(){
   nb_bytes octets
   compute_nblock is define if nb_bytes > 0
   */
-void compute_nblock(int nb_bytes,int *nb_blocs)
+int compute_nblock(int nb_bytes)
 {
   assert(nb_bytes>0);
-  *nb_blocs=nb_bytes/BLOCK_SIZE;
-  if(nb_bytes%BLOCK_SIZE!=0){*nb_blocs+=1;}
+  int size_in_blocks = nb_bytes/BLOCK_SIZE;
+  if(nb_bytes%BLOCK_SIZE!=0){size_in_blocks+=1;}
+
+  return size_in_blocks;
 }
 
 

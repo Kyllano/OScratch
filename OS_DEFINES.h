@@ -284,10 +284,10 @@ void print_block(block_t *bloc);
     \brief  fonction permettant de calculer le nombre de blocs nécéssaire pour stocker nb_bytes octets
     \author Guilhem C.
     \pre    compute_nblock est défini pour nb_bytes > 0
-    \param[in]  nb_bytes  nombre d'octets à ???
-    \param[in]  nb_blocs  nombre de blocs à ???
+    \param[in]  nb_bytes  nombre d'octets à convertir
+    \param[out] size_in_blocks  nombre de blocs
 */
-void compute_nblock(int nb_bytes,int *nb_blocs);
+int compute_nblock(int nb_bytes);
 
 /*! \fn write_block
     \brief  fonction permettant d'écrire un bloc de données sur le disque dur
@@ -426,6 +426,24 @@ void delete_inode(int indice);
 */
 void write_super_block();
 
+
+
+
+
+
+
+
+
+
+/*------------------------------------------------------------
+  FONCTIONS COUCHE 3
+------------------------------------------------------------*/
+
+/*! \fn init_users_table
+    \brief  initialise la table des utililsateurs
+    \author Victor J.
+*/
+void init_users_table();
 
 
 
