@@ -22,6 +22,7 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <math.h>
 #include "sha256.h"
 #include "sha256_utils.h"
 
@@ -425,6 +426,12 @@ void delete_inode(int indice);
     \author Keylan A.
 */
 void write_super_block();
+
+/*! \fn read_super_block
+    \brief  fonction permettant de lire le super bloc au début du fichier disque
+    \author Keylan A.
+*/
+void read_super_block();
 
 
 

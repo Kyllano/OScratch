@@ -12,6 +12,10 @@ couche_1.o: couche_1.c
 couche_2.o: couche_2.c
 	$(CC) -o couche_2.o -c couche_2.c $(OPT)
 
+#compile couche_1
+couche_3.o: couche_3.c
+	$(CC) -o couche_3.o -c couche_3.c $(OPT)
+
 #compile main
 main.o: main.c
 	$(CC) -o main.o -c main.c $(OPT)

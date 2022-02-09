@@ -137,8 +137,23 @@ void delete_inode(int indice){
 }
 
 void write_super_block(){
-    write_block(disk.super_block.number_of_files, 0);
-    write_block(disk.super_block.number_of_users, 1);
-    write_block(disk.super_block.nb_blocks_used , 2);
-    write_block(disk.super_block.first_free_byte, 3);
+	block_t block;
+	int pos = 0;
+	write_int_block(block, &pos, &disk.super_block.number_of_files);
+	write_int_block(block, &pos, &disk.super_block.number_of_users);
+	write_int_block(block, &pos, &disk.super_block.nb_blocks_used );
+	write_int_block(block, &pos, &disk.super_block.first_free_byte);
+}
+
+void read_super_block(){
+	block_t block;
+	int pos = 0;
+	read_int_block(block, &pos, &disk.super_block.number_of_files);
+	printf("%d\n", disk.super_block.number_of_files);
+	read_int_block(block, &pos, &disk.super_block.number_of_users);
+	printf("%d\n", disk.super_block.number_of_users);
+	read_int_block(block, &pos, &disk.super_block.nb_blocks_used );
+	printf("%d\n", disk.super_block.nb_blocks_used);
+	read_int_block(block, &pos, &disk.super_block.first_free_byte);
+	printf("%d\n", disk.super_block.first_free_byte);
 }
