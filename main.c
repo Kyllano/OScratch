@@ -3,16 +3,15 @@
 virtual_disk_t disk;
 
 int main(int argc, char const *argv[]) {
-    init_disk_sos("./d0");
-	
-	//disk.super_block.first_free_byte = 16;
-	//disk.super_block.nb_blocks_used = 4;
-	//write_super_block();
-	disk.super_block.first_free_byte = 77;
-	disk.super_block.nb_blocks_used = 88;
 
-    read_super_block();
-	//printf("%d\n%d\n%d\n%d\n", disk.super_block.number_of_users, disk.super_block.number_of_files, disk.super_block.nb_blocks_used, disk.super_block.first_free_byte);
-	
-  	return 0;
+  block_t block1,block2;
+  disk.storage=fopen(argv[1],"wb+");
+  fseek(disk.storage,49,SEEK_SET);
+  convert_int_to_block(&block1,4096);
+  write_block(&block1,49);
+  read_block(&block2,49);
+  print_block(&block2);
+  read_inodes_table();
+  fclose(disk.storage);
+  return 0;
 }
