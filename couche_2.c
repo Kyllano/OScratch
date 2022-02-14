@@ -120,10 +120,12 @@ void clear_inode(int indice)
 void delete_inode(int indice){
   int j = indice+1;
 
+  // update du super bloc
   disk.super_block.number_of_files -= 1;
   disk.super_block.nb_blocks_used -= disk.inodes[indice].nblock;
   disk.super_block.first_free_byte -= disk.inodes[indice].size;
   
+  // suppression
   while(j<10 && disk.inodes[j].size!=0){
     strcpy(disk.inodes[j-1].filename,disk.inodes[j].filename);
     disk.inodes[j-1].size=disk.inodes[j].size;
