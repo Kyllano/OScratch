@@ -161,3 +161,10 @@ void read_super_block(){
 	read_int_block(block, &pos, &disk.super_block.first_free_byte);
 	printf("%d\n", disk.super_block.first_free_byte);
 }
+
+void init_inode(char* filename, int size, int pos){
+  int i = get_unused_inode();
+  strcpy(disk.inodes[i].filename, filename);
+  disk.inodes[i].size = size;
+  disk.inodes[i].first_byte = pos;
+}
