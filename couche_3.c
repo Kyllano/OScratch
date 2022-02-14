@@ -17,18 +17,21 @@ void init_users_table(){
     } while (rootlogin[i]!='\0');
 }
 
-void write_users_table(){
-    int pos = INODES_START+INODE_TABLE_SIZE;
-    for (int i=0; i<NB_USERS; i++){
-        write_mult_blocks(disk.users_table[i].login, compute_nblock(FILENAME_MAX_SIZE), &pos);
-        write_mult_blocks(disk.users_table[i].passwd, compute_nblock(SHA256_BLOCK_SIZE*2+1), &pos);
-    }
-}
-
 void read_users_table(){
     fseek(disk.storage,INODES_START+INODE_TABLE_SIZE, SEEK_SET);
+
     for (int i=0; i<NB_USERS; i++){
         fread(disk.users_table[i].login, FILENAME_MAX_SIZE, 1, disk.storage);
         fread(disk.users_table[i].passwd, SHA256_BLOCK_SIZE*2 + 1, 1, disk.storage);
     }
+}
+
+void write_users_table(){
+  fseek(disk.storage,INODES_START+INODE_TABLE_SIZE, SEEK_SET);
+  
+  for(int i=0;i<NB_USERS;i++){
+    fwrite(disk.users_table[i].login, FILENAME_MAX_SIZE, 1, disk.storage);
+    fwrite(disk.users_table[i].passwd, SHA256_BLOCK_SIZE*2 + 1, 1, disk.storage);
+  }
+
 }

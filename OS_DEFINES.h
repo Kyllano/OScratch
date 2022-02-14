@@ -416,7 +416,7 @@ void clear_inode(int indice);
 /*! \fn delete_inode
     \brief  fonction permettant de supprimer une inode
     \author Guilhem C.
-    \param[in]  indice  indoce de l'inode à supprimer
+    \param[in]  indice  indice de l'inode à supprimer
     \note   cette fonction ne laisse pas de trou dans la table d'inodes
 */
 void delete_inode(int indice);
@@ -468,6 +468,5 @@ void init_users_table();
     \brief  variable globale du disque
 */
 virtual_disk_t disk;
-
 
 #endif // OS_DEFINES

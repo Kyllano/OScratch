@@ -118,9 +118,12 @@ void clear_inode(int indice)
 
 // fonction permettant de compacter la table d'inode
 void delete_inode(int indice){
-
   int j = indice+1;
 
+  disk.super_block.number_of_files -= 1;
+  disk.super_block.nb_blocks_used -= disk.inodes[indice].nblock;
+  disk.super_block.first_free_byte -= disk.inodes[indice].size;
+  
   while(j<10 && disk.inodes[j].size!=0){
     strcpy(disk.inodes[j-1].filename,disk.inodes[j].filename);
     disk.inodes[j-1].size=disk.inodes[j].size;
@@ -132,8 +135,7 @@ void delete_inode(int indice){
     disk.inodes[j-1].nblock=disk.inodes[j].nblock;
     disk.inodes[j-1].first_byte=disk.inodes[j].first_byte;
   }
-
-  if (j<10) clear_inode(j);
+  clear_inode(j-1);
 }
 
 void write_super_block(){
