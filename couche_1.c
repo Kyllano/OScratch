@@ -10,11 +10,10 @@
 /* fonction permettant d'afficher le contenu d'un bloc */
 void print_block(block_t *bloc)
 {
-  for(int i=0;i<BLOCK_SIZE;i++)
-  {
-    printf("%.2x ",bloc->data[i]);
-  }
-  printf("\n");
+    for(int i=0; i<BLOCK_SIZE; i++){
+        printf("%.2x ", bloc->data[i]);
+    }
+    printf("\n");
 }
 
 //Peut-être que ça deviendra une fonction int si on doit retourner un n° d'erreur
@@ -42,90 +41,91 @@ void shutoff_save(){
   */
 int compute_nblock(int nb_bytes)
 {
-  assert(nb_bytes>0);
-  int size_in_blocks = nb_bytes/BLOCK_SIZE;
-  if(nb_bytes%BLOCK_SIZE!=0){size_in_blocks+=1;}
+    assert(nb_bytes > 0);
 
-  return size_in_blocks;
+    int size_in_blocks = nb_bytes/BLOCK_SIZE;
+    if (nb_bytes%BLOCK_SIZE != 0) size_in_blocks++;
+    return size_in_blocks;
 }
 
 
 /* fonction permettant d'écrire un bloc de données sur le disque dur
    write_block is define if pos > -1 and pos < TAILLE_FICHIER-3
    */
-void write_block(block_t *bloc,int pos)
+void write_block(block_t *bloc, int pos)
 {
-  assert(pos>-1);
-  errno=0;
-  fseek(disk.storage,pos,SEEK_SET);
-  fwrite(bloc->data,BLOCK_SIZE,1,disk.storage);
-  if(errno!=0){
-    perror("erreur d'écriture");
-    exit(errno);
-  }
+    assert(pos > -1);
+    errno = 0;
+
+    fseek(disk.storage, pos, SEEK_SET);
+    fwrite(bloc->data, BLOCK_SIZE, 1, disk.storage);
+
+    if (errno != 0){
+        perror("erreur d'écriture");
+        exit(errno);
+    }
 }
 
 /* fonction permettant de lire un bloc de données sur le disque dur
    read_block is define if pos > -1 and pos < TAILLE_FICHIER-3
    */
-void read_block(block_t *bloc,int pos)
+void read_block(block_t *bloc, int pos)
 {
-  assert(pos>-1);
-  errno=0;
-  fseek(disk.storage,pos,SEEK_SET);
-  fread(bloc->data,BLOCK_SIZE,1,disk.storage);
-  if(errno!=0){
-    perror("erreur de lecture");
-    exit(errno);
-  }
+    assert(pos > -1);
+    errno = 0;
+    
+    fseek(disk.storage, pos, SEEK_SET);
+    fread(bloc->data, BLOCK_SIZE, 1, disk.storage);
+
+    if (errno != 0){
+        perror("erreur de lecture");
+        exit(errno);
+    }
 
 }
 
 /*fonction convertissant un nombre entier sous forme de block*/
-void convert_int_to_block(block_t* block,uint nombre)
+void convert_int_to_block(block_t* block, uint nombre)
 {
-
-
-  int i=0;
-  while(nombre>=256)
-  {
-    block->data[i]=nombre%256;
-    nombre/=256;
-    i++;
-  }
-  block->data[i]=nombre%256;
-  for(i=i+1;i<4;i++)
-  {
-    block->data[i]=0;
-  }
-
+    int i = 0;
+    while (nombre >= 256){
+        block->data[i] = nombre%256;
+        nombre/=256;
+        i++;
+    }
+    
+    block->data[i] = nombre%256;
+    
+    for(i=i+1; i<4; i++){
+        block->data[i] = 0;
+    }
 }
 
 
 /*fonction convertissant un block sous forme d'entier */
-void convert_block_to_int(block_t block,uint *nombre)
+void convert_block_to_int(block_t block, uint *nombre)
 {
-  *nombre=0;
-  for(int i=0;i<4;i++)
-  {
-    *nombre+=pow(256,i)*block.data[i];
+  *nombre = 0;
+  for (int i=0; i<4; i++){
+    *nombre += pow(256,i)*block.data[i];
   }
 }
 
-void gestion_ouverture(FILE *f,char rep)
+void gestion_ouverture(FILE *f, char* rep)
 {
-  if(f==NULL){
-    perror(&rep);
+  if (f == NULL){
+    perror(rep);
     exit(1);
   }
 }
 
 /*fonction initialisant la structure de données disk
   la table d'inode et la table des utilisateurs seront initialisées ultérieurement*/
-void init_disk_sos(char rep)
+void init_disk_sos(char* rep)
 {
-  disk.storage=fopen(&rep,"wb+");
+  disk.storage = fopen(rep,"wr+");
   gestion_ouverture(disk.storage,rep);
+  
   disk.super_block.number_of_files=0;
   disk.super_block.number_of_users=0;
   disk.super_block.nb_blocks_used=0;
