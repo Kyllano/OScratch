@@ -116,8 +116,11 @@ void clear_inode(int indice)
 
 int get_unused_inode(){
     int i=0;
-    while (disk.inodes[i].size != 0) i++;
-    return i;
+    // TODO Ajouter le cas ou la table d inode est pleine
+    while (disk.inodes[i].size != 0 && i < INODE_TABLE_SIZE) i++;
+    
+    if (i == INODE_TABLE_SIZE) return -1;
+    else return i;
 }
 
 
@@ -165,6 +168,16 @@ void read_super_block(){
 	printf("%d\n", disk.super_block.nb_blocks_used);
 	read_int_block(block, &pos, &disk.super_block.first_free_byte);
 	printf("%d\n", disk.super_block.first_free_byte);
+}
+
+//A n'appeler que si la table d'inode a été initialisée
+void update_first_free_byte(){
+    if (get_unused_inode() == 0){
+        disk.super_block.first_free_byte = INODE_TABLE_SIZE*INODE_SIZE + INODES_START + 1;
+    }
+    else{
+        disk.super_block.first_free_byte = disk.inodes[get_unused_inode()-1].first_byte + disk.inodes[get_unused_inode()-1].size +1;
+    }
 }
 
 void init_inode(char* filename, int size, int pos){
