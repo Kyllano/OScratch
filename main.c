@@ -5,6 +5,8 @@ int main(int argc, char const *argv[]) {
   block_t block1,block2;
   
   init_disk_sos("./d0");
+  
+  disk.storage=fopen(argv[1],"wr+");
   printf("ici ?\n");
   fseek(disk.storage,49,SEEK_SET);
   printf("non.\n");
