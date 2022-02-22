@@ -22,6 +22,7 @@ void write_fich(char *filename,file_t *fich){
 }
 
 void modify_fich(char *filename,file_t *fich){
+  
   if(disk.inodes[i_fich].size>fich->size){
     disk.inodes[unused_inode].mtimestamp=timestamp();
     disk.inodes[unused_inode].size=fich->size;
