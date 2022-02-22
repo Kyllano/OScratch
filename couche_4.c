@@ -12,8 +12,8 @@ int inode_fich(char *filename){
 void write_fich(char *filename,file_t *fich){
   int unused_inode=get_unused_inode();
   init_inode(filename,fich->size,disk.super_block.first_free_byte);
-  disk.inodes[unused_inode].ctimestamp=timestamp();
-  disk.inodes[unused_inode].mtimestamp=disk.inodes[unused_inode].ctimestamp;
+  strcpy(disk.inodes[unused_inode].ctimestamp,timestamp());
+  strcpy(disk.inodes[unused_inode].mtimestamp,disk.inodes[unused_inode].ctimestamp);
   disk.inodes[unused_inode].nblock=compute_nblock(fich->size);
   disk.inodes[unused_inode].uid=user.userid;
   disk.inodes[unused_inode].uright=0;
