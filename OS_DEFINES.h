@@ -171,10 +171,14 @@ void write_users_table();
   FONCTIONS COUCHE 4
 ------------------------------------------------------------*/
 
-int get_file_id(char* filename);
+int delete_file(char* filename);
+int write_file(char *filename, file_t *fich);
 int read_file(char* filename, file_t* file);
 int delete_file(char* filename);
 
+int get_file_id(char* filename);
+void overwrite_content(char *filename, file_t *fich, int i_fich);
+void write_content(char *filename,file_t *fich);
 
 
 
