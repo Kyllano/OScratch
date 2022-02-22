@@ -149,8 +149,8 @@ void init_disk_sos(char* path);
 
 void read_int_block(block_t block,int *pos,uint *buff);
 void write_int_block(block_t block,int *pos,uint *buff);
-void read_mult_blocks(char *buff,int taille_block,int *pos);
-void write_mult_blocks(char *buff,int taille_block,int *pos);
+void read_mult_blocks(char *buff,int taille_totale,int *pos);
+void write_mult_blocks(char *buff,int taille_totale,int *pos);
 void read_inodes_table();
 void write_inodes_table();
 void clear_inode(int indice);
@@ -166,6 +166,14 @@ void read_super_block();
 void init_users_table();
 void read_users_table();
 void write_users_table();
+
+/*------------------------------------------------------------
+  FONCTIONS COUCHE 4
+------------------------------------------------------------*/
+
+int get_file_id(char* filename);
+int read_file(char* filename, file_t* file);
+int delete_file(char* filename);
 
 
 
