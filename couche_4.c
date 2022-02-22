@@ -1,41 +1,46 @@
-/*! \file couche_4.c
-    \brief  fichier regroupant les fonctions de la couche 4
-    \author JUAN Victor, CHEVALLIER Guilhem, ALI-CHERIF Keylan
-    \date 8 février 2022
-*/
-
 #include "OS_DEFINES.h"
+const session_t user;
 
+int inode_fich(char *filename){
+  for(int i=0;i<disk.super_block.number_of_files;i++){
+    if(!strcmp(disk.inodes[i].filename,filename)){return i;}
+  }
 
-int get_file_id(char* filename){
-
-    int i=0;
-    while (!strcmp(disk.inodes[i].filename, filename) && i<disk.super_block.number_of_files) i++;
-
-    if (i >= disk.super_block.number_of_files) return -1;
-    else return i;
+  return -1;
 }
 
+void write_fich(char *filename,file_t *fich){
+  init_inode(filename,fich->size,disk.super_block.first_free_byte);
+  disk.inodes[unused_inode].ctimestamp=timestamp();
+  disk.inodes[unused_inode].mtimestamp=disk.inodes[get_unused_inode()].ctimestamp;
+  disk.inodes[unused_inode].nblock=compute_nblock(fich->size);
+  disk.inodes[unused_inode].uid=user.userid;
+  disk.inodes[unused_inode].uright=0;
+  disk.inodes[unused_inode].oright=0;
+  write_mult_blocks(fich->data,fich->size,disk.super_block.first_free_byte);
+  update_first_free_byte();
+}
 
-int read_file(char* filename, file_t* file){
+void modify_fich(char *filename,file_t *fich){
+  if(disk.inodes[i_fich].size>fich->size){
+    disk.inodes[unused_inode].mtimestamp=timestamp();
+    disk.inodes[unused_inode].size=fich->size;
+    disk.inodes[unused_inode].nblocks=compute_nblock(fich->size);
+    write_mult_blocks(fich->data,fich->size,disk.inodes[get_unused_inode()].first_byte);
+  }
+  else{
+    delete_inode(get_unused_inode());
+    write_fich(filename,fich);
+  }
+}
 
-    int i = get_file_id(filename);
-    if (i==-1) return 0;
-    
-    read_mult_blocks(file->data, disk.inodes[i].nblock, disk.inodes[i].first_byte);
-    file->size = disk.inodes[i].size;
-
+int write_file(chae *filename,file_t *fich){
+  int i_fich=inode_fich(filename,unused_inode);
+  if(get_unused_inode()==-1 && i_fich==-1){
+    printf("Il n'y a plus assez de place pour l'écriture d'un fichier sur le disque\n");
     return 1;
+  }
+
+  if(i_fich==-1){write_fich(filename,fich);return 0;}
+  else{modify_fich(filename,fich));return 0;}
 }
-
-
-int delete_file(char* filename){
-    
-    int i = get_file_id(filename);
-    if (i==-1) return 0;
-
-    delete_inode(i);
-    
-    return 1;
-}
-
