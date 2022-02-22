@@ -13,7 +13,7 @@ void write_fich(char *filename,file_t *fich){
   int unused_inode=get_unused_inode();
   init_inode(filename,fich->size,disk.super_block.first_free_byte);
   disk.inodes[unused_inode].ctimestamp=timestamp();
-  disk.inodes[unused_inode].mtimestamp=disk.inodes[get_unused_inode()].ctimestamp;
+  disk.inodes[unused_inode].mtimestamp=disk.inodes[unused_inode].ctimestamp;
   disk.inodes[unused_inode].nblock=compute_nblock(fich->size);
   disk.inodes[unused_inode].uid=user.userid;
   disk.inodes[unused_inode].uright=0;
@@ -27,7 +27,7 @@ void modify_fich(char *filename,file_t *fich,int i_fich){
   if(disk.inodes[i_fich].size>fich->size){
     disk.inodes[i_fich].mtimestamp=timestamp();
     disk.inodes[i_fich].size=fich->size;
-    disk.inodes[i_fich].nblocks=compute_nblock(fich->size);
+    disk.inodes[i_fich].nblock=compute_nblock(fich->size);
     write_mult_blocks(fich->data,fich->size,disk.inodes[i_fich].first_byte);
   }
   else{
