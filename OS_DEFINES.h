@@ -120,12 +120,6 @@ typedef struct cmd_s{
     int nbArgs;
 } cmd_t;
 
-virtual_disk_t disk;  // la variable globale de disk
-
-
-
-
-
 /*------------------------------------------------------------
   FONCTIONS COUCHE 1
 ------------------------------------------------------------*/
@@ -147,14 +141,15 @@ void init_disk_sos(char* path);
   FONCTIONS COUCHE 2
 ------------------------------------------------------------*/
 
-void read_int_block(block_t block,int *pos,uint *buff);
-void write_int_block(block_t block,int *pos,uint *buff);
-void read_mult_blocks(char *buff,int taille_totale,int *pos);
-void write_mult_blocks(char *buff,int taille_totale,int *pos);
+void read_int_block(block_t block, int *pos, uint *buff);
+void write_int_block(block_t block, int *pos, uint *buff);
+void read_mult_blocks(char *buff, int taille_totale, int *pos);
+void write_mult_blocks(char *buff,int taille_totale, int *pos);
 void read_inodes_table();
 void write_inodes_table();
 void clear_inode(int indice);
 void delete_inode(int indice);
+void init_inode(char* filename, int size, int pos);
 int get_unused_inode();
 void write_super_block();
 void read_super_block();
@@ -176,9 +171,22 @@ int write_file(char *filename, file_t *fich);
 int read_file(char* filename, file_t* file);
 int delete_file(char* filename);
 
+void update_first_free_byte();
 int get_file_id(char* filename);
 void overwrite_content(char *filename, file_t *fich, int i_fich);
 void write_content(char *filename,file_t *fich);
+
+/*------------------------------------------------------------
+  FONCTIONS AUTRES
+------------------------------------------------------------*/
+
+char *timestamp();
+
+/*------------------------------------------------------------
+  VARIABLES GLOBALES
+------------------------------------------------------------*/
+
+virtual_disk_t disk;  // la variable globale de disk
 
 
 
