@@ -136,10 +136,10 @@ void init_disk_sos(char* path);
   FONCTIONS COUCHE 2
 ------------------------------------------------------------*/
 
-void read_int_block(block_t block, uint pos, uint *buff);
-void write_int_block(block_t block, uint pos, uint *buff);
-void read_mult_blocks(char *buff, int taille_totale, uint pos);
-void write_mult_blocks(char *buff,int taille_totale, uint pos);
+void read_int_block(block_t block, uint *pos, uint *buff);
+void write_int_block(block_t block, uint *pos, uint *buff);
+void read_mult_blocks(char *buff, int taille_totale, uint *pos);
+void write_mult_blocks(char *buff,int taille_totale, uint *pos);
 void read_inodes_table();
 void write_inodes_table();
 void clear_inode(int indice);
