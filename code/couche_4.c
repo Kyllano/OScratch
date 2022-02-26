@@ -10,6 +10,10 @@ int get_file_id(char* filename){
     else return i;
 }
 
+
+/**
+  *\author Guilhem
+  */
 void write_content(char *filename,file_t *fich){
 
 	int unused_inode = get_unused_inode();
@@ -26,6 +30,10 @@ void write_content(char *filename,file_t *fich){
 	update_first_free_byte();
 }
 
+
+/**
+  *\author Guilhem
+  */
 void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	if (disk.inodes[i_fich].size > fich->size){
@@ -42,6 +50,11 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 	}
 }
 
+
+
+/**
+  *\author Guilhem
+  */
 int write_file(char *filename,file_t *fich){
 
 	int i_fich = get_file_id(filename);

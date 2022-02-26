@@ -7,6 +7,9 @@
 #include "OS_DEFINES.h"
 
 
+/**
+  *\author Guilhem
+  */
 // fonction permettant de lire un block et de le convertir en int
 void read_int_block(block_t block, uint *pos, uint *buff)
 {
@@ -16,6 +19,10 @@ void read_int_block(block_t block, uint *pos, uint *buff)
 }
 
 
+
+/**
+  *\author Guilhem
+  */
 // fonction permettant d'écrire un entier sous forme de block
 void write_int_block(block_t block, uint *pos, uint *buff)
 {
@@ -25,7 +32,9 @@ void write_int_block(block_t block, uint *pos, uint *buff)
 
 }
 
-
+/**
+  *\author Guilhem
+  */
 /* Victor : Selon moi on devrait intégrer à la fonction le calcul de la taille totale */
 // fonction permettant de lire une multitude de blocks
 void read_mult_blocks(char *buff, int taille_totale, uint *pos)
@@ -43,7 +52,9 @@ void read_mult_blocks(char *buff, int taille_totale, uint *pos)
 
 }
 
-
+/**
+  *\author Guilhem
+  */
 /* Victor : Idem*/
 // fonction permettant d'écrire une multitude de blocks
 void write_mult_blocks(char *buff, int taille_totale, uint *pos)
@@ -61,7 +72,9 @@ void write_mult_blocks(char *buff, int taille_totale, uint *pos)
 
 }
 
-
+/**
+  *\author Guilhem
+  */
 // fonction permettant de lire la table d'inodes stockée dans le fichier disque pour initialiser la table
 void read_inodes_table(){
   int j=0;
@@ -85,6 +98,10 @@ void read_inodes_table(){
   }
 }
 
+
+/**
+  *\author Guilhem
+  */
 // fonction permettant d'écrire la table d'inodes dans le fichier disque
 void write_inodes_table(){
   int j=0;
@@ -108,6 +125,10 @@ void write_inodes_table(){
   }
 }
 
+
+/**
+  *\author Guilhem
+  */
 // fonction réinitialisant une inode
 void clear_inode(int indice)
 {
@@ -129,6 +150,10 @@ int get_unused_inode(){
 }
 
 
+
+/**
+  *\author Guilhem
+  */
 // fonction permettant de compacter la table d'inode
 void delete_inode(int indice){
   int j = indice+1;
