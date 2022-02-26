@@ -1,7 +1,9 @@
 CC=gcc
 OPT=-Wall -lm
+OBJDIR=bin
 EXEC=OScratch
-TARGET=	bin/couche_1.o\
+TARGET=	bin/timestamp.o\
+		bin/couche_1.o\
 		bin/couche_2.o\
 		bin/couche_3.o\
 		bin/couche_4.o
@@ -10,8 +12,8 @@ all : $(EXEC)
 
 
 #compile couches
-bin/%.o : code/%.c
-	$(CC) -o $@ -c $< $(OPT) 
+$(OBJDIR)/%.o : code/%.c
+	$(CC) -o $@ -c $< $(OPT)
 
 #compile main
 main.o : main.c
@@ -26,16 +28,16 @@ test.o : test.c
 # 	$(CC) code/cmd_dump_inodes.c -o cmd_dump_inodes $(OPT)
 
 #link main avec liste et element
-$(EXEC): $(TARGET) bin/main.o
-	$(CC) $(TARGET) bin/main.o -o $(EXEC) $(OPT)
+$(EXEC): $(TARGET) $(OBJDIR)/main.o
+	$(CC) $(TARGET) $(OBJDIR)/main.o -o $(EXEC) $(OPT)
 
-test : $(TARGET) bin/test.o
-	$(CC) $(TARGET) bin/test.o -o test $(OPT)
+test : $(TARGET) $(OBJDIR)/test.o
+	$(CC) $(TARGET) $(OBJDIR)/test.o -o test $(OPT)
 
 #option du makefile
 clean:
-	rm -rf *.o *.exe *.stackdump
-	rm $(EXEC)
+	rm -f $(OBJDIR)/*.o
+	rm -rf $(EXEC)
 
 again:
 	make clean

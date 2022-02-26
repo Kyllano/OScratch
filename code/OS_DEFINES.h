@@ -25,6 +25,7 @@
 #include <math.h>
 #include "sha256.h"
 #include "sha256_utils.h"
+#include "timestamp.h"
 
 
 
@@ -63,9 +64,6 @@ typedef unsigned char uchar; // 8 bits non signés = octet
 /*------------------------------------------------------------
   TYPES
 ------------------------------------------------------------*/
-
-typedef unsigned int uint;
-typedef unsigned char uchar;
 
 typedef struct user_s{
   char login[FILENAME_MAX_SIZE];
@@ -125,13 +123,10 @@ typedef struct cmd_s{
 ------------------------------------------------------------*/
 
 void print_block(block_t *bloc);
-int compute_nblock(int nb_bytes);
-void write_block(block_t *bloc, int pos);
-void read_block(block_t *bloc, int pos);
+uint compute_nblock(int nb_bytes);
+void write_block(block_t *bloc, uint pos);
+void read_block(block_t *bloc, uint pos);
 void shutoff_save();
-int compute_nblock(int nb_bytes);
-void write_block(block_t *bloc,int pos);
-void read_block(block_t *bloc,int pos);
 void convert_int_to_block(block_t* block,uint nombre);
 void convert_block_to_int(block_t block,uint *nombre);
 void gestion_ouverture(FILE *f,char* path);
@@ -141,15 +136,15 @@ void init_disk_sos(char* path);
   FONCTIONS COUCHE 2
 ------------------------------------------------------------*/
 
-void read_int_block(block_t block, int *pos, uint *buff);
-void write_int_block(block_t block, int *pos, uint *buff);
-void read_mult_blocks(char *buff, int taille_totale, int *pos);
-void write_mult_blocks(char *buff,int taille_totale, int *pos);
+void read_int_block(block_t block, uint pos, uint *buff);
+void write_int_block(block_t block, uint pos, uint *buff);
+void read_mult_blocks(char *buff, int taille_totale, uint pos);
+void write_mult_blocks(char *buff,int taille_totale, uint pos);
 void read_inodes_table();
 void write_inodes_table();
 void clear_inode(int indice);
 void delete_inode(int indice);
-void init_inode(char* filename, int size, int pos);
+void init_inode(char* filename, uint size, uint pos);
 int get_unused_inode();
 void write_super_block();
 void read_super_block();
@@ -176,11 +171,7 @@ int get_file_id(char* filename);
 void overwrite_content(char *filename, file_t *fich, int i_fich);
 void write_content(char *filename,file_t *fich);
 
-/*------------------------------------------------------------
-  FONCTIONS AUTRES
-------------------------------------------------------------*/
 
-char *timestamp();
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
