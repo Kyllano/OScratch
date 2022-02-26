@@ -20,9 +20,14 @@ couche_2.o : couche_2.c
 couche_3.o : couche_3.c
 	$(CC) -o couche_3.o -c couche_3.c $(OPT)
 
+<<<<<<< Updated upstream
 #compile couche_3
 couche_4.o : couche_4.c
 	$(CC) -o couche_4.o -c couche_4.c $(OPT)
+=======
+couche_4.o: couche_4.c
+		$(CC) -o couche_4.o -c couche_4.c $(OPT)
+>>>>>>> Stashed changes
 
 #compile main
 main.o : main.c
