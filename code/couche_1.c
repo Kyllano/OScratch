@@ -7,6 +7,10 @@
 
 #include "OS_DEFINES.h"
 
+
+/**
+  *\author Guilhem
+  */
 /* fonction permettant d'afficher le contenu d'un bloc */
 void print_block(block_t *bloc)
 {
@@ -16,6 +20,10 @@ void print_block(block_t *bloc)
     printf("\n");
 }
 
+
+/**
+  *\author Guilhem
+  */
 //Peut-être que ça deviendra une fonction int si on doit retourner un n° d'erreur
 void shutoff_save(){
 
@@ -35,15 +43,17 @@ void shutoff_save(){
     }
 }
 
+
 /* fonction permettant de calculer le nombre de blocs nécéssaire pour stocker
   nb_bytes octets
   compute_nblock is define if nb_bytes > 0
+  *\author Guilhem
   */
-int compute_nblock(int nb_bytes)
+uint compute_nblock(int nb_bytes)
 {
     assert(nb_bytes > 0);
 
-    int size_in_blocks = nb_bytes/BLOCK_SIZE;
+    uint size_in_blocks = nb_bytes/BLOCK_SIZE;
     if (nb_bytes%BLOCK_SIZE != 0) size_in_blocks++;
     return size_in_blocks;
 }
@@ -52,16 +62,18 @@ int compute_nblock(int nb_bytes)
 /* fonction permettant d'écrire un bloc de données sur le disque dur
    write_block is define if pos > -1 and pos < TAILLE_FICHIER-3
    */
-void write_block(block_t *bloc, int pos)
+ /**
+   *\author Guilhem
+   */
+void write_block(block_t *bloc, uint pos)
 {
-    assert(pos > -1);
     errno = 0;
 
     fseek(disk.storage, pos, SEEK_SET);
     fwrite(bloc->data, BLOCK_SIZE, 1, disk.storage);
 
     if (errno != 0){
-        perror("erreur d'écriture");
+        perror("erreur 'écriture");
         exit(errno);
     }
 }
@@ -69,11 +81,13 @@ void write_block(block_t *bloc, int pos)
 /* fonction permettant de lire un bloc de données sur le disque dur
    read_block is define if pos > -1 and pos < TAILLE_FICHIER-3
    */
-void read_block(block_t *bloc, int pos)
+ /**
+   *\author Guilhem
+   */
+void read_block(block_t *bloc, uint pos)
 {
-    assert(pos > -1);
     errno = 0;
-    
+
     fseek(disk.storage, pos, SEEK_SET);
     fread(bloc->data, BLOCK_SIZE, 1, disk.storage);
 
@@ -84,6 +98,10 @@ void read_block(block_t *bloc, int pos)
 
 }
 
+
+/**
+  *\author Guilhem
+  */
 /*fonction convertissant un nombre entier sous forme de block*/
 void convert_int_to_block(block_t* block, uint nombre)
 {
@@ -93,15 +111,17 @@ void convert_int_to_block(block_t* block, uint nombre)
         nombre/=256;
         i++;
     }
-    
+
     block->data[i] = nombre%256;
-    
+
     for(i=i+1; i<4; i++){
         block->data[i] = 0;
     }
 }
 
-
+/**
+  *\author Guilhem
+  */
 /*fonction convertissant un block sous forme d'entier */
 void convert_block_to_int(block_t block, uint *nombre)
 {
@@ -111,6 +131,10 @@ void convert_block_to_int(block_t block, uint *nombre)
   }
 }
 
+
+/**
+  *\author Guilhem
+  */
 void gestion_ouverture(FILE *f, char* rep)
 {
   if (f == NULL){
@@ -125,10 +149,9 @@ void init_disk_sos(char* rep)
 {
   disk.storage = fopen(rep,"wr+");
   gestion_ouverture(disk.storage,rep);
-  
+
   disk.super_block.number_of_files=0;
   disk.super_block.number_of_users=0;
   disk.super_block.nb_blocks_used=0;
   disk.super_block.first_free_byte=0;
 }
-
