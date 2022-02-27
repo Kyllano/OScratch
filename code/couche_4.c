@@ -36,7 +36,7 @@ void write_content(char *filename,file_t *fich){
   */
 void overwrite_content(char *filename, file_t *fich, int i_fich){
 
-	if (disk.inodes[i_fich].size > fich->size){
+	if (disk.inodes[i_fich].size >= fich->size){
 
 		strcpy(disk.inodes[i_fich].mtimestamp, timestamp());
 		disk.inodes[i_fich].size = fich->size;
