@@ -8,9 +8,7 @@
 #include "OS_DEFINES.h"
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 /* fonction permettant d'afficher le contenu d'un bloc */
 void print_block(block_t *bloc)
 {
@@ -21,9 +19,7 @@ void print_block(block_t *bloc)
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Victor
 //Peut-être que ça deviendra une fonction int si on doit retourner un n° d'erreur
 void shutoff_save(){
 
@@ -44,11 +40,11 @@ void shutoff_save(){
 }
 
 
+// Guilhem
 /* fonction permettant de calculer le nombre de blocs nécéssaire pour stocker
   nb_bytes octets
   compute_nblock is define if nb_bytes > 0
-  *\author Guilhem
-  */
+*/
 uint compute_nblock(int nb_bytes)
 {
     assert(nb_bytes > 0);
@@ -59,11 +55,9 @@ uint compute_nblock(int nb_bytes)
 }
 
 
+// Guilhem
 /* fonction permettant d'écrire un bloc de données sur le disque dur
    write_block is define if pos > -1 and pos < TAILLE_FICHIER-3
-   */
- /**
-   *\author Guilhem
    */
 void write_block(block_t *bloc, uint pos)
 {
@@ -78,11 +72,9 @@ void write_block(block_t *bloc, uint pos)
     }
 }
 
+// Guilhem
 /* fonction permettant de lire un bloc de données sur le disque dur
    read_block is define if pos > -1 and pos < TAILLE_FICHIER-3
-   */
- /**
-   *\author Guilhem
    */
 void read_block(block_t *bloc, uint pos)
 {
@@ -99,9 +91,7 @@ void read_block(block_t *bloc, uint pos)
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 /*fonction convertissant un nombre entier sous forme de block*/
 void convert_int_to_block(block_t* block, uint nombre)
 {
@@ -119,9 +109,7 @@ void convert_int_to_block(block_t* block, uint nombre)
     }
 }
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 /*fonction convertissant un block sous forme d'entier */
 void convert_block_to_int(block_t block, uint *nombre)
 {
@@ -131,10 +119,7 @@ void convert_block_to_int(block_t block, uint *nombre)
   }
 }
 
-
-/**
-  *\author Guilhem
-  */
+// Guilhem
 void gestion_ouverture(FILE *f, char* rep)
 {
   if (f == NULL){
@@ -150,8 +135,8 @@ void init_disk_sos(char* rep)
   disk.storage = fopen(rep,"wr+");
   gestion_ouverture(disk.storage,rep);
 
-  disk.super_block.number_of_files=0;
-  disk.super_block.number_of_users=0;
-  disk.super_block.nb_blocks_used=0;
-  disk.super_block.first_free_byte=0;
+  disk.super_block.number_of_files = 0;
+  disk.super_block.number_of_users = 0;
+  disk.super_block.nb_blocks_used = 0;
+  disk.super_block.first_free_byte = 0;
 }

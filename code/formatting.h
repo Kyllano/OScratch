@@ -1,7 +1,7 @@
 /*! \file   formatting.h
     \brief  header containing definitions for easier display formatting (and more)
     \date   Feb 4th 2022
-    \author Victor Juan
+    \author Victor JUAN
 */
 
 #define BOLD "\x1B[1m"
