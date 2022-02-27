@@ -7,6 +7,10 @@
 
 #include "OS_DEFINES.h"
 
+
+/**
+  *\author Guilhem
+  */
 /* fonction permettant d'afficher le contenu d'un bloc */
 void print_block(block_t *bloc)
 {
@@ -16,6 +20,10 @@ void print_block(block_t *bloc)
     printf("\n");
 }
 
+
+/**
+  *\author Guilhem
+  */
 //Peut-être que ça deviendra une fonction int si on doit retourner un n° d'erreur
 void shutoff_save(){
 
@@ -35,9 +43,11 @@ void shutoff_save(){
     }
 }
 
+
 /* fonction permettant de calculer le nombre de blocs nécéssaire pour stocker
   nb_bytes octets
   compute_nblock is define if nb_bytes > 0
+  *\author Guilhem
   */
 uint compute_nblock(int nb_bytes)
 {
@@ -52,6 +62,9 @@ uint compute_nblock(int nb_bytes)
 /* fonction permettant d'écrire un bloc de données sur le disque dur
    write_block is define if pos > -1 and pos < TAILLE_FICHIER-3
    */
+ /**
+   *\author Guilhem
+   */
 void write_block(block_t *bloc, uint pos)
 {
     errno = 0;
@@ -60,13 +73,16 @@ void write_block(block_t *bloc, uint pos)
     fwrite(bloc->data, BLOCK_SIZE, 1, disk.storage);
 
     if (errno != 0){
-        perror("erreur d'écriture");
+        perror("erreur 'écriture");
         exit(errno);
     }
 }
 
 /* fonction permettant de lire un bloc de données sur le disque dur
    read_block is define if pos > -1 and pos < TAILLE_FICHIER-3
+   */
+ /**
+   *\author Guilhem
    */
 void read_block(block_t *bloc, uint pos)
 {
@@ -82,6 +98,10 @@ void read_block(block_t *bloc, uint pos)
 
 }
 
+
+/**
+  *\author Guilhem
+  */
 /*fonction convertissant un nombre entier sous forme de block*/
 void convert_int_to_block(block_t* block, uint nombre)
 {
@@ -99,7 +119,9 @@ void convert_int_to_block(block_t* block, uint nombre)
     }
 }
 
-
+/**
+  *\author Guilhem
+  */
 /*fonction convertissant un block sous forme d'entier */
 void convert_block_to_int(block_t block, uint *nombre)
 {
@@ -109,6 +131,10 @@ void convert_block_to_int(block_t block, uint *nombre)
   }
 }
 
+
+/**
+  *\author Guilhem
+  */
 void gestion_ouverture(FILE *f, char* rep)
 {
   if (f == NULL){
