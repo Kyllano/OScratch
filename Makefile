@@ -38,6 +38,7 @@ test : $(TARGET) $(OBJDIR)/test.o
 clean:
 	rm -f $(OBJDIR)/*.o
 	rm -rf $(EXEC)
+	rm test
 
 again:
 	make clean

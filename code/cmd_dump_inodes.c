@@ -1,3 +1,9 @@
+/*! \file   cmd_dump_inodes.c
+    \brief  programme pour dump la table d'inodes
+    \author JUAN Victor
+    \date   inconnue
+*/
+
 #include "OS_DEFINES.h"
 #include "formatting.h"
 
