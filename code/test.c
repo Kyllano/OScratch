@@ -2,7 +2,7 @@
 
 int main(int argc, char const *argv[]) {
 
-  block_t block1,block2;
+  block_t block1,block2;file_t loul;
   char filename[FILENAME_MAX_SIZE];
   init_disk_sos("./d0");
 
@@ -16,7 +16,7 @@ int main(int argc, char const *argv[]) {
   print_block(&block2);
   fseek(disk.storage,0,SEEK_SET);
 
-  
+
   printf("écriture du super_block\n");
   write_super_block();
   printf("pos = %ld\n",ftell(disk.storage));
@@ -54,6 +54,23 @@ int main(int argc, char const *argv[]) {
   printf("suppression de la deuxième inode:\n");
   delete_inode(1);
   printf("get_unused_inode = %d\n",get_unused_inode());
+  write_super_block();
+  read_super_block();
+
+
+  printf("code erreur load = %d\n",load_file_from_host("miam.txt",&loul));
+  printf("%s\n",loul.data);
+  printf("get_unused_inode = %d\n",get_unused_inode());
+  write_super_block();
+  read_super_block();
+  write_inodes_table();
+
+
+
+
+
+
+
   fclose(disk.storage);
   return 0;
 }

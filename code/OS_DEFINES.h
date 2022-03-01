@@ -164,14 +164,13 @@ void write_users_table();
 int delete_file(char* filename);
 int write_file(char *filename, file_t *fich);
 int read_file(char* filename, file_t* file);
-int delete_file(char* filename);
 
 void update_first_free_byte();
 int get_file_id(char* filename);
 void overwrite_content(char *filename, file_t *fich, int i_fich);
 void write_content(char *filename,file_t *fich);
-
-
+int load_file_from_host(char* filename_on_host, file_t* empty_file);
+int store_file_to_host(char* filename);
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
