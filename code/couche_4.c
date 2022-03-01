@@ -45,7 +45,7 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	}
 	else{
-		delete_inode(get_unused_inode());
+		delete_inode(i_fich);
 		write_content(filename, fich);
 	}
 }
