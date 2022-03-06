@@ -1,10 +1,14 @@
 #include "OS_DEFINES.h"
-const session_t user;
+
+
+session_t user;
+/*
+user.userid=1;*/
 
 int get_file_id(char* filename){
 
     int i=0;
-    while (!strcmp(disk.inodes[i].filename, filename) && i<disk.super_block.number_of_files) i++;
+    while (strcmp(disk.inodes[i].filename, filename) && i<disk.super_block.number_of_files) i++;
 
     if (i >= disk.super_block.number_of_files) return -1;
     else return i;
@@ -22,7 +26,7 @@ void write_content(char *filename,file_t *fich){
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
 	strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
 	disk.inodes[unused_inode].nblock = compute_nblock(fich->size);
-	disk.inodes[unused_inode].uid = user.userid;
+	disk.inodes[unused_inode].uid = 1 ;/*user.userid;*/
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
 
@@ -45,7 +49,7 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	}
 	else{
-		delete_inode(get_unused_inode());
+		delete_inode(i_fich);
 		write_content(filename, fich);
 	}
 }
@@ -115,6 +119,7 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 	empty_file->size = 0;
 	while ((c=fgetc(fichier_hote) != EOF )&& empty_file->size < MAX_FILE_SIZE){
 		empty_file->data[empty_file->size] = c;
+    printf("caractère %d = %c\n",empty_file->size,c);
 		empty_file->size ++;
 	}
 
