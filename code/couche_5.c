@@ -4,6 +4,8 @@
     \date 7 mars 2022
 */
 
+#include "OS_DEFINES.h"
+
 // Victor
 int cmd_ls(){
 
