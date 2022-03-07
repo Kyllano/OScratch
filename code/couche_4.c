@@ -37,6 +37,7 @@ void write_content(char *filename,file_t *fich){
 
 	write_mult_blocks((char *)fich->data, fich->size, &disk.super_block.first_free_byte);
 	update_first_free_byte();
+  disk.super_block.number_of_files ++;
 }
 
 
@@ -84,7 +85,7 @@ int read_file(char* filename, file_t* file){
     int i = get_file_id(filename);
     if (i==-1) return 1;
 
-    read_mult_blocks((char *)file->data, disk.inodes[i].nblock, &disk.inodes[i].first_byte);
+    read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
     file->size = disk.inodes[i].size;
 
     return 0;
@@ -159,7 +160,7 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 // Keylan
 int store_file_to_host(char* filename){
 	file_t file;
-	if (!read_file(filename, &file)){
+	if (read_file(filename, &file)!=0){
 		return 1;
 	}
 

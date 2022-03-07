@@ -62,7 +62,6 @@ int main(int argc, char const *argv[]) {
   printf("code erreur load = %d\n",load_file_from_host("miam.txt",&loul));
   printf("%s\n",loul.data);
   printf("get_unused_inode = %d\n",get_unused_inode());
-  write_file("miam.txt", &loul);
   sleep(10);
   write_super_block();
   read_super_block();
