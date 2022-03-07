@@ -1,4 +1,5 @@
 #include "OS_DEFINES.h"
+#include <unistd.h>
 
 int main(int argc, char const *argv[]) {
 
@@ -61,9 +62,13 @@ int main(int argc, char const *argv[]) {
   printf("code erreur load = %d\n",load_file_from_host("miam.txt",&loul));
   printf("%s\n",loul.data);
   printf("get_unused_inode = %d\n",get_unused_inode());
+  sleep(10);
   write_super_block();
   read_super_block();
   write_inodes_table();
+
+  remove("miam.txt");
+  printf("code erreur store = %d\n",store_file_to_host("miam.txt"));
 
 
 

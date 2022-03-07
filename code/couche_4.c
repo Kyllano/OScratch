@@ -1,3 +1,9 @@
+/*! \file couche_3.c
+    \brief  fichier regroupant les fonctions de la couche 3
+    \author JUAN Victor, CHEVALLIER Guilhem, ALI-CHERIF Keylan
+    \date 7 mars 2022
+*/
+
 #include "OS_DEFINES.h"
 
 
@@ -5,6 +11,7 @@ session_t user;
 /*
 user.userid=1;*/
 
+// Victor
 int get_file_id(char* filename){
 
     int i=0;
@@ -15,11 +22,9 @@ int get_file_id(char* filename){
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 void write_content(char *filename,file_t *fich){
-
+  printf("taille write : %d\n",fich->size);
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
@@ -32,12 +37,11 @@ void write_content(char *filename,file_t *fich){
 
 	write_mult_blocks((char *)fich->data, fich->size, &disk.super_block.first_free_byte);
 	update_first_free_byte();
+  disk.super_block.number_of_files ++;
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	if (disk.inodes[i_fich].size >= fich->size){
@@ -55,10 +59,7 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 }
 
 
-
-/**
-  *\author Guilhem
-  */
+// Guilhem
 int write_file(char *filename,file_t *fich){
 
 	int i_fich = get_file_id(filename);
@@ -84,8 +85,9 @@ int read_file(char* filename, file_t* file){
     int i = get_file_id(filename);
     if (i==-1) return 1;
 
-    read_mult_blocks((char *)file->data, disk.inodes[i].nblock, &disk.inodes[i].first_byte);
+    read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
     file->size = disk.inodes[i].size;
+    printf("taille = %d\n",disk.inodes[i].size);
 
     return 0;
 }
@@ -109,19 +111,27 @@ int delete_file(char* filename){
  * 2 si le fichier est trop gros (dans ce cas, on l'écrit quand meme, mais on le stock tronqué)
  * 3 si y'a plus de place dans la table d'inode
  */
+// Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
 	FILE* fichier_hote = fopen(filename_on_host, "r");
 	if (fichier_hote == NULL){
 		return 1;
 	}
 
+
 	uchar c;
 	empty_file->size = 0;
-	while ((c=fgetc(fichier_hote) != EOF )&& empty_file->size < MAX_FILE_SIZE){
+	c = fgetc(fichier_hote);
+	while (!feof(fichier_hote) && empty_file->size < MAX_FILE_SIZE){
 		empty_file->data[empty_file->size] = c;
-    printf("caractère %d = %c\n",empty_file->size,c);
 		empty_file->size ++;
+		c = fgetc(fichier_hote);
 	}
+  printf("lol %d:%s\n",empty_file->size,empty_file->data);
+
+  empty_file->data[empty_file->size -1] = '\0';
+
+
 
 	fclose(fichier_hote);
 	fichier_hote = NULL;
@@ -147,21 +157,24 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
  * 2 si problème de droit d'ecriture sur l'hote
  * 3 il y a un probleme avec le fputc (vienvrais de l'hote)
  */
+// Keylan
 int store_file_to_host(char* filename){
 	file_t file;
-	if (read_file(filename, &file)){
+	if (read_file(filename, &file)!=0){
 		return 1;
 	}
 
-	FILE* host_file = fopen(filename, "w");
+	FILE* host_file = fopen(filename, "w+");
 	if (host_file == NULL){
 		return 2;
 	}
 
 	for (int i=0; i < file.size; i++){
-		if(fputc(file.data[i] , host_file) == EOF){
+		printf("char laul : %d\n", file.data[i]);
+		fputc(file.data[i] , host_file);
+		/*if(fputc(file.data[i] , host_file) == EOF){
 			return 3;
-		}
+		}*/
 	}
 
 	fclose(host_file);
