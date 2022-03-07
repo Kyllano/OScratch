@@ -54,8 +54,12 @@
 #define INODES_START SUPER_BLOCK_SIZE*BLOCK_SIZE+1
 #define INODE_SIZE FILENAME_MAX_SIZE/BLOCK_SIZE+6+(TIMESTAMP_SIZE*2)/BLOCK_SIZE
 
-typedef unsigned int uint; // même taille que int
-typedef unsigned char uchar; // 8 bits non signés = octet
+#define NO_ERROR			0
+#define ERROR_FILE_ACCESS	1
+#define ERROR_RIGHTS		2
+#define ERROR_INODES_FULL	3
+#define ERROR_FILE_TOO_BIG	4
+#define ERROR_DISK_FULL		5
 
 
 
@@ -65,57 +69,60 @@ typedef unsigned char uchar; // 8 bits non signés = octet
   TYPES
 ------------------------------------------------------------*/
 
+typedef unsigned int uint; // même taille que int
+typedef unsigned char uchar; // 8 bits non signés = octet
+
 typedef struct user_s{
-  char login[FILENAME_MAX_SIZE];
-  char passwd[SHA256_BLOCK_SIZE*2 + 1];
+	char login[FILENAME_MAX_SIZE];
+	char passwd[SHA256_BLOCK_SIZE*2 + 1];
 } user_t;
 
 typedef struct session_s{
-  int userid;
+	int userid;
 } session_t;
 
 typedef struct block_s{
-    uchar data[BLOCK_SIZE];
+	uchar data[BLOCK_SIZE];
 } block_t;
 
 typedef struct inode_s{
-  // type file vs dir
-  char filename[FILENAME_MAX_SIZE]; // dont '\0'
-  uint size; // du fichier en octets
-  uint uid; //user id proprio
-  uint uright; //owner's rights between 0 and 3 coding rw in binary
-  uint oright; // other's right idem
-  char ctimestamp[TIMESTAMP_SIZE]; // date creation : 26 octets
-  char mtimestamp[TIMESTAMP_SIZE]; // date dernière modif. : 26 octets
-  uint nblock; // nblock du fichier = (size+BLOCK_SIZE-1)/BLOCK_SIZE ?
-  uint first_byte; // number of the first byte on the virtual disk
+	// type file vs dir
+	char filename[FILENAME_MAX_SIZE]; // dont '\0'
+	uint size; // du fichier en octets
+	uint uid; //user id proprio
+	uint uright; //owner's rights between 0 and 3 coding rw in binary
+	uint oright; // other's right idem
+	char ctimestamp[TIMESTAMP_SIZE]; // date creation : 26 octets
+	char mtimestamp[TIMESTAMP_SIZE]; // date dernière modif. : 26 octets
+	uint nblock; // nblock du fichier = (size+BLOCK_SIZE-1)/BLOCK_SIZE ?
+	uint first_byte; // number of the first byte on the virtual disk
 } inode_t;
 
 typedef inode_t inode_table_t[INODE_TABLE_SIZE];
 typedef user_t users_table_t[NB_USERS];
 
 typedef struct super_block_s{
-  uint number_of_files;
-  uint number_of_users;
-  uint nb_blocks_used ;
-  uint first_free_byte;
-  } super_block_t;
+	uint number_of_files;
+	uint number_of_users;
+	uint nb_blocks_used ;
+	uint first_free_byte;
+} super_block_t;
 
 typedef struct virtual_disk_s {
-    super_block_t super_block;
-    users_table_t users_table;
-    inode_table_t inodes;
-    FILE *storage;
+	super_block_t super_block;
+	users_table_t users_table;
+	inode_table_t inodes;
+	FILE *storage;
 } virtual_disk_t;
 
 typedef struct file_s{
-  uint size;
-  uchar data [MAX_FILE_SIZE] ;
+uint size;
+uchar data [MAX_FILE_SIZE] ;
 } file_t ;
 
 typedef struct cmd_s{
-    char ** tabArgs;
-    int nbArgs;
+	char ** tabArgs;
+	int nbArgs;
 } cmd_t;
 
 
