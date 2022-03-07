@@ -24,7 +24,7 @@ int get_file_id(char* filename){
 
 // Guilhem
 void write_content(char *filename,file_t *fich){
-
+  printf("taille write : %d\n",fich->size);
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
@@ -87,6 +87,7 @@ int read_file(char* filename, file_t* file){
 
     read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
     file->size = disk.inodes[i].size;
+    printf("taille = %d\n",disk.inodes[i].size);
 
     return 0;
 }
@@ -126,11 +127,10 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 		empty_file->size ++;
 		c = fgetc(fichier_hote);
 	}
+  printf("lol %d:%s\n",empty_file->size,empty_file->data);
 
-	if (empty_file->size < MAX_FILE_SIZE){
-		empty_file->size ++;
-	}
-	empty_file->data[empty_file->size -1] = '\0';
+  empty_file->data[empty_file->size -1] = '\0';
+
 
 
 	fclose(fichier_hote);
