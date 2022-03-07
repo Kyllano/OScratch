@@ -1,7 +1,7 @@
 /*! \file OS_DEFINES.h
     \brief  fichier global regroupant les définitions
     \author CHEVALLIER Guilhem, ALI-CHERIF Keylan, JUAN Victor
-    \date 4 février 2022
+    \date 7 mars 2022
 */
 
 #ifndef OS_DEFINES
@@ -118,6 +118,10 @@ typedef struct cmd_s{
     int nbArgs;
 } cmd_t;
 
+
+
+
+
 /*------------------------------------------------------------
   FONCTIONS COUCHE 1
 ------------------------------------------------------------*/
@@ -164,13 +168,13 @@ void write_users_table();
 int delete_file(char* filename);
 int write_file(char *filename, file_t *fich);
 int read_file(char* filename, file_t* file);
-
-void update_first_free_byte();
-int get_file_id(char* filename);
-void overwrite_content(char *filename, file_t *fich, int i_fich);
-void write_content(char *filename,file_t *fich);
 int load_file_from_host(char* filename_on_host, file_t* empty_file);
 int store_file_to_host(char* filename);
+
+int get_file_id(char* filename);
+void write_content(char *filename,file_t *fich);
+void overwrite_content(char *filename, file_t *fich, int i_fich);
+void update_first_free_byte();
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES

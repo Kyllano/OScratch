@@ -1,3 +1,9 @@
+/*! \file couche_3.c
+    \brief  fichier regroupant les fonctions de la couche 3
+    \author JUAN Victor (j'ai perdu à la courte paille si vous vous demandez)
+    \date 7 mars 2022
+*/
+
 #include "OS_DEFINES.h"
 
 
@@ -5,6 +11,7 @@ session_t user;
 /*
 user.userid=1;*/
 
+// Victor
 int get_file_id(char* filename){
 
     int i=0;
@@ -15,9 +22,7 @@ int get_file_id(char* filename){
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 void write_content(char *filename,file_t *fich){
 
 	int unused_inode = get_unused_inode();
@@ -35,9 +40,7 @@ void write_content(char *filename,file_t *fich){
 }
 
 
-/**
-  *\author Guilhem
-  */
+// Guilhem
 void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	if (disk.inodes[i_fich].size >= fich->size){
@@ -55,10 +58,7 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 }
 
 
-
-/**
-  *\author Guilhem
-  */
+// Guilhem
 int write_file(char *filename,file_t *fich){
 
 	int i_fich = get_file_id(filename);
@@ -109,6 +109,7 @@ int delete_file(char* filename){
  * 2 si le fichier est trop gros (dans ce cas, on l'écrit quand meme, mais on le stock tronqué)
  * 3 si y'a plus de place dans la table d'inode
  */
+// Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
 	FILE* fichier_hote = fopen(filename_on_host, "r");
 	if (fichier_hote == NULL){
@@ -155,6 +156,7 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
  * 2 si problème de droit d'ecriture sur l'hote
  * 3 il y a un probleme avec le fputc (vienvrais de l'hote)
  */
+// Keylan
 int store_file_to_host(char* filename){
 	file_t file;
 	if (!read_file(filename, &file)){
