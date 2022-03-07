@@ -26,6 +26,7 @@
 #include "sha256.h"
 #include "sha256_utils.h"
 #include "timestamp.h"
+#include "formatting.h"
 
 
 
@@ -48,6 +49,8 @@
 #define MAX_MSG 1024
 #define TIMESTAMP_SIZE 24+2
 #define NB_USERS 5
+#define CMD_MAX_SIZE 10
+#define PARAM_MAX_SIZE 64
 
 #define BLOCK_SIZE 4
 #define SUPER_BLOCK_SIZE 4
@@ -60,6 +63,7 @@
 #define ERROR_INODES_FULL	3
 #define ERROR_FILE_TOO_BIG	4
 #define ERROR_DISK_FULL		5
+#define ERROR_ARGS			6
 
 
 
@@ -200,6 +204,8 @@ int cmd_listusers();
 int cmd_quit();
 int cmd_adduser();
 int cmd_rmuser();
+
+void flush();
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
