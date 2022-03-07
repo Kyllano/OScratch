@@ -1,6 +1,6 @@
 /*! \file couche_3.c
     \brief  fichier regroupant les fonctions de la couche 3
-    \author JUAN Victor (j'ai perdu à la courte paille si vous vous demandez)
+    \author JUAN Victor, CHEVALLIER Guilhem, ALI-CHERIF Keylan
     \date 7 mars 2022
 */
 
