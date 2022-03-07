@@ -66,16 +66,16 @@ int write_file(char *filename,file_t *fich){
 
 	if (get_unused_inode()==-1 && i_fich==-1){
 		printf("Il n'y a plus assez de place pour l'écriture d'un fichier sur le disque\n");
-		return 1;
+		return ERROR_DISK_FULL;
 	}
 
 	if (i_fich == -1){
 		write_content(filename, fich);
-		return 0;
+		return NO_ERROR;
 	}
 	else {
 		overwrite_content(filename, fich, i_fich);
-		return 0;
+		return NO_ERROR;
 	}
 }
 
@@ -83,39 +83,32 @@ int write_file(char *filename,file_t *fich){
 int read_file(char* filename, file_t* file){
 
     int i = get_file_id(filename);
-    if (i==-1) return 1;
+    if (i==-1) return ERROR_FILE_ACCESS;
 
     read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
     file->size = disk.inodes[i].size;
-    printf("taille = %d\n",disk.inodes[i].size);
 
-    return 0;
+    return NO_ERROR;
 }
 
 // Victor
 int delete_file(char* filename){
 
     int i = get_file_id(filename);
-    if (i==-1) return 1;
+    if (i==-1) return ERROR_FILE_ACCESS;
 
     delete_inode(i);
 
-    return 0;
+    return NO_ERROR;
 }
 
-/**
- * Ecris un fichier hote pasé en parametre dans un fichier empty file passé en parametre puis ecris ce fichier empty dans le disk
- * codes d erreur :
- * 0 si tout va bien
- * 1 si probleme d acces au fichier de l hote
- * 2 si le fichier est trop gros (dans ce cas, on l'écrit quand meme, mais on le stock tronqué)
- * 3 si y'a plus de place dans la table d'inode
- */
+
+// Ecrit un fichier hote pasé en parametre dans un fichier empty file passé en parametre puis ecris ce fichier empty dans le disk
 // Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
 	FILE* fichier_hote = fopen(filename_on_host, "r");
 	if (fichier_hote == NULL){
-		return 1;
+		return ERROR_FILE_ACCESS;
 	}
 
 
@@ -127,56 +120,30 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 		empty_file->size ++;
 		c = fgetc(fichier_hote);
 	}
-  printf("lol %d:%s\n",empty_file->size,empty_file->data);
-
-  empty_file->data[empty_file->size -1] = '\0';
-
-
+  	// if (empty_file->size < MAX_FILE_SIZE) empty_file->size--;
 
 	fclose(fichier_hote);
 	fichier_hote = NULL;
 
-	if (write_file(filename_on_host, empty_file)){
-		return 3;
-	}
-
-	if (empty_file->size == MAX_FILE_SIZE){
-		return 2;
-	}
-	else{
-		return 0;
-	}
+	if (write_file(filename_on_host, empty_file)) return ERROR_INODES_FULL;
+	if (empty_file->size == MAX_FILE_SIZE) return ERROR_FILE_TOO_BIG;	// Le fichier est stocké mais tronqué
+	else return NO_ERROR;
 }
 
 
-/**
- * Ecris sur l hote un des fichier du systeme SOS passé en parametre
- * Codes d erreur :
- * 0 si tout va bien
- * 1 si le fichier n existe pas ou n est pas trouvé (mauvais filename)
- * 2 si problème de droit d'ecriture sur l'hote
- * 3 il y a un probleme avec le fputc (vienvrais de l'hote)
- */
+// Ecris sur l hote un des fichier du systeme SOS passé en parametre
 // Keylan
 int store_file_to_host(char* filename){
 	file_t file;
-	if (read_file(filename, &file)!=0){
-		return 1;
-	}
+	if (read_file(filename, &file)!=0) return ERROR_FILE_ACCESS;
 
 	FILE* host_file = fopen(filename, "w+");
-	if (host_file == NULL){
-		return 2;
-	}
+	if (host_file == NULL) return ERROR_RIGHTS;
 
 	for (int i=0; i < file.size; i++){
-		printf("char laul : %d\n", file.data[i]);
 		fputc(file.data[i] , host_file);
-		/*if(fputc(file.data[i] , host_file) == EOF){
-			return 3;
-		}*/
 	}
 
 	fclose(host_file);
-	return 0;
+	return NO_ERROR;
 }
