@@ -115,13 +115,21 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 		return 1;
 	}
 
+
 	uchar c;
 	empty_file->size = 0;
-	while ((c=fgetc(fichier_hote) != EOF )&& empty_file->size < MAX_FILE_SIZE){
+	c = fgetc(fichier_hote);
+	while (!feof(fichier_hote) && empty_file->size < MAX_FILE_SIZE){
 		empty_file->data[empty_file->size] = c;
-    printf("caractère %d = %c\n",empty_file->size,c);
+		empty_file->size ++;
+		c = fgetc(fichier_hote);
+	}
+
+	if (empty_file->size < MAX_FILE_SIZE){
 		empty_file->size ++;
 	}
+	empty_file->data[empty_file->size -1] = '\0';
+
 
 	fclose(fichier_hote);
 	fichier_hote = NULL;
@@ -149,19 +157,21 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
  */
 int store_file_to_host(char* filename){
 	file_t file;
-	if (read_file(filename, &file)){
+	if (!read_file(filename, &file)){
 		return 1;
 	}
 
-	FILE* host_file = fopen(filename, "w");
+	FILE* host_file = fopen(filename, "w+");
 	if (host_file == NULL){
 		return 2;
 	}
 
 	for (int i=0; i < file.size; i++){
-		if(fputc(file.data[i] , host_file) == EOF){
+		printf("char laul : %d\n", file.data[i]);
+		fputc(file.data[i] , host_file);
+		/*if(fputc(file.data[i] , host_file) == EOF){
 			return 3;
-		}
+		}*/
 	}
 
 	fclose(host_file);
