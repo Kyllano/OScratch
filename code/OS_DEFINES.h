@@ -184,6 +184,24 @@ void overwrite_content(char *filename, file_t *fich, int i_fich);
 void update_first_free_byte();
 
 /*------------------------------------------------------------
+  FONCTIONS COUCHE 5
+------------------------------------------------------------*/
+
+int cmd_ls();
+int cmd_cat();
+int cmd_rm();
+int cmd_cr();
+int cmd_edit();
+int cmd_load();
+int cmd_store();
+int cmd_chown();
+int cmd_chmod();
+int cmd_listusers();
+int cmd_quit();
+int cmd_adduser();
+int cmd_rmuser();
+
+/*------------------------------------------------------------
   VARIABLES GLOBALES
 ------------------------------------------------------------*/
 
