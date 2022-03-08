@@ -6,7 +6,8 @@ TARGET=	bin/timestamp.o\
 		bin/couche_1.o\
 		bin/couche_2.o\
 		bin/couche_3.o\
-		bin/couche_4.o
+		bin/couche_4.o\
+		bin/couche_5.o
 
 all : $(EXEC)
 

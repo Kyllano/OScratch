@@ -7,7 +7,7 @@
 #include "OS_DEFINES.h"
 
 // Victor
-int cmd_ls(){
+/*int cmd_ls(){
 
 }
 
@@ -19,7 +19,7 @@ int cmd_cat(){
 // Keylan
 int cmd_rm(){
 
-}
+}*/
 
 
 int cmd_cr(char *filename){
@@ -31,7 +31,7 @@ int cmd_cr(char *filename){
   init_inode(filename,1, disk.super_block.first_free_byte);
   strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
   strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
-  disk.inodes[unused_inode].nblock = 1
+  disk.inodes[unused_inode].nblock = 1;
   disk.inodes[unused_inode].uid = user.userid;
   disk.inodes[unused_inode].uright = rw;
   disk.inodes[unused_inode].oright = rw;
@@ -43,7 +43,7 @@ int cmd_cr(char *filename){
 
 
 int cmd_edit(char *filename){
-  int i;file_t *file;
+  int i;file_t file;char c;
   if((i=get_file_id(filename))==-1){
     return ERROR_FILE_ACCESS;
   }
@@ -52,17 +52,18 @@ int cmd_edit(char *filename){
     return 2;
   }
   printf("entrez le contenu du fichier\n");
-  if(!fgets(file->data,MAX_FILE_SIZE,stdin)){
-    return 3;
+  file.size=0;
+  while((c=fgetc(stdin))>0 && file.size!=MAX_FILE_SIZE){
+    file.data[file.size++]=c;
   }
-  return write_file(filename,file);
+  return write_file(filename,&file);
 
 
 }
 
 
 
-int cmd_load(char *filename){
+/*int cmd_load(char *filename){
   file_t *file;
   return load_file_from_host(filename,file);
 
@@ -102,3 +103,4 @@ int cmd_adduser(){
 int cmd_rmuser(){
 
 }
+*/

@@ -206,6 +206,7 @@ int cmd_rmuser();
 ------------------------------------------------------------*/
 
 virtual_disk_t disk;  // la variable globale de disk
+session_t user; // la session courante
 
 
 
