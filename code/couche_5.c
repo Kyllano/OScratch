@@ -43,22 +43,34 @@ int cmd_cr(char *filename){
 
 
 int cmd_edit(char *filename){
-  int i;
+  int i;file_t *file;
   if((i=get_file_id(filename))==-1){
-    return 1;
+    return ERROR_FILE_ACCESS;
   }
-  if(disk.inodes[i].uid==user.userid && (disk.inodes[i].uright=Rw || disk.inodes[i].uright=RW))
+  if((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
+  || (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW)){
+    return 2;
+  }
+  printf("entrez le contenu du fichier\n");
+  if(!fgets(file->data,MAX_FILE_SIZE,stdin)){
+    return 3;
+  }
+  return write_file(filename,file);
+
+
 }
 
 
 
-int cmd_load(){
+int cmd_load(char *filename){
+  file_t *file;
+  return load_file_from_host(filename,file);
 
 }
 
 
-int cmd_store(){
-
+int cmd_store(char *filename){
+  return store_file_to_host(filename);
 }
 
 
