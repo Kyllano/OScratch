@@ -7,8 +7,39 @@
 #include "OS_DEFINES.h"
 
 // Victor
-int cmd_ls(){
+int cmd_ls(int type){
+    printf("%32s", "filename");
 
+    // Not Short
+    if (type != 1) {
+        printf(" | size    ");
+        printf(" | date de création          ");
+    }
+
+    // Long
+    if (type ==2){
+        printf(" | date de modification      ");
+        printf(" | owner id");
+    }
+
+
+    for (int i=0; i<disk.super_block.number_of_files; i++){
+        printf("%32s | ", disk.inodes[i].filename);
+
+        // Not Short
+        if (type != 1) {
+            printf(" | %8d", disk.inodes[i].size);
+            printf(" | %s", disk.inodes[i].ctimestamp);
+        }
+
+        // Long
+        if (type ==2){
+            printf(" | %s", disk.inodes[i].mtimestamp);
+            printf(" | %8d", disk.inodes[i].uid);
+        }
+    }
+
+    return NO_ERROR;
 }
 
 // Victor

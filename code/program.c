@@ -17,19 +17,19 @@ void flush(){
 int main(int argc, char* argv[]){
 
     if (argc != 2){
-        printf(RED"usage : %s "UNDR"disk path"DEF"\n", argv[0]);
+        printf(YELLOW"usage : %s "UNDR"disk path"DEF"\n", argv[0]);
         return ERROR_ARGS;
     }
 
-    int i = get_file_id(argv[1]);
-    if (i==-1){
-        printf(RED"Erreur d'accès au disque.\n"DEF);
-        return ERROR_FILE_ACCESS;
-    }
+    FILE* fichier_hote = fopen(argv[1], "rw");
+	if (fichier_hote == NULL){
+		return ERROR_FILE_ACCESS;
+	}
 
-    char* cmdline;
+    char cmdline[CMDLINE_MAX_SIZE];
     char* strToken;
-    cmd_t cmd; 
+    cmd_t cmd;
+    cmd.tabArgs = malloc(sizeof(char**)); 
     int loop = 1;
 
     while (loop){
@@ -38,10 +38,16 @@ int main(int argc, char* argv[]){
         printf("► ");
         fgets(cmdline, CMDLINE_MAX_SIZE, stdin);
 
+        //printf(GREEN"Still alive\n"DEF);
+
         cmd.nbArgs = 0;
+        realloc(cmd.tabArgs, sizeof(char**));
         strToken = strtok(cmdline, " ");
+
         while (strToken!=NULL){
-            cmd.tabArgs[cmd.nbArgs++] = strToken;
+            realloc(cmd.tabArgs[cmd.nbArgs], strlen(strToken));
+            realloc(cmd.tabArgs, cmd.nbArgs*sizeof(char**));
+            strcpy(cmd.tabArgs[cmd.nbArgs++], strToken);
             strToken = strtok(NULL, " ");
         }
 
@@ -51,53 +57,53 @@ int main(int argc, char* argv[]){
             if (!strcmp(cmd.tabArgs[1],"")) cmd_ls(0);
             else if (!strcmp(cmd.tabArgs[1], "-l")) cmd_ls(1);
             else if (!strcmp(cmd.tabArgs[1], "-s")) cmd_ls(2);
-            else printf("usage : ls [-l | -s]\n");
+            else printf(YELLOW"usage : ls [-l | -s]\n");
         }
         else if (!strcmp(cmd.tabArgs[0], "cat")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : cat "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cat "UNDR"nom de fichier"DEF"\n");
             else cmd_cat(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "rm")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : rm "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : rm "UNDR"nom de fichier"DEF"\n");
             else cmd_rm(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "cr")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : cr "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cr "UNDR"nom de fichier"DEF"\n");
             else cmd_cr(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "edit")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : edit "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : edit "UNDR"nom de fichier"DEF"\n");
             else cmd_edit(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "load")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : load "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : load "UNDR"nom de fichier"DEF"\n");
             else cmd_load(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "store")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : store "UNDR"nom de fichier"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : store "UNDR"nom de fichier"DEF"\n");
             else cmd_store(cmd.tabArgs[1]);
         }
         else if (!strcmp(cmd.tabArgs[0], "chown")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : chown "UNDR"nom de fichier"DEF" "UNDR"login autre utilisateur"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
             else {
                 scanf("%s", cmd.tabArgs[2]);
-                if (!strcmp(cmd.tabArgs[2], "")) printf("usage : chown "UNDR"nom de fichier"DEF" "UNDR"login autre utilisateur"DEF"\n");
+                if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
                 else cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
             }
         }
         else if (!strcmp(cmd.tabArgs[0], "chmod")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : chown "UNDR"nom de fichier"DEF" "UNDR"droit"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
             else {
                 scanf("%s", cmd.tabArgs[2]);
-                if (!strcmp(cmd.tabArgs[2], "")) printf("usage : chown "UNDR"nom de fichier"DEF" "UNDR"droit"DEF"\n");
+                if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
                 else cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
             }
         }
@@ -113,10 +119,12 @@ int main(int argc, char* argv[]){
         }
         else if (!strcmp(cmd.tabArgs[0], "rmuser")){
             scanf("%s", cmd.tabArgs[1]);
-            if (!strcmp(cmd.tabArgs[1], "")) printf("usage : rmuser "UNDR"login"DEF"\n");
+            if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : rmuser "UNDR"login"DEF"\n");
             else cmd_rmuser(cmd.tabArgs[1]);
         }
-        // Affichage du résultat
+        else {
+            printf(YELLOW"commande "BOLD"%s"DEF YELLOW"non reconnue\n"DEF, cmd.tabArgs[0]);
+        }
     }
 
     return NO_ERROR;
