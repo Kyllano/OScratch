@@ -7,7 +7,7 @@
 #include "OS_DEFINES.h"
 
 // Victor
-/*int cmd_ls(){
+int cmd_ls(){
 
 }
 
@@ -16,10 +16,17 @@ int cmd_cat(){
 
 }
 
-// Keylan
 int cmd_rm(){
-
-}*/
+  int i;
+  if((i=get_file_id(filename))==-1){
+    return ERROR_FILE_ACCESS;
+  }
+  if((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW&& disk.inodes[i].uright!=RW)
+  || (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW)){
+    return 2;
+  }
+  return delete_file(filename);
+}
 
 
 int cmd_cr(char *filename){
@@ -51,9 +58,9 @@ int cmd_edit(char *filename){
   || (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW)){
     return 2;
   }
-  printf("entrez le contenu du fichier\n");
+  printf("entrez le contenu du fichier (terminer la saisie avec une tabulation)\n");
   file.size=0;
-  while((c=fgetc(stdin))>0 && file.size!=MAX_FILE_SIZE){
+  while((c=fgetc(stdin))!='\t' && file.size!=MAX_FILE_SIZE){
     file.data[file.size++]=c;
   }
   return write_file(filename,&file);
@@ -63,7 +70,7 @@ int cmd_edit(char *filename){
 
 
 
-/*int cmd_load(char *filename){
+int cmd_load(char *filename){
   file_t *file;
   return load_file_from_host(filename,file);
 
@@ -103,4 +110,3 @@ int cmd_adduser(){
 int cmd_rmuser(){
 
 }
-*/
