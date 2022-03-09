@@ -115,7 +115,6 @@ int cmd_edit(char *filename){
 }
 
 // Guilhem
-
 int cmd_load(char *filename){
 	file_t *file;
 	return load_file_from_host(filename, file);
