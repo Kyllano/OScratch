@@ -49,7 +49,8 @@
 #define MAX_MSG 1024
 #define TIMESTAMP_SIZE 24+2
 #define NB_USERS 5
-#define CMDLINE_MAX_SIZE 64
+#define CMDLINE_MAX_SIZE 128
+#define ARG_MAX_SIZE 32
 
 #define BLOCK_SIZE 4
 #define SUPER_BLOCK_SIZE 4

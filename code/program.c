@@ -29,10 +29,10 @@ int main(int argc, char* argv[]){
     char cmdline[CMDLINE_MAX_SIZE];
     char* strToken;
     cmd_t cmd;
-    cmd.tabArgs = (char**) malloc (3*sizeof(char*));
-    cmd.tabArgs[0] = (char*) malloc (sizeof(char));
-    cmd.tabArgs[1] = (char*) malloc (sizeof(char));
-    cmd.tabArgs[2] = (char*) malloc (sizeof(char));
+    cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
+    cmd.tabArgs[0] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+    cmd.tabArgs[1] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+    cmd.tabArgs[2] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
     int loop = 1;
 
 
@@ -43,18 +43,34 @@ int main(int argc, char* argv[]){
         fgets(cmdline, CMDLINE_MAX_SIZE, stdin);
         printf(DEF);
         cmdline[strlen(cmdline)-1] = '\0';
+        
+        //printf(PURPLE"%s\n"DEF, cmdline);
 
         cmd.nbArgs = 0;
         strToken = strtok(cmdline, " ");
 
         while (strToken!=NULL){
-            cmd.tabArgs[cmd.nbArgs] = (char*) realloc (&cmd.tabArgs[cmd.nbArgs], strlen(strToken)*sizeof(char));
-            if (cmd.tabArgs[cmd.nbArgs] == NULL){
-                printf(RED"Erreur d'allocation mémoire.\n"DEF);
-                return ERROR_MALLOC;
+
+            if (strlen(strToken)>ARG_MAX_SIZE){
+                while (strToken!=NULL) strToken = strtok(NULL, " ");
+                printf(RED"Erreur : Un argument dépasse la taille maximale autorisée.\n"DEF);
+                strcpy(cmd.tabArgs[0], "");
             }
-            cmd.tabArgs[cmd.nbArgs++] = strToken;
-            strToken = strtok(NULL, " ");
+
+            else{
+                cmd.tabArgs = (char**) realloc (cmd.tabArgs, (1+cmd.nbArgs)*sizeof(char*));
+                cmd.tabArgs[cmd.nbArgs] = (char*) realloc (cmd.tabArgs[cmd.nbArgs], (ARG_MAX_SIZE*sizeof(char))); 
+
+                if (cmd.tabArgs[cmd.nbArgs] == NULL){
+                    printf(RED"Erreur d'allocation mémoire.\n"DEF);
+                    return ERROR_MALLOC;
+                }
+
+                strcpy(cmd.tabArgs[cmd.nbArgs], strToken);
+                //cmd.tabArgs[cmd.nbArgs] = strToken;
+                cmd.nbArgs++;
+                strToken = strtok(NULL, " ");
+            }
         }
 
         // Interprétation puis vérification et exécution
@@ -117,8 +133,9 @@ int main(int argc, char* argv[]){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : rmuser "UNDR"login"DEF"\n");
             else cmd_rmuser(cmd.tabArgs[1]);
         }
+        else if (!strcmp(cmd.tabArgs[0], "")){}
         else {
-            printf(YELLOW"commande non reconnue\n"DEF, cmd.tabArgs[0]);
+            printf(YELLOW"commande non reconnue\n"DEF);
         }
     }
 
