@@ -24,7 +24,7 @@ int get_file_id(char* filename){
 
 // Guilhem
 void write_content(char *filename,file_t *fich){
-  printf("taille write : %d\n",fich->size);
+  	printf("taille write : %d\n",fich->size);
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
@@ -37,7 +37,7 @@ void write_content(char *filename,file_t *fich){
 
 	write_mult_blocks((char *)fich->data, fich->size, &disk.super_block.first_free_byte);
 	update_first_free_byte();
-  disk.super_block.number_of_files ++;
+  	disk.super_block.number_of_files ++;
 }
 
 
