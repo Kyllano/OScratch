@@ -193,7 +193,7 @@ void update_first_free_byte();
 ------------------------------------------------------------*/
 
 int cmd_ls(int type);
-int cmd_cat(char *filename);
+int cmd_cat();
 int cmd_rm(char *filename);
 int cmd_cr(char *filename);
 int cmd_edit(char *filename);
