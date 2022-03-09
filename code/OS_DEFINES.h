@@ -26,6 +26,7 @@
 #include "sha256.h"
 #include "sha256_utils.h"
 #include "timestamp.h"
+#include "formatting.h"
 
 
 
@@ -187,13 +188,13 @@ void update_first_free_byte();
   FONCTIONS COUCHE 5
 ------------------------------------------------------------*/
 
-int cmd_ls();
-int cmd_cat();
-int cmd_rm();
-int cmd_cr();
-int cmd_edit();
+int cmd_ls(int type);
+int cmd_cat(char *filename);
+int cmd_rm(char *filename);
+int cmd_cr(char *filename);
+int cmd_edit(char *filename);
 int cmd_load();
-int cmd_store();
+int cmd_store(char *filename);
 int cmd_chown();
 int cmd_chmod();
 int cmd_listusers();
