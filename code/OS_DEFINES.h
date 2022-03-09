@@ -63,6 +63,7 @@
 #define ERROR_FILE_TOO_BIG	4
 #define ERROR_DISK_FULL		5
 #define ERROR_ARGS			6
+#define ERROR_MALLOC		7
 
 
 
