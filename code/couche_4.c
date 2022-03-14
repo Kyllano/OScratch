@@ -34,7 +34,7 @@ void write_content(char *filename,file_t *fich){
 	disk.inodes[unused_inode].uid = user.userid;
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
-
+	printf("%s\n",fich->data);
 	write_mult_blocks((char *)fich->data, fich->size, &disk.super_block.first_free_byte);
 	update_first_free_byte();
   	disk.super_block.number_of_files ++;
