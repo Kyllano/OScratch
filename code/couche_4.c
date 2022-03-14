@@ -85,7 +85,14 @@ int read_file(char* filename, file_t* file){
     int i = get_file_id(filename);
     if (i==-1) return ERROR_FILE_ACCESS;
 
-    read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
+	block_t block;
+
+	for (int j=0; j<disk.inodes[i].nblock; j++){
+		read_block(&block, disk.inodes[i].first_byte + j*BLOCK_SIZE);
+		for (int k=0; k<4; k++){
+			file->data[j+k] = block.data[k];
+		}
+	}
 
 	file->size = disk.inodes[i].size;
 
