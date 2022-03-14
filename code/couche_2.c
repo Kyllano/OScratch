@@ -33,8 +33,11 @@ void write_int_block(block_t block, uint *pos, uint *buff)
 void read_mult_blocks(char *buff, int taille_totale, uint *pos)
 {
   errno = 0;
-  fseek(disk.storage, (long)(*pos), SEEK_SET);
-  fread(buff, taille_totale, 1, disk.storage);
+  printf("bite,%d\n",*pos);
+  printf("%d\n",fseek(disk.storage, *pos, SEEK_SET));
+  printf("bite\n");
+  printf("%ld\n",fread(buff, taille_totale, 1, disk.storage));
+  printf("bite\n");
 
   if (errno != 0){
     perror("Erreur de lecture");
@@ -49,8 +52,11 @@ void read_mult_blocks(char *buff, int taille_totale, uint *pos)
 void write_mult_blocks(char *buff, int taille_totale, uint *pos)
 {
   errno = 0;
-  fseek(disk.storage, (long)(*pos), SEEK_SET);
-  fwrite(buff, taille_totale, 1, disk.storage);
+  printf("cul %d\n",*pos);
+  printf("%d\n",fseek(disk.storage, *pos, SEEK_SET));
+  printf("cul\n");
+  printf("%ld\n",fwrite(buff, taille_totale, 1, disk.storage));
+  printf("cul\n");
 
   if (errno != 0) {
     perror("Erreur d'écriture");

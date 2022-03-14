@@ -21,8 +21,8 @@ int main(int argc, char* argv[]){
         return ERROR_ARGS;
     }
 
-    FILE* fichier_hote = fopen(argv[1], "rw");
-	if (fichier_hote == NULL){
+    	disk.storage = fopen(argv[1], "rb+");
+	if (disk.storage == NULL){
 		return ERROR_FILE_ACCESS;
 	}
 
