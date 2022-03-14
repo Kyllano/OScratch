@@ -54,8 +54,8 @@ int cmd_rm(char *filename){
 	if ((i=get_file_id(filename)) == -1){
 		return ERROR_FILE_ACCESS;
 	}
-	if ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
-	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW)){
+	if (user.userid && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
+	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
 	return delete_file(filename);
@@ -88,8 +88,8 @@ int cmd_edit(char *filename){
 
 	if ((i=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 	
-	if((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
-	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW)){
+	if(user.userid && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
+	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
 	
