@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
     int retour;
 
     // Tests
-    user.userid = 0;
+    user.userid = 0; 
 
     clear_screen();
 

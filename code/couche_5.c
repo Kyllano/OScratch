@@ -85,7 +85,7 @@ int cmd_edit(char *filename){
 	int i;
 	file_t file;
 	char c;
-
+	printf("%d\n",user.userid);
 	if ((i=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 	
 	if(user.userid && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
@@ -95,7 +95,7 @@ int cmd_edit(char *filename){
 	
 	printf("Entrez le contenu du fichier (terminer la saisie avec une tabulation)\n");
 	file.size=0;
-	while ((c=fgetc(stdin))!='\t' && file.size!=MAX_FILE_SIZE){
+	while ((c=fgetc(stdin))!='$' && file.size!=MAX_FILE_SIZE){
 		file.data[file.size++] = c;
 	}
 	return write_file(filename, &file);
