@@ -7,7 +7,7 @@
 #include "OS_DEFINES.h"
 
 // Victor
-int cmd_ls(){
+int cmd_ls(int type){
 
 }
 
@@ -16,7 +16,7 @@ int cmd_cat(){
 
 }
 
-int cmd_rm(){
+int cmd_rm(char *filename){
   int i;
   if((i=get_file_id(filename))==-1){
     return ERROR_FILE_ACCESS;
