@@ -31,7 +31,7 @@ void write_content(char *filename,file_t *fich){
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
 	strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
 	disk.inodes[unused_inode].nblock = compute_nblock(fich->size);
-	disk.inodes[unused_inode].uid = 1 ;/*user.userid;*/
+	disk.inodes[unused_inode].uid = user.userid;
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
 
@@ -86,7 +86,8 @@ int read_file(char* filename, file_t* file){
     if (i==-1) return ERROR_FILE_ACCESS;
 
     read_mult_blocks((char *)file->data, disk.inodes[i].size, &disk.inodes[i].first_byte);
-    file->size = disk.inodes[i].size;
+
+	file->size = disk.inodes[i].size;
 
     return NO_ERROR;
 }
