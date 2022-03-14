@@ -77,7 +77,6 @@ int cmd_cr(char *filename){
 	update_first_free_byte();
 	disk.super_block.number_of_files ++;
 	return NO_ERROR;
-
 }
 
 // Guilhem
@@ -130,7 +129,10 @@ int cmd_listusers(){
 
 // Victor
 int cmd_quit(){
+	printf("Sauvegarde des données...\n");
 	shutoff_save();
+	printf("Arrêt du programme.\n");
+	return NO_ERROR;
 }
 
 // Keylan

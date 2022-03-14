@@ -72,7 +72,6 @@ int main(int argc, char* argv[]){
                 }
 
                 strcpy(cmd.tabArgs[cmd.nbArgs], strToken);
-                //cmd.tabArgs[cmd.nbArgs] = strToken;
                 cmd.nbArgs++;
                 strToken = strtok(NULL, " ");
             }
@@ -91,11 +90,17 @@ int main(int argc, char* argv[]){
         }
         else if (!strcmp(cmd.tabArgs[0], "rm")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : rm "UNDR"nom de fichier"DEF"\n");
-            else retour = cmd_rm(cmd.tabArgs[1]);
+            else {
+                retour = cmd_rm(cmd.tabArgs[1]);
+                if (retour == NO_ERROR) printf("Le fichier %s a été supprimé avec succès.\n", cmd.tabArgs[1]);
+            }
         }
         else if (!strcmp(cmd.tabArgs[0], "cr")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cr "UNDR"nom de fichier"DEF"\n");
-            else retour = cmd_cr(cmd.tabArgs[1]);
+            else {
+                retour = cmd_cr(cmd.tabArgs[1]);
+                if (retour == NO_ERROR) printf("Le fichier %s a été créé avec succès.\n", cmd.tabArgs[1]);
+            }
         }
         else if (!strcmp(cmd.tabArgs[0], "edit")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : edit "UNDR"nom de fichier"DEF"\n");
@@ -103,11 +108,17 @@ int main(int argc, char* argv[]){
         }
         else if (!strcmp(cmd.tabArgs[0], "load")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : load "UNDR"nom de fichier"DEF"\n");
-            else retour = cmd_load(cmd.tabArgs[1]);
+            else {
+                retour = cmd_load(cmd.tabArgs[1]);
+                if (retour == NO_ERROR) printf("Le fichier %s a été chargé avec succès.\n", cmd.tabArgs[1]);
+            }
         }
         else if (!strcmp(cmd.tabArgs[0], "store")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : store "UNDR"nom de fichier"DEF"\n");
-            else retour = cmd_store(cmd.tabArgs[1]);
+            else {
+                retour = cmd_store(cmd.tabArgs[1]);
+                if (retour == NO_ERROR) printf("Le fichier %s a été enregistré avec succès.\n", cmd.tabArgs[1]);
+            }
         }
         else if (!strcmp(cmd.tabArgs[0], "chown")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
@@ -137,6 +148,23 @@ int main(int argc, char* argv[]){
         else if (!strcmp(cmd.tabArgs[0], "rmuser")){
             if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : rmuser "UNDR"login"DEF"\n");
             else retour = cmd_rmuser(cmd.tabArgs[1]);
+        }
+        else if (!strcmp(cmd.tabArgs[0], "help")){
+            printf(
+                    WHITE BOLD "\t\t- COMMANDES -\n\n"DEF
+                    WHITE BOLD "cat "UNDR"nom de fichier"DEF"\n\tAffiche à l’écran le contenu d’un fichier si l’utilisateur a les droits.\n\n"
+                    WHITE BOLD "rm "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du système si l’utilisateur a les droits.\n\n"
+                    WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
+                    WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
+                    WHITE BOLD "load "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système ”hôte” sur le système avec le même nom (assimilé à une création).\n\n"
+                    WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
+                    WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
+                    WHITE BOLD "chmod "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"droit"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
+                    WHITE BOLD "listusers"DEF"\n\tAffiche la liste des utilisateurs.\n\n"
+                    WHITE BOLD "quit"DEF"\n\tSort de l’interprète de commande et du programme en sauvegardant le système de fichiers sur le disque.\n\n"
+                    WHITE BOLD "adduser"DEF"\n\tAjoute un utilisateur.\n\n"
+                    WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
+                );
         }
         else if (!strcmp(cmd.tabArgs[0], "")){}
         else {
