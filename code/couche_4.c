@@ -24,7 +24,6 @@ int get_file_id(char* filename){
 
 // Guilhem
 void write_content(char *filename,file_t *fich){
-  	printf("taille write : %d\n",fich->size);
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
@@ -34,10 +33,8 @@ void write_content(char *filename,file_t *fich){
 	disk.inodes[unused_inode].uid = user.userid;
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
-	printf("%s\n",fich->data);
-	write_mult_blocks((char *)fich->data, fich->size, &disk.super_block.first_free_byte);
-	update_first_free_byte();
-  	disk.super_block.number_of_files ++;
+	write_mult_blocks((char *)fich->data, disk.inodes[unused_inode].nblock, &disk.super_block.first_free_byte,fich->size);
+ 	disk.super_block.number_of_files ++;
 }
 
 
@@ -45,12 +42,11 @@ void write_content(char *filename,file_t *fich){
 void overwrite_content(char *filename, file_t *fich, int i_fich){
 
 	if (disk.inodes[i_fich].size >= fich->size){
-
 		strcpy(disk.inodes[i_fich].mtimestamp, timestamp());
 		disk.inodes[i_fich].size = fich->size;
 		disk.inodes[i_fich].nblock = compute_nblock(fich->size);
-		write_mult_blocks((char *)fich->data, fich->size, &disk.inodes[i_fich].first_byte);
-
+		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
+    	update_first_free_byte();
 	}
 	else{
 		delete_inode(i_fich);
@@ -87,8 +83,8 @@ int read_file(char* filename, file_t* file){
 
 	block_t block;
 
-	for (int j=0; j<disk.inodes[i].nblock; j++){
-		read_block(&block, disk.inodes[i].first_byte + j*BLOCK_SIZE);
+	for (int j=0; j<BLOCK_SIZE*disk.inodes[i].nblock; j+=BLOCK_SIZE){
+		read_block(&block, disk.inodes[i].first_byte + j);
 		for (int k=0; k<4; k++){
 			file->data[j+k] = block.data[k];
 		}
@@ -114,11 +110,11 @@ int delete_file(char* filename){
 // Ecrit un fichier hote pasé en parametre dans un fichier empty file passé en parametre puis ecris ce fichier empty dans le disk
 // Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
+	
 	FILE* fichier_hote = fopen(filename_on_host, "r");
 	if (fichier_hote == NULL){
 		return ERROR_FILE_ACCESS;
 	}
-
 
 	uchar c;
 	empty_file->size = 0;
@@ -128,7 +124,6 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file){
 		empty_file->size ++;
 		c = fgetc(fichier_hote);
 	}
-  	// if (empty_file->size < MAX_FILE_SIZE) empty_file->size--;
 
 	fclose(fichier_hote);
 	fichier_hote = NULL;
