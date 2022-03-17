@@ -20,6 +20,9 @@ int cmd_ls(int type){
 	}
 	printf("\n");
 
+
+	printf("nb_file = %d\n",disk.super_block.number_of_files);
+
 	for (int i=0; i<disk.super_block.number_of_files; i++){
 		printf("%-32s", disk.inodes[i].filename);
 		if (type != 1) {	// Not Short
@@ -54,7 +57,7 @@ int cmd_rm(char *filename){
 	if ((i=get_file_id(filename)) == -1){
 		return ERROR_FILE_ACCESS;
 	}
-	if (user.userid && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
+	if (user.userid!=0 && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
 	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
@@ -64,8 +67,9 @@ int cmd_rm(char *filename){
 // Guilhem
 int cmd_cr(char *filename){
 	int unused_inode;
-
 	if ((unused_inode = get_unused_inode()) == -1) return ERROR_DISK_FULL;
+
+	if(get_file_id(filename)!=-1) return ERROR_FILENAME;
 
 	init_inode(filename,1, disk.super_block.first_free_byte);
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
@@ -75,7 +79,9 @@ int cmd_cr(char *filename){
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
 	update_first_free_byte();
+	printf("%d\n",disk.super_block.first_free_byte);
 	disk.super_block.number_of_files ++;
+
 	return NO_ERROR;
 }
 
@@ -84,15 +90,14 @@ int cmd_edit(char *filename){
 	int i;
 	file_t file;
 	char c;
-	printf("%d\n",user.userid);
 	if ((i=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
-	
-	if(user.userid && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
+
+	if(user.userid!=0  && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
 	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
-	
-	printf("Entrez le contenu du fichier (terminer la saisie avec une tabulation)\n");
+
+	printf("Entrez le contenu du fichier (terminez la saisie avec $)\n");
 	file.size=0;
 	while ((c=fgetc(stdin))!='$' && file.size!=MAX_FILE_SIZE){
 		file.data[file.size++] = c;
@@ -110,6 +115,10 @@ int cmd_load(char *filename){
 // Guihem
 int cmd_store(char *filename){
 	return store_file_to_host(filename);
+}
+
+int cmd_sudo(){
+
 }
 
 // Keylan
@@ -130,7 +139,9 @@ int cmd_listusers(){
 // Victor
 int cmd_quit(){
 	printf("Sauvegarde des données...\n");
-	shutoff_save();
+	if (shutoff_save()){
+		return ERROR_FILE_ACCESS;
+	}
 	printf("Arrêt du programme.\n");
 	return NO_ERROR;
 }
@@ -145,6 +156,11 @@ int cmd_rmuser(){
 
 }
 
+// Guilhem
+int cmd_sudo(){
+
+}
+
 
 
 
@@ -154,6 +170,14 @@ int cmd_rmuser(){
 // Victor
 void clear_screen(){
 	printf("\e[1;1H\e[2J");
+}
+
+// Victor
+void flush(){
+    int c;
+    do {
+        c=getchar();
+    } while (c!='\n' && c!=EOF);
 }
 
 // Victor

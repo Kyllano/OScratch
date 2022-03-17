@@ -65,6 +65,7 @@
 #define ERROR_DISK_FULL		5
 #define ERROR_ARGS			6
 #define ERROR_MALLOC		7
+#define ERROR_FILENAME 8
 
 
 
@@ -140,30 +141,30 @@ typedef struct cmd_s{
 
 void print_block(block_t *bloc);
 uint compute_nblock(int nb_bytes);
-void write_block(block_t *bloc, uint pos);
-void read_block(block_t *bloc, uint pos);
-void shutoff_save();
-void convert_int_to_block(block_t* block,uint nombre);
-void convert_block_to_int(block_t block,uint *nombre);
-void gestion_ouverture(FILE *f,char* path);
-void init_disk_sos(char* path);
+int write_block(block_t *bloc, uint pos);
+int read_block(block_t *bloc, uint pos);
+int shutoff_save();
+void convert_int_to_block(block_t* block, uint nombre);
+void convert_block_to_int(block_t block, uint *nombre);
+int gestion_ouverture(FILE *f, char* path);
+int init_disk_sos(char* path);
 
 /*------------------------------------------------------------
   FONCTIONS COUCHE 2
 ------------------------------------------------------------*/
 
-void read_int_block(block_t block, uint *pos, uint *buff);
-void write_int_block(block_t block, uint *pos, uint *buff);
-void read_mult_blocks(char *buff, int taille_totale, uint *pos);
-void write_mult_blocks(char *buff,int taille_totale, uint *pos);
-void read_inodes_table();
-void write_inodes_table();
+int read_int_block(block_t block, uint *pos, uint *buff);
+int write_int_block(block_t block, uint *pos, uint *buff);
+void read_mult_blocks(char *s, int nblock, uint *pos, int taille_max_s);
+void write_mult_blocks(char *s, int nblock, uint *pos, int taille_max_s);
+int read_inodes_table();
+int write_inodes_table();
 void clear_inode(int indice);
 void delete_inode(int indice);
 void init_inode(char* filename, uint size, uint pos);
 int get_unused_inode();
-void write_super_block();
-void read_super_block();
+int write_super_block();
+int read_super_block();
 
 /*------------------------------------------------------------
   FONCTIONS COUCHE 3
@@ -184,7 +185,7 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file);
 int store_file_to_host(char* filename);
 
 int get_file_id(char* filename);
-void write_content(char *filename,file_t *fich);
+void write_content(char *filename, file_t *fich);
 void overwrite_content(char *filename, file_t *fich, int i_fich);
 void update_first_free_byte();
 
@@ -205,6 +206,7 @@ int cmd_listusers();
 int cmd_quit();
 int cmd_adduser();
 int cmd_rmuser();
+int cmd_sudo();
 
 void flush();
 void clear_screen();
