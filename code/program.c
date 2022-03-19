@@ -21,6 +21,7 @@ int main(int argc, char* argv[]){
 
 	if (!read_super_block()){
 		read_inodes_table();
+		//ajouter read_user_table()
 	}
 	update_first_free_byte();
 
@@ -129,9 +130,9 @@ int main(int argc, char* argv[]){
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "chmod")){
-			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
+			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chmod "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
 			else {
-				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
+				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chmod "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
 				else retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
 			}
 		}
