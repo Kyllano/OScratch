@@ -45,8 +45,10 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 		strcpy(disk.inodes[i_fich].mtimestamp, timestamp());
 		disk.inodes[i_fich].size = fich->size;
 		disk.inodes[i_fich].nblock = compute_nblock(fich->size);
+    int stock=disk.inodes[i_fich].first_byte;
 		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
-    	update_first_free_byte();
+    disk.inodes[i_fich].first_byte=stock;
+    update_first_free_byte();
 	}
 	else{
 		delete_inode(i_fich);
@@ -110,7 +112,7 @@ int delete_file(char* filename){
 // Ecrit un fichier hote pasé en parametre dans un fichier empty file passé en parametre puis ecris ce fichier empty dans le disk
 // Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
-	
+
 	FILE* fichier_hote = fopen(filename_on_host, "r");
 	if (fichier_hote == NULL){
 		return ERROR_FILE_ACCESS;

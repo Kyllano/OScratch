@@ -24,6 +24,7 @@ int shutoff_save(){
 
 	if (write_super_block()) return ERROR_FILE_ACCESS;
 	if (write_inodes_table()) return ERROR_FILE_ACCESS;
+	write_users_table();
 
 	return NO_ERROR;
 }

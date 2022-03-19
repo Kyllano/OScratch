@@ -2,7 +2,9 @@ CC=gcc
 OPT=-Wall -lm
 OBJDIR=bin
 EXEC=OScratch
-TARGET=	bin/timestamp.o\
+TARGET=	bin/sha256.o\
+		bin/sha256_utils.o\
+		bin/timestamp.o\
 		bin/couche_1.o\
 		bin/couche_2.o\
 		bin/couche_3.o\

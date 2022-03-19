@@ -117,12 +117,8 @@ int cmd_store(char *filename){
 	return store_file_to_host(filename);
 }
 
-int cmd_sudo(){
-
-}
-
 // Keylan
-int cmd_chown(){
+int cmd_chown(char* filename, char* name_owner){
 
 }
 
@@ -148,7 +144,7 @@ int cmd_quit(){
 
 // Keylan
 int cmd_adduser(){
-
+	
 }
 
 // Keylan
@@ -212,6 +208,10 @@ void error_message(int i){
 
 		case ERROR_MALLOC:
 			printf("Erreur d'allocation mémoire.\n");
+			break;
+
+		case ERROR_USER_NOT_OWNER:
+			printf("Erreur : cet utilisateur n'est pas le propriétaire du fichier.\n");
 			break;
 	}
 
