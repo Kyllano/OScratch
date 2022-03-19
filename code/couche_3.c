@@ -14,10 +14,10 @@ void init_users_table(){
     char sha_mdp [SHA256_BLOCK_SIZE*2 + 1];
     sha256ofString((BYTE*)"root", sha_mdp);
     strcpy(disk.users_table[ROOT_UID].passwd, sha_mdp);
+    disk.super_block.number_of_users = 1;
 
     write_users_table();
 
-    disk.super_block.number_of_users = 1;
 }
 
 

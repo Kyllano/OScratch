@@ -1,11 +1,11 @@
 #include "OS_DEFINES.h"
 #include <unistd.h>
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
 
 	user.userid = 0;
 
-	if (init_disk_sos("d0")){
+	if (init_disk_sos(argv[1])){
 		return ERROR_FILE_ACCESS;
 	}
 
