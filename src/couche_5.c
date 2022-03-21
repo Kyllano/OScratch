@@ -176,13 +176,7 @@ int cmd_rmuser(){
 
 int cmd_su(char *username){
     char password [CMDLINE_MAX_SIZE];
-    char username [CMDLINE_MAX_SIZE];
     int id;
-    
-    
-    printf("entrez le nom de l'utilisateur :\n");
-    fgets(username, CMDLINE_MAX_SIZE, stdin);
-    username[strlen(username) -1] = '\0';
 
     printf("entrez le login de l'utilisateur :\n");
     fgets(password, CMDLINE_MAX_SIZE, stdin);
