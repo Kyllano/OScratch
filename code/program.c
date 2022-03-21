@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 
 	if (!read_super_block()){
 		read_inodes_table();
-		//ajouter read_user_table()
+		init_users_table();
 	}
 	update_first_free_byte();
 

@@ -74,13 +74,12 @@ void write_users_table(){
         strcat((char*) fich_passwd.data, "\n\0");
     }
     fich_passwd.size = strlen((char*) fich_passwd.data);
-    printf("strlen : %d\nDONNE : %s\n", fich_passwd.size, fich_passwd.data);
 
     write_file("passwd", &fich_passwd);
     int file_passwd_id = get_file_id("passwd");
     disk.inodes[file_passwd_id].uid = 0;
     disk.inodes[file_passwd_id].uright = RW;
-    disk.inodes[file_passwd_id].uid = RW;
+    disk.inodes[file_passwd_id].oright = RW;
 }
 
 //Keylan
@@ -109,9 +108,10 @@ int add_user(char* username, char* password){
     return NO_ERROR;
 }
 
+
 int remove_user(char* username){
     if (disk.super_block.number_of_users == 1){
-        printf("cannot remove root\n");
+        printf("cannot remove root or user not existent\n");
         return ERROR_NOT_ENOUGH_RIGHTS;
     }
 

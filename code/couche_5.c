@@ -129,7 +129,13 @@ int cmd_chmod(){
 
 // Keylan
 int cmd_listusers(){
+	read_users_table();
 
+	printf(BOLD WHITE"List des utilisateurs :\n"DEF);
+	for (int i = 0; i < disk.super_block.number_of_users; i++){
+		printf("%s\n", disk.users_table[i].login );
+	}
+	return NO_ERROR;
 }
 
 // Victor
@@ -144,7 +150,23 @@ int cmd_quit(){
 
 // Keylan
 int cmd_adduser(){
-	
+	read_users_table();
+	if (disk.super_block.number_of_users == NB_USERS) return ERROR_TOO_MANY_USER;
+
+	printf("Nom du nouvel utilisateur : ");
+	char username [CMDLINE_MAX_SIZE];
+	fgets(username, CMDLINE_MAX_SIZE, stdin);
+	username[strlen(username) -1] = '\0';
+
+	printf("Mot de passe du nouvel utilisateur : ");
+	char password [CMDLINE_MAX_SIZE];
+	fgets(password, CMDLINE_MAX_SIZE, stdin);
+	password[strlen(password) -1] = '\0';
+
+	int retour = add_user(username, password);
+
+	if (retour == NO_ERROR) printf("Utilisateur créé\n");
+	return retour;
 }
 
 // Keylan
