@@ -92,8 +92,8 @@ int get_user_id(char* user_login){
 }
 
 int add_user(char* username, char* password){
-    if (disk.super_block.number_of_users >= NB_USERS) return ERROR_TOO_MANY_USER;
-    if (get_user_id(username) != ERROR_INEXISTANT_USER) return ERROR_USER_ALREADY_EXIST;
+    if (disk.super_block.number_of_users >= NB_USERS) return ERROR_TOO_MANY_USERS;
+    if (get_user_id(username) != ERROR_INEXISTANT_USER) return ERROR_USER_ALREADY_EXISTING;
 
     strcpy(disk.users_table[disk.super_block.number_of_users].login, username);
 
@@ -112,7 +112,7 @@ int add_user(char* username, char* password){
 int remove_user(char* username){
     if (disk.super_block.number_of_users == 1){
         printf("cannot remove root or user not existent\n");
-        return ERROR_NOT_ENOUGH_RIGHTS;
+        return ERROR_RIGHTS;
     }
 
     int uid_to_delete = get_user_id(username);
