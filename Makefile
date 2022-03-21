@@ -1,6 +1,7 @@
 CC=gcc
 OPT=-Wall -lm
 OBJDIR=bin
+SRCDIR=src
 EXEC=OScratch
 TARGET=	bin/sha256.o\
 		bin/sha256_utils.o\
@@ -15,7 +16,7 @@ all : $(EXEC)
 
 
 #compile couches
-$(OBJDIR)/%.o : code/%.c
+$(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) -o $@ -c $< $(OPT)
 
 #compile main
@@ -27,8 +28,8 @@ test.o : test.c
 	$(CC) -o test.o -c test.c $(OPT)
 
 #compile cmd_dump_inodes
-# cmd_dump_inodes : code/cmd_dump_inodes.c
-# 	$(CC) code/cmd_dump_inodes.c -o cmd_dump_inodes $(OPT)
+# cmd_dump_inodes : src/cmd_dump_inodes.c
+# 	$(CC) src/cmd_dump_inodes.c -o cmd_dump_inodes $(OPT)
 
 #link main avec liste et element
 $(EXEC): $(TARGET) $(OBJDIR)/program.o
