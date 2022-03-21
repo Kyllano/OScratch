@@ -69,7 +69,7 @@ int cmd_cr(char *filename){
 	int unused_inode;
 	if ((unused_inode = get_unused_inode()) == -1) return ERROR_DISK_FULL;
 
-	if(get_file_id(filename)!=-1) return ERROR_FILENAME;
+	if(get_file_id(filename)!=-1) return ERROR_FILENAME_TAKEN;
 
 	init_inode(filename,1, disk.super_block.first_free_byte);
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
@@ -247,6 +247,10 @@ void error_message(int i){
 			printf("Erreur d'allocation mémoire.\n");
 			break;
 
+		case ERROR_FILENAME_TAKEN:
+			printf("Erreur : Le fichier existe déjà.\n");
+			break;
+
 		case ERROR_USER_NOT_OWNER:
 			printf("Erreur : Cet utilisateur n'est pas le propriétaire du fichier.\n");
 			break;
@@ -261,6 +265,9 @@ void error_message(int i){
 
 		case ERROR_USERNAME_TAKEN:
 			printf("Erreur : Ce nom d'utilisateur est déjà pris.\n");
+			break;
+		
+		case ERROR_PASSWORD:
 			break;
 	}
 

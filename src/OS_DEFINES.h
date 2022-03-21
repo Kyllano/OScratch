@@ -66,7 +66,7 @@
 #define ERROR_DISK_FULL			-5
 #define ERROR_ARGS				-6
 #define ERROR_MALLOC			-7
-#define ERROR_FILENAME 			-8
+#define ERROR_FILENAME_TAKEN 	-8
 #define ERROR_USER_NOT_OWNER	-9
 #define ERROR_USER_NOT_FOUND	-10
 #define ERROR_TOO_MANY_USERS	-11
