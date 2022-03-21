@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
+#include "OS_DEFINES.h"
 
 // create a file named di (i = diskid) in directory dirname of size bytes
 // the file is initialized with 0
@@ -32,4 +29,21 @@ int main(int argc, char **argv) {
       int diskid = 0;
 	    format(argv[1], size, diskid);
     }
+
+
+
+    if (init_disk_sos(argv[0])){
+      return ERROR_FILE_ACCESS;
+    }
+
+    if (!write_super_block()){
+      init_user_table();
+      write_inodes_table();
+      write_users_table();
+      return NO_ERROR;
+    }
+
+    return ERROR_FILE_ACCESS;
+
+
 }
