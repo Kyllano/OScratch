@@ -57,20 +57,20 @@
 #define INODES_START SUPER_BLOCK_SIZE*BLOCK_SIZE+1
 #define INODE_SIZE FILENAME_MAX_SIZE/BLOCK_SIZE+6+(TIMESTAMP_SIZE*2)/BLOCK_SIZE
 
-#define ERROR_NOT_ENOUGH_RIGHTS	-4
-#define ERROR_USER_ALREADY_EXIST -3
-#define ERROR_TOO_MANY_USER		-2
-#define ERROR_INEXISTANT_USER	-1
-#define NO_ERROR				0
-#define ERROR_FILE_ACCESS		1
-#define ERROR_RIGHTS			2
-#define ERROR_INODES_FULL		3
-#define ERROR_FILE_TOO_BIG		4
-#define ERROR_DISK_FULL			5
-#define ERROR_ARGS				6
-#define ERROR_MALLOC			7
-#define ERROR_FILENAME 			8
-#define ERROR_USER_NOT_OWNER	9
+
+#define NO_ERROR				 0
+#define ERROR_FILE_ACCESS		-1
+#define ERROR_RIGHTS			-2
+#define ERROR_INODES_FULL		-3
+#define ERROR_FILE_TOO_BIG		-4
+#define ERROR_DISK_FULL			-5
+#define ERROR_ARGS				-6
+#define ERROR_MALLOC			-7
+#define ERROR_FILENAME 			-8
+#define ERROR_USER_NOT_OWNER	-9
+#define ERROR_INEXISTANT_USER	-10
+#define ERROR_TOO_MANY_USERS	-11
+#define ERROR_USER_ALREADY_EXISTING	-12
 
 
 
@@ -214,7 +214,7 @@ int cmd_listusers();
 int cmd_quit();
 int cmd_adduser();
 int cmd_rmuser();
-int cmd_sudo();
+int cmd_su(char *username);
 
 void flush();
 void clear_screen();

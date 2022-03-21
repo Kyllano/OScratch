@@ -2,10 +2,12 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
+	printf("ptdr");
 
 	user.userid = 0;
 
-	if (init_disk_sos(argv[1])){
+
+	if (init_disk_sos("d0")){
 		return ERROR_FILE_ACCESS;
 	}
 
@@ -38,16 +40,27 @@ int main(int argc, char *argv[]) {
 
 	printf("\n\nON DELETE J et MEC\n\n");
 
-	remove_user("j");
+	printf("CAT PRIMITIF\n\n");
+	cmd_cat("passwd");
+
 	remove_user("mec");
+	printf("CAT\n");
+	cmd_cat("passwd");
+	remove_user("j");
 
 	for (int i=0; i < disk.super_block.number_of_users; i++){
 		printf("user : %s\nmdp : %s\nid: %d\n", disk.users_table[i].login, disk.users_table[i].passwd, i);
 	}
 
-
 	printf("ON CAT\n\n\n");
 	cmd_cat("passwd");
+	printf("\n\n");
+
+	read_users_table();
+
+	for (int i=0; i < disk.super_block.number_of_users; i++){
+		printf("user : %s\nmdp : %s\nid: %d\n", disk.users_table[i].login, disk.users_table[i].passwd, i);
+	}
 
   fclose(disk.storage);
   return 0;
