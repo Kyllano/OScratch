@@ -215,6 +215,7 @@ int cmd_quit();
 int cmd_adduser();
 int cmd_rmuser();
 int cmd_su(char *username);
+int cmd_whoami();
 
 void flush();
 void clear_screen();

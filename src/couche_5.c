@@ -190,6 +190,12 @@ int cmd_su(char *username){
     return NO_ERROR;
 }
 
+// Keylan
+int cmd_whoami(){
+	
+	return NO_ERROR;
+}
+
 
 
 

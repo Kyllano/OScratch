@@ -157,6 +157,9 @@ int main(int argc, char* argv[]){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : su "UNDR"nom d'utilisateur"DEF"\n");
 			else retour = cmd_su(cmd.tabArgs[1]);
 		}
+		else if (!strcmp(cmd.tabArgs[0], "whoami")){
+			cmd_whoami();
+		}
 		else if (!strcmp(cmd.tabArgs[0], "help")){
 			printf(
 					WHITE BOLD "\t\t- COMMANDES -\n\n"DEF
@@ -173,6 +176,7 @@ int main(int argc, char* argv[]){
 					WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
 					WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
 					WHITE BOLD "su "UNDR"nom d'utilisateur"DEF"\n\tChange d'utilisateur.\n\n"
+					WHITE BOLD "whoami"DEF"\n\tAffiche le nom de l'utilisateur courant.\n\n"
 				);
 		}
 		else if (!strcmp(cmd.tabArgs[0], "")){}
