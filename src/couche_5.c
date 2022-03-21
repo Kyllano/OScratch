@@ -175,7 +175,19 @@ int cmd_rmuser(){
 }
 
 int cmd_su(char *username){
+    char password [CMDLINE_MAX_SIZE];
+    int id;
 
+    printf("entrez le login de l'utilisateur :\n");
+    fgets(password, CMDLINE_MAX_SIZE, stdin);
+    password[strlen(password) -1] = '\0';
+    
+	id = get_user_id(username);
+    if (id== ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+    if (strcmp(disk.users_table[id].passwd, password)) return ERROR_PASSWORD;
+
+    user.userid=id;    
+    return NO_ERROR;
 }
 
 
@@ -233,7 +245,7 @@ void error_message(int i){
 			printf("Erreur : Cet utilisateur n'est pas le propriétaire du fichier.\n");
 			break;
 
-		case ERROR_INEXISTANT_USER:
+		case ERROR_USER_NOT_FOUND:
 			printf("Erreur : Cet utilisateur n'existe pas.\n");
 			break;
 
@@ -241,8 +253,8 @@ void error_message(int i){
 			printf("Erreur : Le nombre d'utilisateurs maximal est déjà atteint.\n");
 			break;
 
-		case ERROR_USER_ALREADY_EXISTING:
-			printf("Erreur : Cet utilisateur existe déjà.\n");
+		case ERROR_USERNAME_TAKEN:
+			printf("Erreur : Ce nom d'utilisateur est déjà pris.\n");
 			break;
 	}
 
