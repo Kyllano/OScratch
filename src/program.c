@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 
 	if (!read_super_block()){
 		read_inodes_table();
-		init_users_table();
+		read_users_table();
 	}
 	update_first_free_byte();
 
@@ -34,6 +34,9 @@ int main(int argc, char* argv[]){
 	cmd.tabArgs[0] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
 	cmd.tabArgs[1] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
 	cmd.tabArgs[2] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+	for (int i=0; i<3; i++){
+		strcpy(cmd.tabArgs[i], "");
+	}
 	int loop = 1;
 	int retour;
 

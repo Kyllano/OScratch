@@ -114,7 +114,6 @@ int write_inodes_table(){
 		write_int_block(block,&pos,&disk.inodes[j].nblock);
 		write_int_block(block,&pos,&disk.inodes[j].first_byte);
 		j++;
-
 	}
 	return NO_ERROR;
 }

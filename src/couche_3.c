@@ -111,7 +111,7 @@ int add_user(char* username, char* password){
 
 int remove_user(char* username){
     if (disk.super_block.number_of_users == 1){
-        printf("cannot remove root or user not existent\n");
+        printf(RED"Erreur : impossible de supprimer Root, ou l'utilisateur n'existe pas.\n"DEF);
         return ERROR_RIGHTS;
     }
 
