@@ -84,7 +84,7 @@ void write_users_table(){
 
 //Keylan
 int get_user_id(char* user_login){
-    int id = ERROR_INEXISTANT_USER;
+    int id = ERROR_USER_NOT_FOUND;
     for (int i =0; i < disk.super_block.number_of_users; i++){
         if ( ! strcmp(disk.users_table[i].login, user_login)) id = i;
     }
@@ -93,7 +93,7 @@ int get_user_id(char* user_login){
 
 int add_user(char* username, char* password){
     if (disk.super_block.number_of_users >= NB_USERS) return ERROR_TOO_MANY_USERS;
-    if (get_user_id(username) != ERROR_INEXISTANT_USER) return ERROR_USER_ALREADY_EXISTING;
+    if (get_user_id(username) != ERROR_USER_NOT_FOUND) return ERROR_USERNAME_TAKEN;
 
     strcpy(disk.users_table[disk.super_block.number_of_users].login, username);
 
@@ -116,7 +116,7 @@ int remove_user(char* username){
     }
 
     int uid_to_delete = get_user_id(username);
-    if (uid_to_delete == ERROR_INEXISTANT_USER) return ERROR_INEXISTANT_USER;
+    if (uid_to_delete == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 
     for (int i=uid_to_delete; i < disk.super_block.number_of_users-1; i++){
         strcpy(disk.users_table[i].login, disk.users_table[i+1].login);
