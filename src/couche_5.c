@@ -175,7 +175,28 @@ int cmd_rmuser(){
 }
 
 int cmd_su(char *username){
+    char password [CMDLINE_MAX_SIZE];
+    char username [CMDLINE_MAX_SIZE];
+    int id;
+    
+    
+    printf("entrez le nom de l'utilisateur :\n");
+    fgets(username, CMDLINE_MAX_SIZE, stdin);
+    username[strlen(username) -1] = '\0';
 
+    printf("entrez le login de l'utilisateur :\n");
+    fgets(password, CMDLINE_MAX_SIZE, stdin);
+    password[strlen(password) -1] = '\0';
+    
+    if((id=get_user_id(username))== ERROR_INEXISTANT_USER) return ERROR_INEXISTANT_USER;
+    if(strcmp(disk.users_table[id].passwd,password)) return ERROR_PASSWORD;
+    
+    
+    
+    user.userid=id;
+    
+    
+    return NO_ERROR;
 }
 
 
