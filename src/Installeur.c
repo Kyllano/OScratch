@@ -36,10 +36,11 @@ int main(int argc, char **argv) {
       return ERROR_FILE_ACCESS;
     }
 
+    update_first_free_byte();
+    init_user_table();
+
     if (!write_super_block()){
-      init_user_table();
       write_inodes_table();
-      write_users_table();
       return NO_ERROR;
     }
 
