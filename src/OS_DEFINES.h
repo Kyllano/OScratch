@@ -66,7 +66,7 @@
 #define ERROR_DISK_FULL			-5
 #define ERROR_ARGS				-6
 #define ERROR_MALLOC			-7
-#define ERROR_FILENAME 			-8
+#define ERROR_FILENAME_TAKEN 	-8
 #define ERROR_USER_NOT_OWNER	-9
 #define ERROR_USER_NOT_FOUND	-10
 #define ERROR_TOO_MANY_USERS	-11
@@ -127,8 +127,8 @@ typedef struct virtual_disk_s {
 } virtual_disk_t;
 
 typedef struct file_s{
-uint size;
-uchar data [MAX_FILE_SIZE] ;
+	uint size;
+	uchar data [MAX_FILE_SIZE] ;
 } file_t ;
 
 typedef struct cmd_s{
@@ -215,6 +215,8 @@ int cmd_quit();
 int cmd_adduser();
 int cmd_rmuser();
 int cmd_su(char *username);
+int cmd_whoami();
+int cmd_help();
 
 void flush();
 void clear_screen();

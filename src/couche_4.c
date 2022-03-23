@@ -45,12 +45,11 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 		strcpy(disk.inodes[i_fich].mtimestamp, timestamp());
 		disk.inodes[i_fich].size = fich->size;
 		disk.inodes[i_fich].nblock = compute_nblock(fich->size);
-    int stock=disk.inodes[i_fich].first_byte;
+		int stock = disk.inodes[i_fich].first_byte;
 		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
-    disk.inodes[i_fich].first_byte=stock;
-    update_first_free_byte();
+		disk.inodes[i_fich].first_byte=stock;
 	}
-	else{
+	else {
 		delete_inode(i_fich);
 		write_content(filename, fich);
 	}
@@ -82,16 +81,17 @@ int read_file(char* filename, file_t* file){
 
     int i = get_file_id(filename);
     if (i==-1) return ERROR_FILE_ACCESS;
+		block_t block;
 
-	block_t block;
-
-	for (int j=0; j<BLOCK_SIZE*disk.inodes[i].nblock; j+=BLOCK_SIZE){
-		read_block(&block, disk.inodes[i].first_byte + j);
-		for (int k=0; k<4; k++){
-			file->data[j+k] = block.data[k];
+		for (int j=0; j<BLOCK_SIZE*disk.inodes[i].nblock; j+=BLOCK_SIZE){
+			read_block(&block, disk.inodes[i].first_byte + j);
+			for (int k=0; k<4; k++){
+			if(j+k<disk.inodes[i].size){
+				file->data[j+k] = block.data[k];
+			}
 		}
-	}
-
+  	}
+  	file->data[disk.inodes[i].size]='\0';
 	file->size = disk.inodes[i].size;
 
     return NO_ERROR;

@@ -88,6 +88,9 @@ int main(int argc, char* argv[]){
 			else if (!strcmp(cmd.tabArgs[1], "-l")) retour = cmd_ls(2);
 			else printf(YELLOW"usage : ls [-l | -s]\n");
 		}
+		else if (!strcmp(cmd.tabArgs[0], "ll")){
+			retour = cmd_ls(2);
+		}
 		else if (!strcmp(cmd.tabArgs[0], "cat")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cat "UNDR"nom de fichier"DEF"\n");
 			else retour = cmd_cat(cmd.tabArgs[1]);
@@ -157,23 +160,14 @@ int main(int argc, char* argv[]){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : su "UNDR"nom d'utilisateur"DEF"\n");
 			else retour = cmd_su(cmd.tabArgs[1]);
 		}
+		else if (!strcmp(cmd.tabArgs[0], "whoami")){
+			retour = cmd_whoami();
+		}
+		else if (!strcmp(cmd.tabArgs[0], "clear")){
+			clear_screen();
+		}
 		else if (!strcmp(cmd.tabArgs[0], "help")){
-			printf(
-					WHITE BOLD "\t\t- COMMANDES -\n\n"DEF
-					WHITE BOLD "adduser"DEF"\n\tAjoute un utilisateur.\n\n"
-					WHITE BOLD "cat "UNDR"nom de fichier"DEF"\n\tAffiche à l’écran le contenu d’un fichier si l’utilisateur a les droits.\n\n"
-					WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
-					WHITE BOLD "chmod "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"droit"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
-					WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
-					WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
-					WHITE BOLD "listusers"DEF"\n\tAffiche la liste des utilisateurs.\n\n"
-					WHITE BOLD "load "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système ”hôte” sur le système avec le même nom (assimilé à une création).\n\n"
-					WHITE BOLD "quit"DEF"\n\tSort de l’interprète de commande et du programme en sauvegardant le système de fichiers sur le disque.\n\n"
-					WHITE BOLD "rm "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du système si l’utilisateur a les droits.\n\n"
-					WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
-					WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
-					WHITE BOLD "su "UNDR"nom d'utilisateur"DEF"\n\tChange d'utilisateur.\n\n"
-				);
+			retour = cmd_help();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "")){}
 		else {
