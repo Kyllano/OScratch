@@ -174,18 +174,19 @@ int cmd_rmuser(){
 
 }
 
+// Guilhem
 int cmd_su(char *username){
     char password [CMDLINE_MAX_SIZE];
 	char sha_mdp[SHA256_BLOCK_SIZE*2 + 1];
     int id;
 
-    printf("entrez le login de l'utilisateur :\n");
+	id = get_user_id(username);
+    if (id == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+
+    printf("entrez le mot de passe de l'utilisateur :\n");
     fgets(password, CMDLINE_MAX_SIZE, stdin);
     password[strlen(password) -1] = '\0';
 
-	id = get_user_id(username);
-    if (id== ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
-		
 	sha256ofString((BYTE*)password, sha_mdp);
     if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
 
@@ -193,9 +194,33 @@ int cmd_su(char *username){
     return NO_ERROR;
 }
 
-// Keylan
+// Victor
 int cmd_whoami(){
-	
+	printf("%s\n", disk.users_table[user.userid].login);
+	return NO_ERROR;
+}
+
+// Victor
+int cmd_help(){
+	printf(
+		WHITE BOLD "\t\t- COMMANDES -\n\n"DEF
+		WHITE BOLD "adduser"DEF"\n\tAjoute un utilisateur.\n\n"
+		WHITE BOLD "cat "UNDR"nom de fichier"DEF"\n\tAffiche à l’écran le contenu d’un fichier si l’utilisateur a les droits.\n\n"
+		ITAL"(à venir) "WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
+		ITAL"(à venir) "WHITE BOLD "chmod "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"droit"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
+		WHITE BOLD "clear "DEF"\n\tVide l'affichage\n\n"
+		WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
+		WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
+		WHITE BOLD "listusers"DEF"\n\tAffiche la liste des utilisateurs.\n\n"
+		WHITE BOLD "load "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système ”hôte” sur le système avec le même nom (assimilé à une création).\n\n"
+		WHITE BOLD "ls [-l | -s]"DEF"\n\tAffiche la liste des fichiers du disque.\n\n"
+		WHITE BOLD "quit"DEF"\n\tSort de l’interprète de commande et du programme en sauvegardant le système de fichiers sur le disque.\n\n"
+		WHITE BOLD "rm "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du système si l’utilisateur a les droits.\n\n"
+		ITAL"(à venir) "WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
+		WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
+		WHITE BOLD "su "UNDR"nom d'utilisateur"DEF"\n\tChange d'utilisateur.\n\n"
+		WHITE BOLD "whoami"DEF"\n\tAffiche le nom de l'utilisateur courant.\n\n"
+	);
 	return NO_ERROR;
 }
 
@@ -273,6 +298,7 @@ void error_message(int i){
 			break;
 		
 		case ERROR_PASSWORD:
+			printf("Erreur : le mot de passe est erroné.\n");
 			break;
 	}
 
