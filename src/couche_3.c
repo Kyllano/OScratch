@@ -11,8 +11,14 @@ void init_users_table(){
     // Définition du login root
     strcpy(disk.users_table[ROOT_UID].login, "root");
     //Definition du mdp root
+    char password[CMDLINE_MAX_SIZE];
     char sha_mdp [SHA256_BLOCK_SIZE*2 + 1];
-    sha256ofString((BYTE*)"root", sha_mdp);
+
+    printf("entrez un mot de passe pour l'utilisateur %s:\n",disk.users_table[ROOT_UID].login);
+    fgets(password, CMDLINE_MAX_SIZE, stdin);
+    password[strlen(password) -1] = '\0';
+
+    sha256ofString((BYTE*)password, sha_mdp);
     strcpy(disk.users_table[ROOT_UID].passwd, sha_mdp);
     disk.super_block.number_of_users = 1;
 

@@ -48,7 +48,6 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
     int stock=disk.inodes[i_fich].first_byte;
 		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
     disk.inodes[i_fich].first_byte=stock;
-    update_first_free_byte();
 	}
 	else{
 		delete_inode(i_fich);
@@ -88,10 +87,12 @@ int read_file(char* filename, file_t* file){
 	for (int j=0; j<BLOCK_SIZE*disk.inodes[i].nblock; j+=BLOCK_SIZE){
 		read_block(&block, disk.inodes[i].first_byte + j);
 		for (int k=0; k<4; k++){
-			file->data[j+k] = block.data[k];
-		}
-	}
-
+      if(j+k<disk.inodes[i].size){
+        file->data[j+k] = block.data[k];
+      }
+    }
+  }
+  file->data[disk.inodes[i].size]='\0';
 	file->size = disk.inodes[i].size;
 
     return NO_ERROR;

@@ -24,7 +24,7 @@ int shutoff_save(){
 
 	if (write_super_block()) return ERROR_FILE_ACCESS;
 	write_inodes_table();
-	write_users_table();
+	/*write_users_table();*/
 
 	return NO_ERROR;
 }
@@ -36,7 +36,6 @@ nb_bytes octets
 compute_nblock is define if nb_bytes > 0
 */
 uint compute_nblock(int nb_bytes){
-	assert(nb_bytes > 0);
 
 	uint size_in_blocks = nb_bytes/BLOCK_SIZE;
 	if (nb_bytes%BLOCK_SIZE != 0) size_in_blocks++;

@@ -175,17 +175,20 @@ int cmd_rmuser(){
 
 int cmd_su(char *username){
     char password [CMDLINE_MAX_SIZE];
+		char sha_mdp[SHA256_BLOCK_SIZE*2 + 1];
     int id;
 
     printf("entrez le login de l'utilisateur :\n");
     fgets(password, CMDLINE_MAX_SIZE, stdin);
     password[strlen(password) -1] = '\0';
-    
-	id = get_user_id(username);
-    if (id== ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
-    if (strcmp(disk.users_table[id].passwd, password)) return ERROR_PASSWORD;
 
-    user.userid=id;    
+		id = get_user_id(username);
+    if (id== ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+		
+		sha256ofString((BYTE*)password, sha_mdp);
+    if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
+
+    user.userid=id;
     return NO_ERROR;
 }
 
