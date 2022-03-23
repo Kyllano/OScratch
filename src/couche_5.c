@@ -102,6 +102,7 @@ int cmd_edit(char *filename){
 	while ((c=fgetc(stdin))!='$' && file.size!=MAX_FILE_SIZE){
 		file.data[file.size++] = c;
 	}
+	flush();
 	return write_file(filename, &file);
 }
 
