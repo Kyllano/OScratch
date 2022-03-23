@@ -127,8 +127,8 @@ typedef struct virtual_disk_s {
 } virtual_disk_t;
 
 typedef struct file_s{
-uint size;
-uchar data [MAX_FILE_SIZE] ;
+	uint size;
+	uchar data [MAX_FILE_SIZE] ;
 } file_t ;
 
 typedef struct cmd_s{

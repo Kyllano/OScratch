@@ -69,7 +69,7 @@ int cmd_cr(char *filename){
 	int unused_inode;
 	if ((unused_inode = get_unused_inode()) == -1) return ERROR_DISK_FULL;
 
-	if(get_file_id(filename)!=-1) return ERROR_FILENAME_TAKEN;
+	if (get_file_id(filename)!=-1) return ERROR_FILENAME_TAKEN;
 
 	init_inode(filename,1, disk.super_block.first_free_byte);
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
@@ -175,17 +175,17 @@ int cmd_rmuser(){
 
 int cmd_su(char *username){
     char password [CMDLINE_MAX_SIZE];
-		char sha_mdp[SHA256_BLOCK_SIZE*2 + 1];
+	char sha_mdp[SHA256_BLOCK_SIZE*2 + 1];
     int id;
 
     printf("entrez le login de l'utilisateur :\n");
     fgets(password, CMDLINE_MAX_SIZE, stdin);
     password[strlen(password) -1] = '\0';
 
-		id = get_user_id(username);
+	id = get_user_id(username);
     if (id== ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 		
-		sha256ofString((BYTE*)password, sha_mdp);
+	sha256ofString((BYTE*)password, sha_mdp);
     if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
 
     user.userid=id;

@@ -160,7 +160,7 @@ int read_super_block(){
 	block_t block;
 	uint pos = 0;
 
-	if (read_int_block(block, &pos, &disk.super_block.number_of_files))return ERROR_FILE_ACCESS;
+	if (read_int_block(block, &pos, &disk.super_block.number_of_files)) return ERROR_FILE_ACCESS;
 
 	read_int_block(block, &pos, &disk.super_block.number_of_users);
 	read_int_block(block, &pos, &disk.super_block.nb_blocks_used );
@@ -173,7 +173,7 @@ void update_first_free_byte(){
 	if (get_unused_inode() == 0){
 		disk.super_block.first_free_byte = (INODE_TABLE_SIZE*INODE_SIZE)*4 + INODES_START + 1;
 	}
-	else{
+	else {
 		disk.super_block.first_free_byte = disk.inodes[get_unused_inode()-1].first_byte + disk.inodes[get_unused_inode()-1].size +1;
 	}
 }

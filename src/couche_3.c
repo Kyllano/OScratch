@@ -73,7 +73,7 @@ void write_users_table(){
     file_t fich_passwd;
     strcpy((char*) fich_passwd.data, "");
 
-    for(int i=0;i<disk.super_block.number_of_users;i++){
+    for (int i=0;i<disk.super_block.number_of_users;i++){
         strcat((char*) fich_passwd.data, disk.users_table[i].login);
         strcat((char*) fich_passwd.data, "\t");
         strcat((char*) fich_passwd.data, disk.users_table[i].passwd);
