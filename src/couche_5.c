@@ -21,7 +21,7 @@ int cmd_ls(int type){
 	printf("\n");
 
 
-	printf("nb_file = %d\n",disk.super_block.number_of_files);
+	//printf("nb_file = %d\n",disk.super_block.number_of_files);
 
 	for (int i=0; i<disk.super_block.number_of_files; i++){
 		printf("%-32s", disk.inodes[i].filename);
@@ -79,7 +79,7 @@ int cmd_cr(char *filename){
 	disk.inodes[unused_inode].uright = rw;
 	disk.inodes[unused_inode].oright = rw;
 	update_first_free_byte();
-	printf("%d\n",disk.super_block.first_free_byte);
+	//printf("%d\n",disk.super_block.first_free_byte);
 	disk.super_block.number_of_files ++;
 
 	return NO_ERROR;
@@ -109,7 +109,6 @@ int cmd_edit(char *filename){
 int cmd_load(char *filename){
 	file_t file;
 	return load_file_from_host(filename, &file);
-
 }
 
 // Guihem
@@ -230,9 +229,11 @@ void error_message(int i){
 			break;
 
 		case ERROR_INODES_FULL:
+			printf("Erreur : la table d'inodes est pleine.\n");
 			break;
 
 		case ERROR_FILE_TOO_BIG:
+			printf(YELLOW"Attention : Le fichier est trop volumineux. Il a été tronqué.\n");
 			break;
 
 		case ERROR_DISK_FULL:
