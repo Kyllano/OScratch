@@ -122,10 +122,41 @@ int cmd_chown(char* filename, char* name_owner){
 	
 }
 
-// Keylan
+// Keylan & Victor
 //On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer les droits du fichier
 //Aussi, peut etre faudra t il modifier pour modifier spécifiquement les droits users et les droits des autres
-int cmd_chmod(char* filename, char* droit){
+int cmd_chmod(char* rights, char* filename){
+
+	rights[strlen(rights)] = '\0';
+
+	int i=0;
+	int editUrights=0, editOrights=0, addrights=0, read=0, write=0;
+	
+	if (rights[i]!='u' && rights[i]!='o') return ERROR_RIGHTS_SYNTAX;
+	while (rights[i]=='u' || rights[i]=='o'){
+		if (rights[i]=='u') editUrights = 1;
+		if (rights[i]=='o') editOrights = 1;
+		i++;
+	}
+	if (rights[i]!='+' && rights[i]!='-') return ERROR_RIGHTS_SYNTAX;
+	
+	if (rights[i]=='+') addrights = 1;
+	i++;
+
+	if (rights[i]!='r' && rights[i]!='w') return ERROR_RIGHTS_SYNTAX;
+	while (rights[i]=='r' || rights[i]=='w'){
+		if (rights[i]=='r') read = 1;
+		if (rights[i]=='w') write = 1;
+		i++;
+	}
+	if (rights[i]!='\0') return ERROR_RIGHTS_SYNTAX;
+	
+
+	// Voilà t'as 5 booléens pour gérer le reste, bon courage ☆⌒（＊＾∇゜)
+
+	printf("%d %d %d %d %d\n", editUrights, editOrights, addrights, read, write);
+
+
 	int id_fich;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
@@ -134,6 +165,7 @@ int cmd_chmod(char* filename, char* droit){
 		return ERROR_RIGHTS;
 	}
 
+/*
 	if (strcmp(droit, "rw")){
 		disk.inodes[id_fich].uright = rw;
 	}
@@ -146,6 +178,8 @@ int cmd_chmod(char* filename, char* droit){
 	else if (strcmp(droit, "Rw")){
 		disk.inodes[id_fich].uright = Rw;
 	}
+*/
+	return NO_ERROR;
 }
 
 // Keylan
@@ -253,7 +287,7 @@ int cmd_help(){
 		WHITE BOLD "adduser"DEF"\n\tAjoute un utilisateur.\n\n"
 		WHITE BOLD "cat "UNDR"nom de fichier"DEF"\n\tAffiche à l’écran le contenu d’un fichier si l’utilisateur a les droits.\n\n"
 		ITAL"(à venir) "WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
-		ITAL"(à venir) "WHITE BOLD "chmod "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"droit"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
+		ITAL"(à venir) "WHITE BOLD "chmod "UNDR"droits"DEF" "WHITE BOLD UNDR"nom du fichier"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
 		WHITE BOLD "clear "DEF"\n\tVide l'affichage\n\n"
 		WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
 		WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
@@ -345,6 +379,10 @@ void error_message(int i){
 		
 		case ERROR_PASSWORD:
 			printf("Erreur : le mot de passe est erroné.\n");
+			break;
+		
+		case ERROR_RIGHTS_SYNTAX:
+			printf("Erreur de syntaxe : [u o][+ -][r w] exemples :  u+rw  ou-w  o+r\n");
 			break;
 	}
 

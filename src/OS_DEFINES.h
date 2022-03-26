@@ -72,6 +72,7 @@
 #define ERROR_TOO_MANY_USERS	-11
 #define ERROR_USERNAME_TAKEN	-12
 #define ERROR_PASSWORD			-13
+#define ERROR_RIGHTS_SYNTAX		-14
 
 
 
@@ -209,7 +210,7 @@ int cmd_edit(char *filename);
 int cmd_load();
 int cmd_store(char *filename);
 int cmd_chown();
-int cmd_chmod();
+int cmd_chmod(char* rights, char* filename);
 int cmd_listusers();
 int cmd_quit();
 int cmd_adduser();
