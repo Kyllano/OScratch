@@ -119,12 +119,33 @@ int cmd_store(char *filename){
 
 // Keylan
 int cmd_chown(char* filename, char* name_owner){
-
+	
 }
 
 // Keylan
-int cmd_chmod(){
+//On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer les droits du fichier
+//Aussi, peut etre faudra t il modifier pour modifier spécifiquement les droits users et les droits des autres
+int cmd_chmod(char* filename, char* droit){
+	int id_fich;
+	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
+	if(user.userid!=0  && ((disk.inodes[id_fich].uid==user.userid)
+	|| (disk.inodes[id_fich].uid!=user.userid && disk.inodes[id_fich].oright!=Rw && disk.inodes[id_fich].oright!=RW))){
+		return ERROR_RIGHTS;
+	}
+
+	if (strcmp(droit, "rw")){
+		disk.inodes[id_fich].uright = rw;
+	}
+	else if (strcmp(droit, "Rw")){
+		disk.inodes[id_fich].uright = Rw;
+	}
+	if (strcmp(droit, "rw")){
+		disk.inodes[id_fich].uright = rw;
+	}
+	else if (strcmp(droit, "Rw")){
+		disk.inodes[id_fich].uright = Rw;
+	}
 }
 
 // Keylan
@@ -133,7 +154,12 @@ int cmd_listusers(){
 
 	printf(BOLD WHITE"Liste des utilisateurs :\n"DEF);
 	for (int i=0; i<disk.super_block.number_of_users; i++){
-		printf("%s\n", disk.users_table[i].login );
+		if (i == user.userid){
+			printf(BOLD GREEN "%s\n" DEF, disk.users_table[i].login );
+		}
+		else{
+			printf("%s\n", disk.users_table[i].login );
+		}
 	}
 	return NO_ERROR;
 }
@@ -170,8 +196,24 @@ int cmd_adduser(){
 }
 
 // Keylan
-int cmd_rmuser(){
+int cmd_rmuser(char* username){
+	char password [CMDLINE_MAX_SIZE];
+	char sha_mdp[SHA256_BLOCK_SIZE*2 + 1];
+	int id_user_to_del;
 
+	if ((id_user_to_del = get_user_id(username)) == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+	if (user.userid != id_user_to_del && user.userid != ROOT_UID){
+		printf("Entrez le mot de passe de %s : ", username);
+		fgets(password, CMDLINE_MAX_SIZE, stdin);
+		password[strlen(password) -1] = '\0';
+
+		sha256ofString((BYTE*)password, sha_mdp);
+    	if (strcmp(disk.users_table[id_user_to_del].passwd, sha_mdp)) return ERROR_PASSWORD;
+	}
+
+	remove_user(username);
+	printf("Utilisateur %s supprimé\n", username);
+	return NO_ERROR;
 }
 
 // Guilhem
@@ -183,13 +225,17 @@ int cmd_su(char *username){
 	id = get_user_id(username);
     if (id == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 
-    printf("entrez le mot de passe de l'utilisateur :\n");
-    fgets(password, CMDLINE_MAX_SIZE, stdin);
-    password[strlen(password) -1] = '\0';
+	if (user.userid != ROOT_UID){
+		printf("Entrez le mot de passe de l'utilisateur :\n");
+		fgets(password, CMDLINE_MAX_SIZE, stdin);
+		password[strlen(password) -1] = '\0';
 
-	sha256ofString((BYTE*)password, sha_mdp);
-    if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
+		sha256ofString((BYTE*)password, sha_mdp);
+		if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
+	}
 
+
+	printf("Changement d'utilisateur de %s vers %s\n", disk.users_table[user.userid].login, username);
     user.userid=id;
     return NO_ERROR;
 }
