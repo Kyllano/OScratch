@@ -118,34 +118,52 @@ int cmd_store(char *filename){
 }
 
 // Keylan
+//On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer le proprio du fichier
 int cmd_chown(char* filename, char* name_owner){
-	
+	int id_fich;
+	int id_new_owner;
+	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
+
+	printf("PTDR\n");
+	printf("%s\n%s\n", filename, name_owner);
+	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
+	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
+		return ERROR_RIGHTS;
+	}
+
+	if ((id_new_owner = get_user_id(name_owner)) == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+
+	disk.inodes[id_fich].uid = id_new_owner;
+	return NO_ERROR;
+
 }
 
 // Keylan
 //On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer les droits du fichier
-//Aussi, peut etre faudra t il modifier pour modifier spécifiquement les droits users et les droits des autres
-int cmd_chmod(char* filename, char* droit){
+int cmd_chmod(char* filename, char* uright, char* oright){
 	int id_fich;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
+//probablement faux, a changer
 	if(user.userid!=0  && ((disk.inodes[id_fich].uid==user.userid)
 	|| (disk.inodes[id_fich].uid!=user.userid && disk.inodes[id_fich].oright!=Rw && disk.inodes[id_fich].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
 
-	if (strcmp(droit, "rw")){
-		disk.inodes[id_fich].uright = rw;
-	}
-	else if (strcmp(droit, "Rw")){
-		disk.inodes[id_fich].uright = Rw;
-	}
-	if (strcmp(droit, "rw")){
-		disk.inodes[id_fich].uright = rw;
-	}
-	else if (strcmp(droit, "Rw")){
-		disk.inodes[id_fich].uright = Rw;
-	}
+	if 		(strcmp(uright, "rw"))	disk.inodes[id_fich].uright = rw;
+	else if (strcmp(uright, "Rw"))	disk.inodes[id_fich].uright = Rw;
+	else if (strcmp(uright, "rW"))	disk.inodes[id_fich].uright = rW;
+	else if (strcmp(uright, "RW"))	disk.inodes[id_fich].uright = RW;
+	else							printf("Droits user non reconnu\n");
+
+	if 		(strcmp(oright, "rw"))	disk.inodes[id_fich].oright = rw;
+	else if (strcmp(oright, "Rw"))	disk.inodes[id_fich].oright = Rw;
+	else if (strcmp(oright, "rW"))	disk.inodes[id_fich].oright = rW;
+	else if (strcmp(oright, "RW"))	disk.inodes[id_fich].oright = RW;
+	else							printf("Droits autres non reconnu\n");
+
+	printf("changement des droits effectués\n");
+	return NO_ERROR;
 }
 
 // Keylan
