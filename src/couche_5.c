@@ -118,9 +118,24 @@ int cmd_store(char *filename){
 }
 
 // Keylan
+//On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer le proprio du fichier
 int cmd_chown(char* filename, char* name_owner){
-	
+	int id_fich;
+	int id_new_owner;
+	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
+
+	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
+	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
+		return ERROR_RIGHTS;
+	}
+
+	if ((id_new_owner = get_user_id(name_owner)) == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
+
+	disk.inodes[id_fich].uid = id_new_owner;
+	return NO_ERROR;
+
 }
+
 
 // Keylan & Victor
 //On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer les droits du fichier
@@ -154,31 +169,51 @@ int cmd_chmod(char* rights, char* filename){
 
 	// Voilà t'as 5 booléens pour gérer le reste, bon courage ☆⌒（＊＾∇゜)
 
-	printf("%d %d %d %d %d\n", editUrights, editOrights, addrights, read, write);
+	//printf("%d %d %d %d %d\n", editUrights, editOrights, addrights, read, write);
 
 
 	int id_fich;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
-	if(user.userid!=0  && ((disk.inodes[id_fich].uid==user.userid)
-	|| (disk.inodes[id_fich].uid!=user.userid && disk.inodes[id_fich].oright!=Rw && disk.inodes[id_fich].oright!=RW))){
+	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
+	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
 		return ERROR_RIGHTS;
 	}
 
-/*
-	if (strcmp(droit, "rw")){
-		disk.inodes[id_fich].uright = rw;
+	//printf("AVANT MODIF : %d %d\n", disk.inodes[id_fich].uright, disk.inodes[id_fich].oright);
+
+	if (editUrights){
+		if (addrights){
+			if 		(read && write)		disk.inodes[id_fich].uright = RW;
+			else if (read && !write)	disk.inodes[id_fich].uright |= 2;		
+			else if (!read && write)	disk.inodes[id_fich].uright |= 1;
+			//else ca ne change pas 
+		}
+		else{
+			if 		(read && write)		disk.inodes[id_fich].uright = rw;
+			else if (read && !write)	disk.inodes[id_fich].uright &= ~2;		
+			else if (!read && write)	disk.inodes[id_fich].uright &= ~1;
+			//else ca ne change pas 
+		}
 	}
-	else if (strcmp(droit, "Rw")){
-		disk.inodes[id_fich].uright = Rw;
+
+	if (editOrights){
+		if (addrights){
+			if 		(read && write)		disk.inodes[id_fich].oright = RW;
+			else if (read && !write)	disk.inodes[id_fich].oright |= 2;		
+			else if (!read && write)	disk.inodes[id_fich].oright |= 1;
+			//else ca ne change pas 
+		}
+		else{
+			if 		(read && write)		disk.inodes[id_fich].oright = rw;
+			else if (read && !write)	disk.inodes[id_fich].oright &= ~2;		
+			else if (!read && write)	disk.inodes[id_fich].oright &= ~1;
+			//else ca ne change pas 
+		}
 	}
-	if (strcmp(droit, "rw")){
-		disk.inodes[id_fich].uright = rw;
-	}
-	else if (strcmp(droit, "Rw")){
-		disk.inodes[id_fich].uright = Rw;
-	}
-*/
+
+	//printf("APRES MODIF : %d %d\n", disk.inodes[id_fich].uright, disk.inodes[id_fich].oright);
+
 	return NO_ERROR;
 }
 
