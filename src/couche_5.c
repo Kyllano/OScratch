@@ -165,12 +165,8 @@ int cmd_chmod(char* rights, char* filename){
 		i++;
 	}
 	if (rights[i]!='\0') return ERROR_RIGHTS_SYNTAX;
-	
-
-	// Voilà t'as 5 booléens pour gérer le reste, bon courage ☆⌒（＊＾∇゜)
 
 	//printf("%d %d %d %d %d\n", editUrights, editOrights, addrights, read, write);
-
 
 	int id_fich;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
