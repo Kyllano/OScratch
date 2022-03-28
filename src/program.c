@@ -129,8 +129,8 @@ int main(int argc, char* argv[]){
 		else if (!strcmp(cmd.tabArgs[0], "chown")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 			else {
-				scanf("%s", cmd.tabArgs[2]);
-				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
+				//scanf("%s", cmd.tabArgs[2]); yavais un scanf je sais pas ce qu il faisais la
+				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 				else retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
 			}
 		}
