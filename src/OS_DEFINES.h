@@ -23,6 +23,7 @@
 #include <time.h>
 #include <errno.h>
 #include <math.h>
+#include <unistd.h>
 #include "sha256.h"
 #include "sha256_utils.h"
 #include "timestamp.h"
@@ -222,6 +223,7 @@ int cmd_help();
 void flush();
 void clear_screen();
 void error_message(int i);
+void splash();
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES

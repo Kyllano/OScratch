@@ -25,8 +25,6 @@ int main(int argc, char* argv[]){
 	}
 	update_first_free_byte();
 
-	//printf("début = %d",disk.super_block.first_free_byte);
-
 	char cmdline[CMDLINE_MAX_SIZE];
 	char* strToken;
 	cmd_t cmd;
@@ -44,6 +42,7 @@ int main(int argc, char* argv[]){
 	user.userid = 0;
 
 	clear_screen();
+	splash();
 
 	while (loop){
 

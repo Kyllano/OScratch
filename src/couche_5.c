@@ -255,7 +255,9 @@ int cmd_adduser(){
 
 	printf("Mot de passe du nouvel utilisateur : ");
 	char password [CMDLINE_MAX_SIZE];
+	printf(TRSP);
 	fgets(password, CMDLINE_MAX_SIZE, stdin);
+	printf(DEF);
 	password[strlen(password) -1] = '\0';
 
 	int retour = add_user(username, password);
@@ -273,7 +275,9 @@ int cmd_rmuser(char* username){
 	if ((id_user_to_del = get_user_id(username)) == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 	if (user.userid != id_user_to_del && user.userid != ROOT_UID){
 		printf("Entrez le mot de passe de %s : ", username);
+		printf(TRSP);
 		fgets(password, CMDLINE_MAX_SIZE, stdin);
+		printf(DEF);
 		password[strlen(password) -1] = '\0';
 
 		sha256ofString((BYTE*)password, sha_mdp);
@@ -281,7 +285,7 @@ int cmd_rmuser(char* username){
 	}
 
 	remove_user(username);
-	printf("Utilisateur %s supprimé\n", username);
+	printf("Utilisateur %s supprimé.\n", username);
 	return NO_ERROR;
 }
 
@@ -295,17 +299,18 @@ int cmd_su(char *username){
     if (id == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 
 	if (user.userid != ROOT_UID){
-		printf("Entrez le mot de passe de l'utilisateur :\n");
+		printf("Entrez le mot de passe de l'utilisateur : ");
+		printf(TRSP);
 		fgets(password, CMDLINE_MAX_SIZE, stdin);
+		printf(DEF);
 		password[strlen(password) -1] = '\0';
 
 		sha256ofString((BYTE*)password, sha_mdp);
 		if (strcmp(disk.users_table[id].passwd, sha_mdp)) return ERROR_PASSWORD;
 	}
 
-
 	printf("Changement d'utilisateur de %s vers %s\n", disk.users_table[user.userid].login, username);
-    user.userid=id;
+    user.userid = id;
     return NO_ERROR;
 }
 
@@ -422,4 +427,24 @@ void error_message(int i){
 	}
 
 	printf(DEF);
+}
+
+
+// Victor
+void splash(){
+	clear_screen();
+	printf(BLUE
+	" ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄      ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
+	"▒██▒  ██▒▒██    ▒ ▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒\n"
+	"▒██░  ██▒░ ▓██▄   ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░\n"
+	"▒██   ██░  ▒   ██▒▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██ \n"
+	"░ ████▓▒░▒██████▒▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓\n"
+	"░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒\n"
+	"  ░ ▒ ▒░ ░ ░▒  ░ ░  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░    ░      ░  ▒    ▒ ░▒░ ░\n"
+	"░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒     ░      ░         ░  ░░ ░\n"
+	"    ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
+	"                  ░                                    ░                \n"
+	DEF);
+	usleep(500000);
+	clear_screen();
 }
