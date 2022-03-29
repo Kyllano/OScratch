@@ -96,8 +96,8 @@ int cmd_edit(char *filename){
 	char c;
 	if ((i=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
-	if(user.userid!=0  && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
-	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW))){
+	if(user.userid!=0  && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
+	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW))){
 		return ERROR_RIGHTS;
 	}
 
@@ -128,8 +128,7 @@ int cmd_chown(char* filename, char* name_owner){
 	int id_new_owner;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
-	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
-	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
+	if(user.userid!=0  && disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)){
 		return ERROR_RIGHTS;
 	}
 
@@ -175,8 +174,7 @@ int cmd_chmod(char* rights, char* filename){
 	int id_fich;
 	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
 
-	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
-	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
+	if(user.userid!=0  && disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)){
 		return ERROR_RIGHTS;
 	}
 
