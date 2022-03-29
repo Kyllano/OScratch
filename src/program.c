@@ -25,8 +25,6 @@ int main(int argc, char* argv[]){
 	}
 	update_first_free_byte();
 
-	//printf("début = %d",disk.super_block.first_free_byte);
-
 	char cmdline[CMDLINE_MAX_SIZE];
 	char* strToken;
 	cmd_t cmd;
@@ -44,6 +42,7 @@ int main(int argc, char* argv[]){
 	user.userid = 0;
 
 	clear_screen();
+	splash();
 
 	while (loop){
 
@@ -128,17 +127,17 @@ int main(int argc, char* argv[]){
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "chown")){
-			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
+			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 			else {
-				scanf("%s", cmd.tabArgs[2]);
+				//scanf("%s", cmd.tabArgs[2]); yavais un scanf je sais pas ce qu il faisais la
 				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 				else retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "chmod")){
-			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chmod "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
+			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
 			else {
-				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chmod "UNDR"nom de fichier"DEF" "UNDR YELLOW"droit"DEF"\n");
+				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
 				else retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
 			}
 		}

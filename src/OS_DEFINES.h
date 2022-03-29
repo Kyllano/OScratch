@@ -23,6 +23,7 @@
 #include <time.h>
 #include <errno.h>
 #include <math.h>
+#include <unistd.h>
 #include "sha256.h"
 #include "sha256_utils.h"
 #include "timestamp.h"
@@ -72,6 +73,7 @@
 #define ERROR_TOO_MANY_USERS	-11
 #define ERROR_USERNAME_TAKEN	-12
 #define ERROR_PASSWORD			-13
+#define ERROR_RIGHTS_SYNTAX		-14
 
 
 
@@ -209,7 +211,7 @@ int cmd_edit(char *filename);
 int cmd_load();
 int cmd_store(char *filename);
 int cmd_chown();
-int cmd_chmod();
+int cmd_chmod(char* rights, char* filename);
 int cmd_listusers();
 int cmd_quit();
 int cmd_adduser();
@@ -221,6 +223,7 @@ int cmd_help();
 void flush();
 void clear_screen();
 void error_message(int i);
+void splash();
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
