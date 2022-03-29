@@ -131,14 +131,20 @@ int main(int argc, char* argv[]){
 			else {
 				//scanf("%s", cmd.tabArgs[2]); yavais un scanf je sais pas ce qu il faisais la
 				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
-				else retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
+				else {
+					retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
+					if (retour == NO_ERROR) printf("Le propriétaire a été modifié avec succès.\n");
+				}
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "chmod")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
 			else {
 				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
-				else retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
+				else {
+					retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
+					if (retour == NO_ERROR) printf("Les droits ont été modifiés avec succès.\n");
+				}
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "listusers")){

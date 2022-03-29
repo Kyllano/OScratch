@@ -41,6 +41,10 @@ int cmd_ls(int type){
 
 // Victor
 int cmd_cat(char* filename){
+	
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
 
 	file_t file;
 	int retour = read_file(filename, &file);
@@ -343,6 +347,50 @@ int cmd_help(){
 
 
 
+// Victor
+// A VERIFIER
+int check_rights(int id, int uid, char* rights){
+	int i=0;
+
+	if (uid == 0) return NO_ERROR;
+	if (disk.inodes[id].uid == uid){
+		// checking uright
+		while (rights[i]!='\0'){
+			switch (rights[i]){
+				case 'W':
+					return (disk.inodes[id].uright==rw || disk.inodes[id].uright==Rw);
+				case 'w':
+					return (disk.inodes[id].uright==rW || disk.inodes[id].uright==RW);
+				case 'R':
+					return (disk.inodes[id].uright==rw || disk.inodes[id].uright==rW);
+				case 'r':
+					return (disk.inodes[id].uright==Rw || disk.inodes[id].uright==RW);
+				default:
+					break;
+			}
+			i++;
+		}
+	}
+	else {
+		// checking oright
+		while (rights[i]!='\0'){
+			switch (rights[i]){
+				case 'W':
+					return (disk.inodes[id].oright==rw || disk.inodes[id].oright==Rw);
+				case 'w':
+					return (disk.inodes[id].oright==rW || disk.inodes[id].oright==RW);
+				case 'R':
+					return (disk.inodes[id].oright==rw || disk.inodes[id].oright==rW);
+				case 'r':
+					return (disk.inodes[id].oright==Rw || disk.inodes[id].oright==RW);
+				default:
+					break;
+			}
+			i++;
+		}
+	}
+	return NO_ERROR;	
+}
 
 // Victor
 void clear_screen(){

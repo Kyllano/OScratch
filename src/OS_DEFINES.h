@@ -224,6 +224,7 @@ void flush();
 void clear_screen();
 void error_message(int i);
 void splash();
+int check_rights(int id, int uid, char* rights);
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
