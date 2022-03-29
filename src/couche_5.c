@@ -25,8 +25,9 @@ int cmd_ls(int type){
 	//printf("nb_file = %d\n",disk.super_block.number_of_files);
 
 	for (int i=0; i<disk.super_block.number_of_files; i++){
-		printf("%-24s", disk.inodes[i].filename);
+		if (type == 1) printf("%s", disk.inodes[i].filename);
 		if (type != 1) {	// Not Short
+			printf("%-24s", disk.inodes[i].filename);
 			printf(" │ %6d", disk.inodes[i].size);
 			printf(" │ %s", disk.inodes[i].ctimestamp);
 		}
