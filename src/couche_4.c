@@ -23,7 +23,7 @@ int get_file_id(char* filename){
 
 
 // Guilhem
-void write_content(char *filename,file_t *fich){
+void write_content(char *filename,file_t *fich,int uright,int oright){
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
@@ -31,8 +31,8 @@ void write_content(char *filename,file_t *fich){
 	strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
 	disk.inodes[unused_inode].nblock = compute_nblock(fich->size);
 	disk.inodes[unused_inode].uid = user.userid;
-	disk.inodes[unused_inode].uright = rw;
-	disk.inodes[unused_inode].oright = rw;
+	disk.inodes[unused_inode].uright = uright;
+	disk.inodes[unused_inode].oright = oright;
 	write_mult_blocks((char *)fich->data, disk.inodes[unused_inode].nblock, &disk.super_block.first_free_byte,fich->size);
  	disk.super_block.number_of_files ++;
 }
@@ -50,8 +50,9 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 		disk.inodes[i_fich].first_byte=stock;
 	}
 	else {
+		int uright=disk.inodes[i_fich].uright,oright=disk.inodes[i_fich].oright;
 		delete_inode(i_fich);
-		write_content(filename, fich);
+		write_content(filename,fich,uright,oright);
 	}
 }
 
@@ -67,7 +68,7 @@ int write_file(char *filename,file_t *fich){
 	}
 
 	if (i_fich == -1){
-		write_content(filename, fich);
+		write_content(filename, fich,RW,RW);
 		return NO_ERROR;
 	}
 	else {
