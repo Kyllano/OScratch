@@ -32,12 +32,12 @@ int main(int argc, char **argv) {
 
 
 
-    if (init_disk_sos(argv[0])){
+    if (init_disk_sos("d0")){
       return ERROR_FILE_ACCESS;
     }
 
     update_first_free_byte();
-    init_user_table();
+    init_users_table();
 
     if (!write_super_block()){
       write_inodes_table();
