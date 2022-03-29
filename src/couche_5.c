@@ -9,14 +9,15 @@
 // Victor
 int cmd_ls(int type){
 
-	printf(BOLD WHITE"filename                        "DEF);
+	printf(BOLD WHITE"filename                "DEF);
 	if (type != 1) {	// Not Short
-		printf(" │ "BOLD WHITE"size    "DEF);
+		printf(" │ "BOLD WHITE"size  "DEF);
 		printf(" │ "BOLD WHITE"date de création        "DEF);
 	}
 	if (type ==2){		// Long
 		printf(" │ "BOLD WHITE"date de modification    "DEF);
-		printf(" │ "BOLD WHITE"owner id"DEF);
+		printf(" │ "BOLD WHITE"owner        "DEF);
+		printf(" │ "BOLD WHITE"rights"DEF);
 	}
 	printf("\n");
 
@@ -24,14 +25,41 @@ int cmd_ls(int type){
 	//printf("nb_file = %d\n",disk.super_block.number_of_files);
 
 	for (int i=0; i<disk.super_block.number_of_files; i++){
-		printf("%-32s", disk.inodes[i].filename);
+		printf("%-24s", disk.inodes[i].filename);
 		if (type != 1) {	// Not Short
-			printf(" │ %8d", disk.inodes[i].size);
+			printf(" │ %6d", disk.inodes[i].size);
 			printf(" │ %s", disk.inodes[i].ctimestamp);
 		}
 		if (type ==2){	// Long
 			printf(" │ %s", disk.inodes[i].mtimestamp);
-			printf(" │ %8d", disk.inodes[i].uid);
+			printf(" │ %-10s(%d)", disk.users_table[disk.inodes[i].uid].login, disk.inodes[i].uid);
+			printf(" │ ");
+			switch(disk.inodes[i].uright){
+				case rw:
+					printf("u:rw ");
+					break;
+				case rW:
+					printf("u:rW ");
+					break;
+				case Rw:
+					printf("u:Rw ");
+					break;
+				case RW:
+					printf("u:RW ");
+			}
+			switch(disk.inodes[i].oright){
+				case rw:
+					printf("o:rw");
+					break;
+				case rW:
+					printf("o:rW");
+					break;
+				case Rw:
+					printf("o:Rw");
+					break;
+				case RW:
+					printf("o:RW");
+			}
 		}
 		printf("\n");
 	}
@@ -459,18 +487,18 @@ void error_message(int i){
 // Victor
 void splash(){
 	clear_screen();
-	printf(BLUE
-	" ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄      ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
-	"▒██▒  ██▒▒██    ▒ ▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒\n"
-	"▒██░  ██▒░ ▓██▄   ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░\n"
-	"▒██   ██░  ▒   ██▒▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██ \n"
-	"░ ████▓▒░▒██████▒▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓\n"
-	"░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒\n"
-	"  ░ ▒ ▒░ ░ ░▒  ░ ░  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░    ░      ░  ▒    ▒ ░▒░ ░\n"
-	"░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒     ░      ░         ░  ░░ ░\n"
-	"    ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
-	"                  ░                                    ░                \n"
+	printf(BLUE"\n"
+	"   ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄      ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
+	"  ▒██▒  ██▒▒██    ▒ ▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒\n"
+	"  ▒██░  ██▒░ ▓██▄   ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░\n"
+	"  ▒██   ██░  ▒   ██▒▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██ \n"
+	"  ░ ████▓▒░▒██████▒▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓\n"
+	"  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒\n"
+	"    ░ ▒ ▒░ ░ ░▒  ░ ░  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░    ░      ░  ▒    ▒ ░▒░ ░\n"
+	"  ░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒     ░      ░         ░  ░░ ░\n"
+	"      ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
+	"                    ░                                    ░                \n"
 	DEF);
-	usleep(500000);
+	usleep(750000);
 	clear_screen();
 }
