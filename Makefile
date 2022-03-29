@@ -27,6 +27,10 @@ program.o : program.c
 test.o : test.c
 	$(CC) -o test.o -c test.c $(OPT)
 
+Installeur.o: Installeur.c
+	$(CC) -o Installeur.o -c Installeur.c $(OPT)
+
+
 #compile cmd_dump_inodes
 # cmd_dump_inodes : src/cmd_dump_inodes.c
 # 	$(CC) src/cmd_dump_inodes.c -o cmd_dump_inodes $(OPT)
@@ -37,6 +41,9 @@ $(EXEC): $(TARGET) $(OBJDIR)/program.o
 
 test : $(TARGET) $(OBJDIR)/test.o
 	$(CC) $(TARGET) $(OBJDIR)/test.o -o test $(OPT)
+
+install: $(TARGET) $(OBJDIR)/Installeur.o
+	$(CC) $(TARGET) $(OBJDIR)/Installeur.o -o install $(OPT)
 
 #option du makefile
 clean:

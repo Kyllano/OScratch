@@ -41,7 +41,7 @@ int cmd_ls(int type){
 
 // Victor
 int cmd_cat(char* filename){
-	
+
 	int id = get_file_id(filename);
 	if (id == -1) return ERROR_FILE_ACCESS;
 	if (check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
@@ -141,7 +141,7 @@ int cmd_chmod(char* rights, char* filename){
 
 	int i=0;
 	int editUrights=0, editOrights=0, addrights=0, read=0, write=0;
-	
+
 	if (rights[i]!='u' && rights[i]!='o') return ERROR_RIGHTS_SYNTAX;
 	while (rights[i]=='u' || rights[i]=='o'){
 		if (rights[i]=='u') editUrights = 1;
@@ -149,7 +149,7 @@ int cmd_chmod(char* rights, char* filename){
 		i++;
 	}
 	if (rights[i]!='+' && rights[i]!='-') return ERROR_RIGHTS_SYNTAX;
-	
+
 	if (rights[i]=='+') addrights = 1;
 	i++;
 
@@ -371,7 +371,7 @@ int check_rights(int id, int uid, char* rights){
 			i++;
 		}
 	}
-	return NO_ERROR;	
+	return NO_ERROR;
 }
 
 // Victor
@@ -442,11 +442,11 @@ void error_message(int i){
 		case ERROR_USERNAME_TAKEN:
 			printf("Erreur : Ce nom d'utilisateur est déjà pris.\n");
 			break;
-		
+
 		case ERROR_PASSWORD:
 			printf("Erreur : le mot de passe est erroné.\n");
 			break;
-		
+
 		case ERROR_RIGHTS_SYNTAX:
 			printf("Erreur de syntaxe : [u o][+ -][r w] exemples :  u+rw  ou-w  o+r\n");
 			break;
