@@ -500,6 +500,6 @@ void splash(){
 	"      ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
 	"                    ░                                    ░                \n"
 	DEF);
-	usleep(750000);
-	clear_screen();
+	//usleep(750000);
+	//clear_screen();
 }

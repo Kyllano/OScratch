@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
 	// Tests
 	user.userid = 0;
 
-	clear_screen();
+	//clear_screen();
 	splash();
 
 	while (loop){
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
 		cmd.nbArgs = 0;
 		strToken = strtok(cmdline, " ");
 
-		while (strToken!=NULL){
+		while (strToken!=NULL && cmd.nbArgs<2){
 
 			if (strlen(strToken)>ARG_MAX_SIZE){
 				while (strToken!=NULL) strToken = strtok(NULL, " ");
@@ -64,7 +64,6 @@ int main(int argc, char* argv[]){
 			}
 
 			else{
-				cmd.tabArgs = (char**) realloc (cmd.tabArgs, (1+cmd.nbArgs)*sizeof(char*));
 				cmd.tabArgs[cmd.nbArgs] = (char*) realloc (cmd.tabArgs[cmd.nbArgs], (ARG_MAX_SIZE*sizeof(char)));
 
 				if (cmd.tabArgs[cmd.nbArgs] == NULL){
@@ -171,6 +170,7 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "clear")){
 			clear_screen();
+			splash();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "help")){
 			retour = cmd_help();
