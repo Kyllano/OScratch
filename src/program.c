@@ -28,13 +28,6 @@ int main(int argc, char* argv[]){
 	char cmdline[CMDLINE_MAX_SIZE];
 	char* strToken;
 	cmd_t cmd;
-	cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
-	cmd.tabArgs[0] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	cmd.tabArgs[1] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	cmd.tabArgs[2] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	for (int i=0; i<3; i++){
-		strcpy(cmd.tabArgs[i], "");
-	}
 	int loop = 1;
 	int retour;
 
@@ -45,6 +38,11 @@ int main(int argc, char* argv[]){
 	splash();
 
 	while (loop){
+		cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
+		for (int i=0; i<3; i++){
+			cmd.tabArgs[i] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+			strcpy(cmd.tabArgs[i], "");
+		}
 
 		// Lecture de la cmd.tabArgs[0]e
 		printf(BLUE BOLD"► "DEF BLUE);
@@ -89,6 +87,9 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "ll")){
 			retour = cmd_ls(2);
+		}
+		else if (!strcmp(cmd.tabArgs[0], "lu")){
+			retour = cmd_listusers();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "cat")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cat "UNDR"nom de fichier"DEF"\n");
@@ -185,15 +186,11 @@ int main(int argc, char* argv[]){
 
 		// Nettoyage
 		for (int i=0; i<3; i++){
-			strcpy(cmd.tabArgs[i], "");
+			free(cmd.tabArgs[i]);
 		}
+		free(cmd.tabArgs);
 
 	}
-	
-	for(int i=0;i<3;i++){
-		free(cmd.tabArgs[i]);
-	}
-	free(cmd.tabArgs);
 
 	return NO_ERROR;
 }
