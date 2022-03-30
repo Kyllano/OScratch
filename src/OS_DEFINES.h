@@ -195,7 +195,7 @@ int load_file_from_host(char* filename_on_host, file_t* empty_file);
 int store_file_to_host(char* filename);
 
 int get_file_id(char* filename);
-void write_content(char *filename, file_t *fich);
+void write_content(char *filename, file_t *fich,int uright,int oright);
 void overwrite_content(char *filename, file_t *fich, int i_fich);
 void update_first_free_byte();
 
@@ -224,6 +224,7 @@ void flush();
 void clear_screen();
 void error_message(int i);
 void splash();
+int check_rights(int id, int uid, char* rights);
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES

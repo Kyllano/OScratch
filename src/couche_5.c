@@ -9,14 +9,15 @@
 // Victor
 int cmd_ls(int type){
 
-	printf(BOLD WHITE"filename                        "DEF);
+	printf(BOLD WHITE"filename                "DEF);
 	if (type != 1) {	// Not Short
-		printf(" │ "BOLD WHITE"size    "DEF);
+		printf(" │ "BOLD WHITE"size  "DEF);
 		printf(" │ "BOLD WHITE"date de création        "DEF);
 	}
 	if (type ==2){		// Long
 		printf(" │ "BOLD WHITE"date de modification    "DEF);
-		printf(" │ "BOLD WHITE"owner id"DEF);
+		printf(" │ "BOLD WHITE"owner        "DEF);
+		printf(" │ "BOLD WHITE"rights"DEF);
 	}
 	printf("\n");
 
@@ -24,14 +25,42 @@ int cmd_ls(int type){
 	//printf("nb_file = %d\n",disk.super_block.number_of_files);
 
 	for (int i=0; i<disk.super_block.number_of_files; i++){
-		printf("%-32s", disk.inodes[i].filename);
+		if (type == 1) printf("%s", disk.inodes[i].filename);
 		if (type != 1) {	// Not Short
-			printf(" │ %8d", disk.inodes[i].size);
+			printf("%-24s", disk.inodes[i].filename);
+			printf(" │ %6d", disk.inodes[i].size);
 			printf(" │ %s", disk.inodes[i].ctimestamp);
 		}
 		if (type ==2){	// Long
 			printf(" │ %s", disk.inodes[i].mtimestamp);
-			printf(" │ %8d", disk.inodes[i].uid);
+			printf(" │ %-10s(%d)", disk.users_table[disk.inodes[i].uid].login, disk.inodes[i].uid);
+			printf(" │ ");
+			switch(disk.inodes[i].uright){
+				case rw:
+					printf("u:rw ");
+					break;
+				case rW:
+					printf("u:rW ");
+					break;
+				case Rw:
+					printf("u:Rw ");
+					break;
+				case RW:
+					printf("u:RW ");
+			}
+			switch(disk.inodes[i].oright){
+				case rw:
+					printf("o:rw");
+					break;
+				case rW:
+					printf("o:rW");
+					break;
+				case Rw:
+					printf("o:Rw");
+					break;
+				case RW:
+					printf("o:RW");
+			}
 		}
 		printf("\n");
 	}
@@ -41,6 +70,10 @@ int cmd_ls(int type){
 
 // Victor
 int cmd_cat(char* filename){
+
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
 
 	file_t file;
 	int retour = read_file(filename, &file);
@@ -53,14 +86,11 @@ int cmd_cat(char* filename){
 
 // Guilhem
 int cmd_rm(char *filename){
-	int i;
-	if ((i=get_file_id(filename)) == -1){
-		return ERROR_FILE_ACCESS;
-	}
-	if (user.userid!=0 && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=rW && disk.inodes[i].uright!=RW)
-	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=rW && disk.inodes[i].oright!=RW))){
-		return ERROR_RIGHTS;
-	}
+	
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (check_rights(id, user.userid, "W")) return ERROR_RIGHTS;
+
 	return delete_file(filename);
 }
 
@@ -76,7 +106,7 @@ int cmd_cr(char *filename){
 	strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
 	disk.inodes[unused_inode].nblock = 1;
 	disk.inodes[unused_inode].uid = user.userid;
-	disk.inodes[unused_inode].uright = rw;
+	disk.inodes[unused_inode].uright = RW;
 	disk.inodes[unused_inode].oright = rw;
 	update_first_free_byte();
 	//printf("%d\n",disk.super_block.first_free_byte);
@@ -87,15 +117,12 @@ int cmd_cr(char *filename){
 
 // Guilhem
 int cmd_edit(char *filename){
-	int i;
 	file_t file;
 	char c;
-	if ((i=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
-
-	if(user.userid!=0  && ((disk.inodes[i].uid==user.userid && disk.inodes[i].uright!=Rw && disk.inodes[i].uright!=RW)
-	|| (disk.inodes[i].uid!=user.userid && disk.inodes[i].oright!=Rw && disk.inodes[i].oright!=RW))){
-		return ERROR_RIGHTS;
-	}
+	
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (check_rights(id, user.userid, "W")) return ERROR_RIGHTS;
 
 	printf("Entrez le contenu du fichier (terminez la saisie avec $)\n");
 	file.size=0;
@@ -120,18 +147,15 @@ int cmd_store(char *filename){
 // Keylan
 //On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer le proprio du fichier
 int cmd_chown(char* filename, char* name_owner){
-	int id_fich;
+	
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (disk.inodes[id].uid != user.userid && check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
+
 	int id_new_owner;
-	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
-
-	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
-	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
-		return ERROR_RIGHTS;
-	}
-
 	if ((id_new_owner = get_user_id(name_owner)) == ERROR_USER_NOT_FOUND) return ERROR_USER_NOT_FOUND;
 
-	disk.inodes[id_fich].uid = id_new_owner;
+	disk.inodes[id].uid = id_new_owner;
 	return NO_ERROR;
 
 }
@@ -146,7 +170,7 @@ int cmd_chmod(char* rights, char* filename){
 
 	int i=0;
 	int editUrights=0, editOrights=0, addrights=0, read=0, write=0;
-	
+
 	if (rights[i]!='u' && rights[i]!='o') return ERROR_RIGHTS_SYNTAX;
 	while (rights[i]=='u' || rights[i]=='o'){
 		if (rights[i]=='u') editUrights = 1;
@@ -154,7 +178,7 @@ int cmd_chmod(char* rights, char* filename){
 		i++;
 	}
 	if (rights[i]!='+' && rights[i]!='-') return ERROR_RIGHTS_SYNTAX;
-	
+
 	if (rights[i]=='+') addrights = 1;
 	i++;
 
@@ -166,49 +190,40 @@ int cmd_chmod(char* rights, char* filename){
 	}
 	if (rights[i]!='\0') return ERROR_RIGHTS_SYNTAX;
 
-	//printf("%d %d %d %d %d\n", editUrights, editOrights, addrights, read, write);
 
-	int id_fich;
-	if ((id_fich=get_file_id(filename))==-1) return ERROR_FILE_ACCESS;
-
-	if(user.userid!=0  && ((disk.inodes[id_fich].uid!=user.userid && (disk.inodes[id_fich].oright==Rw || disk.inodes[id_fich].oright==rw))
-	|| (disk.inodes[id_fich].uid==user.userid && (disk.inodes[id_fich].uright==Rw || disk.inodes[id_fich].uright==rw)))){
-		return ERROR_RIGHTS;
-	}
-
-	//printf("AVANT MODIF : %d %d\n", disk.inodes[id_fich].uright, disk.inodes[id_fich].oright);
+	int id = get_file_id(filename);
+	if (id == -1) return ERROR_FILE_ACCESS;
+	if (disk.inodes[id].uid != user.userid && check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
 
 	if (editUrights){
 		if (addrights){
-			if 		(read && write)		disk.inodes[id_fich].uright = RW;
-			else if (read && !write)	disk.inodes[id_fich].uright |= 2;		
-			else if (!read && write)	disk.inodes[id_fich].uright |= 1;
+			if 		(read && write)		disk.inodes[id].uright = RW;
+			else if (read && !write)	disk.inodes[id].uright |= 2;		
+			else if (!read && write)	disk.inodes[id].uright |= 1;
 			//else ca ne change pas 
 		}
 		else{
-			if 		(read && write)		disk.inodes[id_fich].uright = rw;
-			else if (read && !write)	disk.inodes[id_fich].uright &= ~2;		
-			else if (!read && write)	disk.inodes[id_fich].uright &= ~1;
+			if 		(read && write)		disk.inodes[id].uright = rw;
+			else if (read && !write)	disk.inodes[id].uright &= ~2;		
+			else if (!read && write)	disk.inodes[id].uright &= ~1;
 			//else ca ne change pas 
 		}
 	}
 
 	if (editOrights){
 		if (addrights){
-			if 		(read && write)		disk.inodes[id_fich].oright = RW;
-			else if (read && !write)	disk.inodes[id_fich].oright |= 2;		
-			else if (!read && write)	disk.inodes[id_fich].oright |= 1;
+			if 		(read && write)		disk.inodes[id].oright = RW;
+			else if (read && !write)	disk.inodes[id].oright |= 2;		
+			else if (!read && write)	disk.inodes[id].oright |= 1;
 			//else ca ne change pas 
 		}
 		else{
-			if 		(read && write)		disk.inodes[id_fich].oright = rw;
-			else if (read && !write)	disk.inodes[id_fich].oright &= ~2;		
-			else if (!read && write)	disk.inodes[id_fich].oright &= ~1;
+			if 		(read && write)		disk.inodes[id].oright = rw;
+			else if (read && !write)	disk.inodes[id].oright &= ~2;		
+			else if (!read && write)	disk.inodes[id].oright &= ~1;
 			//else ca ne change pas 
 		}
 	}
-
-	//printf("APRES MODIF : %d %d\n", disk.inodes[id_fich].uright, disk.inodes[id_fich].oright);
 
 	return NO_ERROR;
 }
@@ -322,8 +337,8 @@ int cmd_help(){
 		WHITE BOLD "\t\t- COMMANDES -\n\n"DEF
 		WHITE BOLD "adduser"DEF"\n\tAjoute un utilisateur.\n\n"
 		WHITE BOLD "cat "UNDR"nom de fichier"DEF"\n\tAffiche à l’écran le contenu d’un fichier si l’utilisateur a les droits.\n\n"
-		ITAL"(à venir) "WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
-		ITAL"(à venir) "WHITE BOLD "chmod "UNDR"droits"DEF" "WHITE BOLD UNDR"nom du fichier"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
+		WHITE BOLD "chown "UNDR"nom de fichier"DEF" "WHITE BOLD UNDR"login autre utilisateur"DEF"\n\tchange le propriétaire d’un fichier si le demandeur a les droits.\n\n"
+		WHITE BOLD "chmod "UNDR"droits"DEF" "WHITE BOLD UNDR"nom du fichier"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
 		WHITE BOLD "clear "DEF"\n\tVide l'affichage\n\n"
 		WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
 		WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
@@ -332,7 +347,7 @@ int cmd_help(){
 		WHITE BOLD "ls [-l | -s]"DEF"\n\tAffiche la liste des fichiers du disque.\n\n"
 		WHITE BOLD "quit"DEF"\n\tSort de l’interprète de commande et du programme en sauvegardant le système de fichiers sur le disque.\n\n"
 		WHITE BOLD "rm "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du système si l’utilisateur a les droits.\n\n"
-		ITAL"(à venir) "WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
+		WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
 		WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
 		WHITE BOLD "su "UNDR"nom d'utilisateur"DEF"\n\tChange d'utilisateur.\n\n"
 		WHITE BOLD "whoami"DEF"\n\tAffiche le nom de l'utilisateur courant.\n\n"
@@ -343,6 +358,50 @@ int cmd_help(){
 
 
 
+// Victor
+// A VERIFIER
+int check_rights(int id, int uid, char* rights){
+	int i=0;
+
+	if (uid == 0) return NO_ERROR;
+	if (disk.inodes[id].uid == uid){
+		// checking uright
+		while (rights[i]!='\0'){
+			switch (rights[i]){
+				case 'W':
+					return (disk.inodes[id].uright==rw || disk.inodes[id].uright==Rw);
+				case 'w':
+					return (disk.inodes[id].uright==rW || disk.inodes[id].uright==RW);
+				case 'R':
+					return (disk.inodes[id].uright==rw || disk.inodes[id].uright==rW);
+				case 'r':
+					return (disk.inodes[id].uright==Rw || disk.inodes[id].uright==RW);
+				default:
+					break;
+			}
+			i++;
+		}
+	}
+	else {
+		// checking oright
+		while (rights[i]!='\0'){
+			switch (rights[i]){
+				case 'W':
+					return (disk.inodes[id].oright==rw || disk.inodes[id].oright==Rw);
+				case 'w':
+					return (disk.inodes[id].oright==rW || disk.inodes[id].oright==RW);
+				case 'R':
+					return (disk.inodes[id].oright==rw || disk.inodes[id].oright==rW);
+				case 'r':
+					return (disk.inodes[id].oright==Rw || disk.inodes[id].oright==RW);
+				default:
+					break;
+			}
+			i++;
+		}
+	}
+	return NO_ERROR;
+}
 
 // Victor
 void clear_screen(){
@@ -412,11 +471,11 @@ void error_message(int i){
 		case ERROR_USERNAME_TAKEN:
 			printf("Erreur : Ce nom d'utilisateur est déjà pris.\n");
 			break;
-		
+
 		case ERROR_PASSWORD:
 			printf("Erreur : le mot de passe est erroné.\n");
 			break;
-		
+
 		case ERROR_RIGHTS_SYNTAX:
 			printf("Erreur de syntaxe : [u o][+ -][r w] exemples :  u+rw  ou-w  o+r\n");
 			break;
@@ -429,18 +488,18 @@ void error_message(int i){
 // Victor
 void splash(){
 	clear_screen();
-	printf(BLUE
-	" ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄      ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
-	"▒██▒  ██▒▒██    ▒ ▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒\n"
-	"▒██░  ██▒░ ▓██▄   ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░\n"
-	"▒██   ██░  ▒   ██▒▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██ \n"
-	"░ ████▓▒░▒██████▒▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓\n"
-	"░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒\n"
-	"  ░ ▒ ▒░ ░ ░▒  ░ ░  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░    ░      ░  ▒    ▒ ░▒░ ░\n"
-	"░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒     ░      ░         ░  ░░ ░\n"
-	"    ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
-	"                  ░                                    ░                \n"
+	printf(BLUE"\n"
+	"   ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄      ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
+	"  ▒██▒  ██▒▒██    ▒ ▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒\n"
+	"  ▒██░  ██▒░ ▓██▄   ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░\n"
+	"  ▒██   ██░  ▒   ██▒▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██ \n"
+	"  ░ ████▓▒░▒██████▒▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓\n"
+	"  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒\n"
+	"    ░ ▒ ▒░ ░ ░▒  ░ ░  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░    ░      ░  ▒    ▒ ░▒░ ░\n"
+	"  ░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒     ░      ░         ░  ░░ ░\n"
+	"      ░ ░        ░  ░ ░         ░           ░  ░         ░ ░       ░  ░  ░\n"
+	"                    ░                                    ░                \n"
 	DEF);
-	usleep(500000);
-	clear_screen();
+	//usleep(750000);
+	//clear_screen();
 }

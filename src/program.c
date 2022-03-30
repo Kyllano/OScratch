@@ -28,23 +28,21 @@ int main(int argc, char* argv[]){
 	char cmdline[CMDLINE_MAX_SIZE];
 	char* strToken;
 	cmd_t cmd;
-	cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
-	cmd.tabArgs[0] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	cmd.tabArgs[1] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	cmd.tabArgs[2] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
-	for (int i=0; i<3; i++){
-		strcpy(cmd.tabArgs[i], "");
-	}
 	int loop = 1;
 	int retour;
 
 	// Tests
 	user.userid = 0;
 
-	clear_screen();
+	//clear_screen();
 	splash();
 
 	while (loop){
+		cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
+		for (int i=0; i<3; i++){
+			cmd.tabArgs[i] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+			strcpy(cmd.tabArgs[i], "");
+		}
 
 		// Lecture de la cmd.tabArgs[0]e
 		printf(BLUE BOLD"► "DEF BLUE);
@@ -57,7 +55,7 @@ int main(int argc, char* argv[]){
 		cmd.nbArgs = 0;
 		strToken = strtok(cmdline, " ");
 
-		while (strToken!=NULL){
+		while (strToken!=NULL && cmd.nbArgs<2){
 
 			if (strlen(strToken)>ARG_MAX_SIZE){
 				while (strToken!=NULL) strToken = strtok(NULL, " ");
@@ -66,7 +64,6 @@ int main(int argc, char* argv[]){
 			}
 
 			else{
-				cmd.tabArgs = (char**) realloc (cmd.tabArgs, (1+cmd.nbArgs)*sizeof(char*));
 				cmd.tabArgs[cmd.nbArgs] = (char*) realloc (cmd.tabArgs[cmd.nbArgs], (ARG_MAX_SIZE*sizeof(char)));
 
 				if (cmd.tabArgs[cmd.nbArgs] == NULL){
@@ -89,6 +86,9 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "ll")){
 			retour = cmd_ls(2);
+		}
+		else if (!strcmp(cmd.tabArgs[0], "lu")){
+			retour = cmd_listusers();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "cat")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : cat "UNDR"nom de fichier"DEF"\n");
@@ -131,14 +131,20 @@ int main(int argc, char* argv[]){
 			else {
 				//scanf("%s", cmd.tabArgs[2]); yavais un scanf je sais pas ce qu il faisais la
 				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chown "UNDR"nom de fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
-				else retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
+				else {
+					retour = cmd_chown(cmd.tabArgs[1], cmd.tabArgs[2]);
+					if (retour == NO_ERROR) printf("Le propriétaire a été modifié avec succès.\n");
+				}
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "chmod")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
 			else {
 				if (!strcmp(cmd.tabArgs[2], "")) printf(YELLOW"usage : chmod "UNDR"droits"DEF" "UNDR YELLOW"nom du fichier"DEF"\n");
-				else retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
+				else {
+					retour = cmd_chmod(cmd.tabArgs[1], cmd.tabArgs[2]);
+					if (retour == NO_ERROR) printf("Les droits ont été modifiés avec succès.\n");
+				}
 			}
 		}
 		else if (!strcmp(cmd.tabArgs[0], "listusers")){
@@ -164,6 +170,7 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "clear")){
 			clear_screen();
+			splash();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "help")){
 			retour = cmd_help();
@@ -179,15 +186,11 @@ int main(int argc, char* argv[]){
 
 		// Nettoyage
 		for (int i=0; i<3; i++){
-			strcpy(cmd.tabArgs[i], "");
+			free(cmd.tabArgs[i]);
 		}
+		free(cmd.tabArgs);
 
 	}
-	
-	for(int i=0;i<3;i++){
-		free(cmd.tabArgs[i]);
-	}
-	free(cmd.tabArgs);
 
 	return NO_ERROR;
 }
