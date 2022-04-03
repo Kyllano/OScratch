@@ -35,6 +35,8 @@ void write_content(char *filename,file_t *fich,int uright,int oright){
 	disk.inodes[unused_inode].oright = oright;
 	write_mult_blocks((char *)fich->data, disk.inodes[unused_inode].nblock, &disk.super_block.first_free_byte,fich->size);
  	disk.super_block.number_of_files ++;
+  disk.super_block.nb_blocks_used+=disk.inodes[unused_inode].nblock;
+
 }
 
 
@@ -44,10 +46,12 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 	if (disk.inodes[i_fich].size >= fich->size){
 		strcpy(disk.inodes[i_fich].mtimestamp, timestamp());
 		disk.inodes[i_fich].size = fich->size;
+    disk.super_block.nb_blocks_used-=disk.inodes[i_fich].nblock;
 		disk.inodes[i_fich].nblock = compute_nblock(fich->size);
 		int stock = disk.inodes[i_fich].first_byte;
 		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
 		disk.inodes[i_fich].first_byte=stock;
+    disk.super_block.nb_blocks_used+=disk.inodes[i_fich].nblock;
 	}
 	else {
 		int uright=disk.inodes[i_fich].uright,oright=disk.inodes[i_fich].oright;

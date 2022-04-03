@@ -11,20 +11,25 @@ import java.io.*;
 public class Main {
 	/**
 	 * @param args
+	 * 
 	 */
+	
+	
 	public static void main(String[] args) {
 		/*File file=new File("d0");*/
 		Super_block sb= new Super_block();
 		try {
 			DataInputStream lecteur = new DataInputStream(new BufferedInputStream(new FileInputStream(args[1])));
-
+			DataOutputStream writer = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(args[1])));
+			
 			try {
 				
+				sb.set_super_block(lecteur);
 				
-				User_table ut = new User_table();
-				Inode_table it= new Inode_table();
+			
+				
 			}
-			catch(EOFException e){
+			catch(Exception e){
 				System.out.println("Erreur de lecture disque");
 			}
 			lecteur.close();

@@ -86,7 +86,7 @@ int cmd_cat(char* filename){
 
 // Guilhem
 int cmd_rm(char *filename){
-	
+
 	int id = get_file_id(filename);
 	if (id == -1) return ERROR_FILE_ACCESS;
 	if (check_rights(id, user.userid, "W")) return ERROR_RIGHTS;
@@ -101,7 +101,7 @@ int cmd_cr(char *filename){
 
 	if (get_file_id(filename)!=-1) return ERROR_FILENAME_TAKEN;
 
-	init_inode(filename,1, disk.super_block.first_free_byte);
+	init_inode(filename,0, disk.super_block.first_free_byte);
 	strcpy(disk.inodes[unused_inode].ctimestamp, timestamp());
 	strcpy(disk.inodes[unused_inode].mtimestamp, disk.inodes[unused_inode].ctimestamp);
 	disk.inodes[unused_inode].nblock = 1;
@@ -119,7 +119,7 @@ int cmd_cr(char *filename){
 int cmd_edit(char *filename){
 	file_t file;
 	char c;
-	
+
 	int id = get_file_id(filename);
 	if (id == -1) return ERROR_FILE_ACCESS;
 	if (check_rights(id, user.userid, "W")) return ERROR_RIGHTS;
@@ -147,7 +147,7 @@ int cmd_store(char *filename){
 // Keylan
 //On considere que si l user a les droits d ecriture et n est pas le proprio, il peut changer le proprio du fichier
 int cmd_chown(char* filename, char* name_owner){
-	
+
 	int id = get_file_id(filename);
 	if (id == -1) return ERROR_FILE_ACCESS;
 	if (disk.inodes[id].uid != user.userid && check_rights(id, user.userid, "R")) return ERROR_RIGHTS;
@@ -198,30 +198,30 @@ int cmd_chmod(char* rights, char* filename){
 	if (editUrights){
 		if (addrights){
 			if 		(read && write)		disk.inodes[id].uright = RW;
-			else if (read && !write)	disk.inodes[id].uright |= 2;		
+			else if (read && !write)	disk.inodes[id].uright |= 2;
 			else if (!read && write)	disk.inodes[id].uright |= 1;
-			//else ca ne change pas 
+			//else ca ne change pas
 		}
 		else{
 			if 		(read && write)		disk.inodes[id].uright = rw;
-			else if (read && !write)	disk.inodes[id].uright &= ~2;		
+			else if (read && !write)	disk.inodes[id].uright &= ~2;
 			else if (!read && write)	disk.inodes[id].uright &= ~1;
-			//else ca ne change pas 
+			//else ca ne change pas
 		}
 	}
 
 	if (editOrights){
 		if (addrights){
 			if 		(read && write)		disk.inodes[id].oright = RW;
-			else if (read && !write)	disk.inodes[id].oright |= 2;		
+			else if (read && !write)	disk.inodes[id].oright |= 2;
 			else if (!read && write)	disk.inodes[id].oright |= 1;
-			//else ca ne change pas 
+			//else ca ne change pas
 		}
 		else{
 			if 		(read && write)		disk.inodes[id].oright = rw;
-			else if (read && !write)	disk.inodes[id].oright &= ~2;		
+			else if (read && !write)	disk.inodes[id].oright &= ~2;
 			else if (!read && write)	disk.inodes[id].oright &= ~1;
-			//else ca ne change pas 
+			//else ca ne change pas
 		}
 	}
 

@@ -38,7 +38,7 @@ void read_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 	fseek(disk.storage, *pos, SEEK_SET);
 
 	for (int j=0; j<BLOCK_SIZE*nblock; j+=4){
-		
+
 		read_block(&block, *pos);
 		for (int k=0; k<4; k++){
 			if(j+k<taille_max_s){
@@ -137,7 +137,7 @@ void clear_inode(int indice){
 int get_unused_inode(){
 	int i=0;
 	// TODO Ajouter le cas ou la table d inode est pleine
-	while (disk.inodes[i].size != 0 && i < INODE_TABLE_SIZE) i++;
+	while (disk.inodes[i].nblock != 0 && i < INODE_TABLE_SIZE) i++;
 
 	if (i == INODE_TABLE_SIZE) return -1;
 	else return i;

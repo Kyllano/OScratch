@@ -10,6 +10,7 @@ package analyseFichier;
 public class Inode_table {
 	private int nb_inode;
 	private Inode[] table_inode;
+	
 	public Inode_table(int nb_fichier) {
 		this.nb_inode=nb_fichier;
 		table_inode= new Inode[10];

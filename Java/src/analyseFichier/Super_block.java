@@ -17,14 +17,19 @@ public class Super_block {
 	
 	
 	
-	public boolean set_super_block(DataInputStream i){
+	public void set_super_block(DataInputStream i){
 		try {
 			
-			nb_fichieri.readInt();
-		}catch(EOFException e) {
+			this.nb_fichier=i.readInt();
+			this.nb_user=i.readInt();
+			this.nb_block_disk=i.readInt();
+			this.first_free_byte=i.readInt();
 			
-			
+		}catch(IOException e) {
+			System.out.println("Erreur de lecture du super bloc");
+			System.exit(1);
 		}
+		
 	}
 
 
