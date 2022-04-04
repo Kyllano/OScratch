@@ -27,7 +27,7 @@ public class Super_block {
 			
 		}catch(IOException e) {
 			System.out.println("Erreur de lecture du super bloc");
-			System.exit(1);
+			System.exit(3);
 		}
 		
 	}

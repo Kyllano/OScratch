@@ -12,6 +12,7 @@ import java.io.IOException;
  */
 public class Inode {
 
+	public static final int TIMESTAMP_SIZE = 26;
 	private byte[] filename = new byte[32];
 	private int size;
 	private int uid;
@@ -32,16 +33,21 @@ public class Inode {
 			this.uid=i.readInt();
 			this.uright=i.readInt();
 			this.oright=i.readInt();
-			this.filename=i.readNBytes(32);
-			this.filename=i.readNBytes(32);
-			this.uright=i.readInt();
-			this.oright=i.readInt();
+			this.ctimestamp=i.readNBytes(TIMESTAMP_SIZE);
+			this.mtimestamp=i.readNBytes(32);
+			this.nblock=i.readInt();
+			this.first_byte=i.readInt();
 			
 			
 		}catch(IOException e) {
 			System.out.println("Erreur de lecture du super bloc");
 			System.exit(1);
 		}
+	}
+	
+	public boolean isEmpty(){
+		if(this.nblock!=0) {return true;}
+		return false;
 	}
 
 
