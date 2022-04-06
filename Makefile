@@ -1,5 +1,5 @@
 CC=gcc
-OPT=-Wall -lm -g
+OPT=-Wall -lm
 OBJDIR=bin
 SRCDIR=src
 EXEC=OScratch
@@ -38,6 +38,9 @@ Installeur.o: Installeur.c
 #link main avec liste et element
 $(EXEC): $(TARGET) $(OBJDIR)/program.o
 	$(CC) $(TARGET) $(OBJDIR)/program.o -o $(EXEC) $(OPT)
+
+debug: $(TARGET) $(OBJDIR)/program.o
+	$(CC) $(TARGET) $(OBJDIR)/program.o -o $(EXEC) $(OPT) -g
 
 test : $(TARGET) $(OBJDIR)/test.o
 	$(CC) $(TARGET) $(OBJDIR)/test.o -o test $(OPT)
