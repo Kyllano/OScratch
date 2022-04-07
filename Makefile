@@ -6,6 +6,8 @@ EXEC=OScratch
 TARGET=	bin/sha256.o\
 		bin/sha256_utils.o\
 		bin/timestamp.o\
+		bin/my_socket.o\
+		bin/simple_chat.o\
 		bin/couche_1.o\
 		bin/couche_2.o\
 		bin/couche_3.o\
