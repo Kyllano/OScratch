@@ -48,7 +48,7 @@
 #define MAX_FILE_SIZE (2*1024)
 #define INODE_TABLE_SIZE 10
 #define MAX_MSG 1024
-#define TIMESTAMP_SIZE 24+2
+#define TIMESTAMP_SIZE 26
 #define NB_USERS 5
 #define CMDLINE_MAX_SIZE 128
 #define ARG_MAX_SIZE 32

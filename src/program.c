@@ -20,6 +20,7 @@ int main(int argc, char* argv[]){
 	}
 
 	if (!read_super_block()){
+		printf("bloop\n");
 		read_inodes_table();
 		read_users_table();
 	}

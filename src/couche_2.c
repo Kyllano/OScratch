@@ -38,7 +38,7 @@ void read_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 	fseek(disk.storage, *pos, SEEK_SET);
 
 	for (int j=0; j<BLOCK_SIZE*nblock; j+=4){
-		
+
 		read_block(&block, *pos);
 		for (int k=0; k<4; k++){
 			if(j+k<taille_max_s){
@@ -85,6 +85,15 @@ int read_inodes_table(){
 		read_mult_blocks(disk.inodes[j].mtimestamp,compute_nblock(TIMESTAMP_SIZE),&pos,TIMESTAMP_SIZE);
 		read_int_block(block,&pos,&disk.inodes[j].nblock);
 		read_int_block(block,&pos,&disk.inodes[j].first_byte);
+		printf("--> r %s\n",disk.inodes[j].filename);
+		printf("r %d\n",disk.inodes[j].size);
+		printf("r %d\n",disk.inodes[j].uid);
+		printf("r %d\n",disk.inodes[j].uright);
+		printf("r %d\n",disk.inodes[j].oright);
+		printf("r %s\n",disk.inodes[j].ctimestamp);
+		printf("r %s\n",disk.inodes[j].mtimestamp);
+		printf("r %d\n",disk.inodes[j].nblock);
+		printf("r %d\n",disk.inodes[j].first_byte);
 		j++;
 	}
 
@@ -113,6 +122,16 @@ int write_inodes_table(){
 		write_mult_blocks(disk.inodes[j].mtimestamp,compute_nblock(TIMESTAMP_SIZE),&pos,TIMESTAMP_SIZE);
 		write_int_block(block,&pos,&disk.inodes[j].nblock);
 		write_int_block(block,&pos,&disk.inodes[j].first_byte);
+		printf("--> w %s\n",disk.inodes[j].filename);
+		printf("w %d\n",disk.inodes[j].size);
+		printf("w %d\n",disk.inodes[j].uid);
+		printf("w %d\n",disk.inodes[j].uright);
+		printf("w %d\n",disk.inodes[j].oright);
+		printf("w %s\n",disk.inodes[j].ctimestamp);
+		printf("w %s\n",disk.inodes[j].mtimestamp);
+		printf("w %d\n",disk.inodes[j].nblock);
+		printf("w %d\n",disk.inodes[j].first_byte);
+
 		j++;
 	}
 	return NO_ERROR;
@@ -137,7 +156,7 @@ void clear_inode(int indice){
 int get_unused_inode(){
 	int i=0;
 	// TODO Ajouter le cas ou la table d inode est pleine
-	while (disk.inodes[i].size != 0 && i < INODE_TABLE_SIZE) i++;
+	while (disk.inodes[i].nblock!= 0 && i < INODE_TABLE_SIZE) i++;
 
 	if (i == INODE_TABLE_SIZE) return -1;
 	else return i;
@@ -171,10 +190,12 @@ int read_super_block(){
 //A n'appeler que si la table d'inode a été initialisée
 void update_first_free_byte(){
 	if (get_unused_inode() == 0){
-		disk.super_block.first_free_byte = (INODE_TABLE_SIZE*INODE_SIZE)*4 + INODES_START + 1;
+		disk.super_block.first_free_byte = 2000;
 	}
 	else {
-		disk.super_block.first_free_byte = disk.inodes[get_unused_inode()-1].first_byte + disk.inodes[get_unused_inode()-1].size +1;
+		int i=0;
+		if((i=get_unused_inode())!=-1) disk.super_block.first_free_byte = disk.inodes[i-1].first_byte + disk.inodes[i-1].size ;
+		else{disk.super_block.first_free_byte = disk.inodes[9].first_byte + disk.inodes[9].size +1;}
 	}
 }
 
@@ -190,7 +211,7 @@ void delete_inode(int indice){
 	disk.super_block.nb_blocks_used -= disk.inodes[indice].nblock;
 
 	// suppression
-	while(j<10 && disk.inodes[j].size!=0){
+	while(j<10 && disk.inodes[j].nblock!=0){
 		strcpy(disk.inodes[j-1].filename,disk.inodes[j].filename);
 		disk.inodes[j-1].size=disk.inodes[j].size;
 		disk.inodes[j-1].uid=disk.inodes[j].uid;
@@ -211,6 +232,7 @@ void delete_inode(int indice){
 // Victor
 void init_inode(char* filename, uint size, uint pos){
 	int i = get_unused_inode();
+	printf("i = %d\n",i);
 	strcpy(disk.inodes[i].filename, filename);
 	disk.inodes[i].size = size;
 	disk.inodes[i].first_byte = pos;
