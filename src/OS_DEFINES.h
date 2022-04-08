@@ -235,13 +235,13 @@ int check_rights(int id, int uid, char* rights);
   FONCTION SOCKET
 ------------------------------------------------------------*/
 int create_socket_heberger(int* server_fd,int* my_socket, int port);
-int create_socket_connexion(int* client_fd,int* my_socket, char* addresse_char, int port);
+int create_socket_connexion(int* my_socket, char* addresse_char, int port);
 
 /*------------------------------------------------------------
   FONCTION CHAT
 ------------------------------------------------------------*/
 int start_chat(int mode);
-int chat(int* socket_fils_descriptor, int* socket, char* name_distant_user, char* your_name);
+int chat(int* socket, char* name_distant_user, char* your_name);
 
 
 /*------------------------------------------------------------

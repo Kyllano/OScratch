@@ -30,9 +30,10 @@ int create_socket_heberger(int* server_fd,int* my_socket, int port){
 
     if (listen(*server_fd, 3) < 0){
         perror("listen");
-        return ERROR_SOCKET;
-        
+        return ERROR_SOCKET;   
     }
+
+    printf("listen terminé\n");
     if ((*my_socket = accept(*server_fd, (struct sockaddr *) &address, (socklen_t*) &address_len))<0){
         perror("accept");
         return ERROR_SOCKET;
@@ -40,7 +41,7 @@ int create_socket_heberger(int* server_fd,int* my_socket, int port){
 
     printf("connexion réussis\n");
 
-    int status = fcntl(*server_fd, F_SETFL, fcntl(*server_fd, F_GETFL, 0) | O_NONBLOCK);
+    int status = fcntl(*my_socket, F_SETFL, fcntl(*my_socket, F_GETFL, 0) | O_NONBLOCK);
     if (status == -1){
         perror("fcntl");
         return ERROR_SOCKET;
@@ -49,10 +50,10 @@ int create_socket_heberger(int* server_fd,int* my_socket, int port){
     return NO_ERROR;
 }
 
-int create_socket_connexion(int* client_fd,int* my_socket, char* addresse_char, int port){
+int create_socket_connexion(int* my_socket, char* addresse_char, int port){
     struct sockaddr_in address;
 
-    if ((*client_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
+    if ((*my_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1){
         printf("\nErreur de création de socket\n");
         return ERROR_SOCKET;
     }
@@ -67,7 +68,7 @@ int create_socket_connexion(int* client_fd,int* my_socket, char* addresse_char, 
     }
    
     printf("tentative de connection...\n");
-    if (connect(*client_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+    if (connect(*my_socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
         printf("\nConnection Failed \n");
         perror("connect");
         return ERROR_SOCKET;
@@ -75,7 +76,7 @@ int create_socket_connexion(int* client_fd,int* my_socket, char* addresse_char, 
 
     printf("connexion réussis\n");
 
-    int status = fcntl(*client_fd, F_SETFL, fcntl(*client_fd, F_GETFL, 0) | O_NONBLOCK);
+    int status = fcntl(*my_socket, F_SETFL, fcntl(*my_socket, F_GETFL, 0) | O_NONBLOCK);
     if (status == -1){
         perror("fcntl");
         return ERROR_SOCKET;
