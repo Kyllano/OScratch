@@ -109,7 +109,7 @@ int cmd_cr(char *filename){
 	disk.inodes[unused_inode].uright = RW;
 	disk.inodes[unused_inode].oright = rw;
 	update_first_free_byte();
-	//printf("%d\n",disk.super_block.first_free_byte);
+	disk.super_block.nb_blocks_used++;
 	disk.super_block.number_of_files ++;
 
 	return NO_ERROR;

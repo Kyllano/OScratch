@@ -39,6 +39,7 @@ int read_users_table(){
 
         //lecture nom user
         while(c != '\t'){
+          printf("i = %d\n",i_username);
             disk.users_table[i_user].login[i_username] = c;
 
             i_username++;
@@ -77,8 +78,9 @@ void write_users_table(){
         strcat((char*) fich_passwd.data, disk.users_table[i].login);
         strcat((char*) fich_passwd.data, "\t");
         strcat((char*) fich_passwd.data, disk.users_table[i].passwd);
-        strcat((char*) fich_passwd.data, "\n\0");
+        strcat((char*) fich_passwd.data, "\n");
     }
+    printf("lol\n");
     fich_passwd.size = strlen((char*) fich_passwd.data);
 
     write_file("passwd", &fich_passwd);

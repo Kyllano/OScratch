@@ -41,6 +41,7 @@ void read_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 
 		read_block(&block, *pos);
 		for (int k=0; k<4; k++){
+			printf("block = %s\n",block.data);
 			if(j+k<taille_max_s){
 				s[j+k] = block.data[k];
 			}
@@ -59,6 +60,7 @@ void write_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 		for (int k=0; k<4; k++){
 			block.data[k] = (j+k>=taille_max_s ? '\0' : s[j+k]);
 		}
+		printf("block = %s\n",block.data);
 		write_block(&block,*pos);
 		*pos += BLOCK_SIZE;
 	}
@@ -85,15 +87,6 @@ int read_inodes_table(){
 		read_mult_blocks(disk.inodes[j].mtimestamp,compute_nblock(TIMESTAMP_SIZE),&pos,TIMESTAMP_SIZE);
 		read_int_block(block,&pos,&disk.inodes[j].nblock);
 		read_int_block(block,&pos,&disk.inodes[j].first_byte);
-		printf("--> r %s\n",disk.inodes[j].filename);
-		printf("r %d\n",disk.inodes[j].size);
-		printf("r %d\n",disk.inodes[j].uid);
-		printf("r %d\n",disk.inodes[j].uright);
-		printf("r %d\n",disk.inodes[j].oright);
-		printf("r %s\n",disk.inodes[j].ctimestamp);
-		printf("r %s\n",disk.inodes[j].mtimestamp);
-		printf("r %d\n",disk.inodes[j].nblock);
-		printf("r %d\n",disk.inodes[j].first_byte);
 		j++;
 	}
 
@@ -122,15 +115,6 @@ int write_inodes_table(){
 		write_mult_blocks(disk.inodes[j].mtimestamp,compute_nblock(TIMESTAMP_SIZE),&pos,TIMESTAMP_SIZE);
 		write_int_block(block,&pos,&disk.inodes[j].nblock);
 		write_int_block(block,&pos,&disk.inodes[j].first_byte);
-		printf("--> w %s\n",disk.inodes[j].filename);
-		printf("w %d\n",disk.inodes[j].size);
-		printf("w %d\n",disk.inodes[j].uid);
-		printf("w %d\n",disk.inodes[j].uright);
-		printf("w %d\n",disk.inodes[j].oright);
-		printf("w %s\n",disk.inodes[j].ctimestamp);
-		printf("w %s\n",disk.inodes[j].mtimestamp);
-		printf("w %d\n",disk.inodes[j].nblock);
-		printf("w %d\n",disk.inodes[j].first_byte);
 
 		j++;
 	}
@@ -194,7 +178,7 @@ void update_first_free_byte(){
 	}
 	else {
 		int i=0;
-		if((i=get_unused_inode())!=-1) disk.super_block.first_free_byte = disk.inodes[i-1].first_byte + disk.inodes[i-1].size ;
+		if((i=get_unused_inode())!=-1) disk.super_block.first_free_byte = disk.inodes[i-1].first_byte + disk.inodes[i-1].size+1;
 		else{disk.super_block.first_free_byte = disk.inodes[9].first_byte + disk.inodes[9].size +1;}
 	}
 }
