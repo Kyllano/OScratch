@@ -41,6 +41,7 @@ int start_chat(int mode){
         //connexion initialisée
         //demarer le chat
         chat(&socket, "you", "me");
+        close(server_fd);
     }
     else{
         return ERROR_ARGS;
@@ -63,13 +64,15 @@ int chat(int* socket, char* name_distant_user, char* your_name){
         memset(historique[i], 0, CMDLINE_MAX_SIZE);
     }*/
 
-    while (strcmp(input_user, "/quit")){
+    while (strcmp(input_user, "/quit\n")){
         if (read(*socket, input_distant, 128) != -1){
-            input_distant[strlen(input_distant)-1] = '\0';
-            printf("<%s> %s\n", name_distant_user, input_distant);
+            printf("\a<%s> %s\n", name_distant_user, input_distant);
+            memset(input_user, 0, CMDLINE_MAX_SIZE);
         }
-        if (read(0, input_user, CMDLINE_MAX_SIZE) != -1){
+        if (read(0, input_user, CMDLINE_MAX_SIZE) != -1 && strcmp(input_user, "/quit\n")!= 0){
             input_user[strlen(input_user)-1] = '\0';
+            send(*socket, input_user, strlen(input_user)+1, 0);
+            memset(input_user, 0, CMDLINE_MAX_SIZE);
         }
 
         sleep(1);
