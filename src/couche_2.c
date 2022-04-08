@@ -138,7 +138,7 @@ int get_unused_inode(){
 	int i=0;
 	// TODO Ajouter le cas ou la table d inode est pleine
 	while (disk.inodes[i].nblock != 0 && i < INODE_TABLE_SIZE) i++;
-
+	printf("i = %d\n",i);
 	if (i == INODE_TABLE_SIZE) return -1;
 	else return i;
 }
@@ -186,11 +186,11 @@ void delete_inode(int indice){
 	int j = indice+1;
 
 	// update du super bloc
-	disk.super_block.number_of_files -= 1;
+	disk.super_block.number_of_files --;
 	disk.super_block.nb_blocks_used -= disk.inodes[indice].nblock;
 
 	// suppression
-	while(j<10 && disk.inodes[j].size!=0){
+	while(j<10 && disk.inodes[j].nblock!=0){
 		strcpy(disk.inodes[j-1].filename,disk.inodes[j].filename);
 		disk.inodes[j-1].size=disk.inodes[j].size;
 		disk.inodes[j-1].uid=disk.inodes[j].uid;

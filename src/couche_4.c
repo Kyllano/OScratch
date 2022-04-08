@@ -24,6 +24,7 @@ int get_file_id(char* filename){
 
 // Guilhem
 void write_content(char *filename,file_t *fich,int uright,int oright){
+  printf("what\n");
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size, disk.super_block.first_free_byte);
 
