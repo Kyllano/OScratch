@@ -51,11 +51,9 @@ write_block is define if pos > -1 and pos < TAILLE_FICHIER-3
 */
 int write_block(block_t *bloc, uint pos){
 	if (fseek(disk.storage, pos, SEEK_SET)){
-		printf("lotkgbjy\n");
 		return ERROR_FILE_ACCESS;
 	}
 	if (!fwrite(bloc->data, BLOCK_SIZE, 1, disk.storage)){
-		printf("gkjhgkjkejhk\n");
 		return ERROR_FILE_ACCESS;
 	}
 	return NO_ERROR;

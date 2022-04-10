@@ -41,7 +41,6 @@ void read_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 
 		read_block(&block, *pos);
 		for (int k=0; k<4; k++){
-			printf("block = %s\n",block.data);
 			if(j+k<taille_max_s){
 				s[j+k] = block.data[k];
 			}
@@ -60,7 +59,6 @@ void write_mult_blocks(char *s, int nblock, uint *pos,int taille_max_s){
 		for (int k=0; k<4; k++){
 			block.data[k] = (j+k>=taille_max_s ? '\0' : s[j+k]);
 		}
-		printf("block = %s\n",block.data);
 		write_block(&block,*pos);
 		*pos += BLOCK_SIZE;
 	}
@@ -178,8 +176,8 @@ void update_first_free_byte(){
 	}
 	else {
 		int i=0;
-		if((i=get_unused_inode())!=-1) disk.super_block.first_free_byte = disk.inodes[i-1].first_byte + disk.inodes[i-1].size+1;
-		else{disk.super_block.first_free_byte = disk.inodes[9].first_byte + disk.inodes[9].size +1;}
+		if((i=get_unused_inode())!=-1) {disk.super_block.first_free_byte = disk.inodes[i-1].first_byte + disk.inodes[i-1].nblock*4;}
+		else{disk.super_block.first_free_byte = disk.inodes[9].first_byte + disk.inodes[9].nblock*4;}
 	}
 }
 
@@ -216,7 +214,6 @@ void delete_inode(int indice){
 // Victor
 void init_inode(char* filename, uint size, uint pos){
 	int i = get_unused_inode();
-	printf("i = %d\n",i);
 	strcpy(disk.inodes[i].filename, filename);
 	disk.inodes[i].size = size;
 	disk.inodes[i].first_byte = pos;
