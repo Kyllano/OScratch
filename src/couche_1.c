@@ -22,9 +22,11 @@ void print_block(block_t *bloc)
 // Victor
 int shutoff_save(){
 
-	if (write_super_block()) return ERROR_FILE_ACCESS;
+	if (write_super_block()){
+		return ERROR_FILE_ACCESS;
+	}
 	write_inodes_table();
-	/*write_users_table();*/
+	write_users_table();
 
 	return NO_ERROR;
 }

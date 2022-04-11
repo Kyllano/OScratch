@@ -62,6 +62,7 @@ int read_users_table(){
         i_fichier ++;
         i_user ++;
     }
+
     disk.super_block.number_of_users = i_user;
 
     return NO_ERROR;
@@ -77,7 +78,7 @@ void write_users_table(){
         strcat((char*) fich_passwd.data, disk.users_table[i].login);
         strcat((char*) fich_passwd.data, "\t");
         strcat((char*) fich_passwd.data, disk.users_table[i].passwd);
-        strcat((char*) fich_passwd.data, "\n\0");
+        strcat((char*) fich_passwd.data, "\n");
     }
     fich_passwd.size = strlen((char*) fich_passwd.data);
 
