@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 	splash();
 
 	while (loop){
-		for (int i=0; i<3; i++){
+		for (int i=0; i<MAX_ARGS; i++){
 			strcpy(cmd.tabArgs[i], "");
 		}
 
@@ -53,14 +53,13 @@ int main(int argc, char* argv[]){
 		cmd.nbArgs = 0;
 		strToken = strtok(cmdline, " ");
 
-		while (strToken!=NULL && cmd.nbArgs<2){
+		while (strToken!=NULL && cmd.nbArgs<MAX_ARGS){
 
 			if (strlen(strToken)>ARG_MAX_SIZE){
 				while (strToken!=NULL) strToken = strtok(NULL, " ");
 				printf(RED"Erreur : Un argument dépasse la taille maximale autorisée.\n"DEF);
 				strcpy(cmd.tabArgs[0], "");
 			}
-
 			else{
 				strcpy(cmd.tabArgs[cmd.nbArgs], strToken);
 				cmd.nbArgs++;
