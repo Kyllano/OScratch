@@ -134,7 +134,7 @@ typedef struct file_s{
 } file_t ;
 
 typedef struct cmd_s{
-	char ** tabArgs;
+	char tabArgs[3][CMDLINE_MAX_SIZE];
 	int nbArgs;
 } cmd_t;
 

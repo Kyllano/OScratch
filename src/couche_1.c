@@ -27,7 +27,7 @@ int shutoff_save(){
 	}
 	write_inodes_table();
 	write_users_table();
-
+	fclose(disk.storage);
 	return NO_ERROR;
 }
 
