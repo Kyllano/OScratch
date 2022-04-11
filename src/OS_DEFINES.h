@@ -52,6 +52,7 @@
 #define NB_USERS 5
 #define CMDLINE_MAX_SIZE 128
 #define ARG_MAX_SIZE 32
+#define MAX_ARGS 3
 
 #define BLOCK_SIZE 4
 #define SUPER_BLOCK_SIZE 4
@@ -134,7 +135,7 @@ typedef struct file_s{
 } file_t ;
 
 typedef struct cmd_s{
-	char ** tabArgs;
+	char tabArgs[MAX_ARGS][CMDLINE_MAX_SIZE];
 	int nbArgs;
 } cmd_t;
 

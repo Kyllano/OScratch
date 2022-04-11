@@ -20,7 +20,6 @@ int main(int argc, char* argv[]){
 	}
 
 	if (!read_super_block()){
-		printf("bloop\n");
 		read_inodes_table();
 		read_users_table();
 	}
@@ -39,13 +38,11 @@ int main(int argc, char* argv[]){
 	splash();
 
 	while (loop){
-		cmd.tabArgs = (char**) malloc (3*ARG_MAX_SIZE*sizeof(char*));
-		for (int i=0; i<3; i++){
-			cmd.tabArgs[i] = (char*) malloc (ARG_MAX_SIZE*sizeof(char));
+		for (int i=0; i<MAX_ARGS; i++){
 			strcpy(cmd.tabArgs[i], "");
 		}
 
-		// Lecture de la cmd.tabArgs[0]e
+		// Lecture de la cmd.tabArgs[0]
 		printf(BLUE BOLD"► "DEF BLUE);
 		fgets(cmdline, CMDLINE_MAX_SIZE, stdin);
 		printf(DEF);
@@ -56,22 +53,14 @@ int main(int argc, char* argv[]){
 		cmd.nbArgs = 0;
 		strToken = strtok(cmdline, " ");
 
-		while (strToken!=NULL && cmd.nbArgs<2){
+		while (strToken!=NULL && cmd.nbArgs<MAX_ARGS){
 
 			if (strlen(strToken)>ARG_MAX_SIZE){
 				while (strToken!=NULL) strToken = strtok(NULL, " ");
 				printf(RED"Erreur : Un argument dépasse la taille maximale autorisée.\n"DEF);
 				strcpy(cmd.tabArgs[0], "");
 			}
-
 			else{
-				cmd.tabArgs[cmd.nbArgs] = (char*) realloc (cmd.tabArgs[cmd.nbArgs], (ARG_MAX_SIZE*sizeof(char)));
-
-				if (cmd.tabArgs[cmd.nbArgs] == NULL){
-					printf(RED"Erreur d'allocation mémoire.\n"DEF);
-					return ERROR_MALLOC;
-				}
-
 				strcpy(cmd.tabArgs[cmd.nbArgs], strToken);
 				cmd.nbArgs++;
 				strToken = strtok(NULL, " ");
@@ -184,13 +173,6 @@ int main(int argc, char* argv[]){
 		// Messages d'erreur
 		error_message(retour);
 		retour = NO_ERROR;
-
-		// Nettoyage
-		for (int i=0; i<3; i++){
-			free(cmd.tabArgs[i]);
-		}
-		free(cmd.tabArgs);
-
 	}
 
 	return NO_ERROR;
