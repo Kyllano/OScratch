@@ -5,12 +5,12 @@ int start_chat(int mode){
     printf("\nLE CHAT\n");
 
     if (mode == 1){
-        printf("veuillez indiquer l'adresse de l'hôte distant : ");
+        printf("Veuillez indiquer l'adresse de l'hôte distant : ");
         char addresse [CMDLINE_MAX_SIZE];
 	    fgets(addresse, CMDLINE_MAX_SIZE, stdin);
 	    addresse[strlen(addresse) -1] = '\0';
 
-        printf("veuillez indiquer le port de l'hôte distant : ");
+        printf("Veuillez indiquer le port de l'hôte distant : ");
         char port_str [CMDLINE_MAX_SIZE];
 	    fgets(port_str, CMDLINE_MAX_SIZE, stdin);
 	    port_str[strlen(port_str) -1] = '\0';
@@ -26,7 +26,7 @@ int start_chat(int mode){
         chat(&socket, "you", "me");
     }
     else if (mode == 2){
-        printf("veuillez indiquer le port sur lequel vous hébergerez la conversation : ");
+        printf("Veuillez indiquer le port sur lequel vous hébergerez la conversation : ");
         char port_str [CMDLINE_MAX_SIZE];
 	    fgets(port_str, CMDLINE_MAX_SIZE, stdin);
 	    port_str[strlen(port_str) -1] = '\0';
@@ -66,7 +66,7 @@ int chat(int* socket, char* name_distant_user, char* your_name){
 
     while (strcmp(input_user, "/quit\n")){
         if (read(*socket, input_distant, 128) != -1){
-            printf("\a<%s> %s\n", name_distant_user, input_distant);
+            printf(RED"\a[%s]"DEF"\t%s\n", name_distant_user, input_distant);
             memset(input_user, 0, CMDLINE_MAX_SIZE);
         }
         if (read(0, input_user, CMDLINE_MAX_SIZE) != -1 && strcmp(input_user, "/quit\n")!= 0){

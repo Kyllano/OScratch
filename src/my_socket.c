@@ -26,7 +26,7 @@ int create_socket_heberger(int* server_fd,int* my_socket, int port){
         return ERROR_SOCKET;
     }
 
-    printf("En attente d'une connexion d'un client\n");
+    printf("En attente d'une connexion d'un client...\n");
 
     if (listen(*server_fd, 3) < 0){
         perror("listen");
@@ -39,7 +39,7 @@ int create_socket_heberger(int* server_fd,int* my_socket, int port){
         return ERROR_SOCKET;
     }
 
-    printf("connexion réussis\n");
+    printf("Connexion réussie.\n");
 
     int status = fcntl(*my_socket, F_SETFL, fcntl(*my_socket, F_GETFL, 0) | O_NONBLOCK);
     if (status == -1){
@@ -67,14 +67,14 @@ int create_socket_connexion(int* my_socket, char* addresse_char, int port){
         return ERROR_SOCKET;
     }
    
-    printf("tentative de connection...\n");
+    printf("Tentative de connection...\n");
     if (connect(*my_socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
         printf("\nConnection Failed \n");
         perror("connect");
         return ERROR_SOCKET;
     }
 
-    printf("connexion réussis\n");
+    printf("Connexion réussie\n");
 
     int status = fcntl(*my_socket, F_SETFL, fcntl(*my_socket, F_GETFL, 0) | O_NONBLOCK);
     if (status == -1){
