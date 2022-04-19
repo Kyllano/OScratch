@@ -29,7 +29,7 @@ int main(int argc, char* argv[]){
 	char* strToken;
 	cmd_t cmd;
 	int loop = 1;
-	int retour;
+	int retour = NO_ERROR;
 
 	// Tests
 	user.userid = 0;
