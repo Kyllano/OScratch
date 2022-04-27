@@ -22,10 +22,10 @@ public class Super_block {
 	public void set_super_block(RandomAccessFile i){
 		try {
 			
-			this.nb_fichier=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.nb_user=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.nb_block_disk=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.first_free_byte=Projets4.BigEndianToLittleEndianint(i.readInt());
+			this.nb_fichier=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.nb_user=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.nb_block_disk=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.first_free_byte=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			
 		}catch(IOException e) {
 			System.out.println("Erreur de lecture du super bloc");

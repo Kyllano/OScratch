@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import analyseFichier.AnalyseFichier;
+
 
 /* Help from :
 - https://www.guru99.com/java-swing-gui.html
@@ -14,6 +16,7 @@ import java.awt.event.*;
 */
 
 public class GUIMain extends JFrame{
+	private static final long serialVersionUID = 1L;
 	JPanel buttonsPanel;
 	JButton butDefrag;
 	JButton butVerif;
@@ -29,6 +32,8 @@ public class GUIMain extends JFrame{
 
 	public GUIMain (String title) {
 		super(title);
+		
+		int retour = 0;
 		
 		setLayout(new FlowLayout());		
 		
@@ -48,17 +53,19 @@ public class GUIMain extends JFrame{
 				outputLabel.setText("Défragmentation");
 			}
 		});
-		
-		butVerif = new JButton("Vérification");
+
+		butVerif = new JButton("Analyse");
 		butVerif.setPreferredSize(new Dimension(200, 100));
 		butVerif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				retour = AnalyseFichier.run();
+				
 				// Code vérification
-				System.out.println("Vérification");
+				System.out.println("Analyse");
 				
 				// Retour dans outputLabel
-				outputLabel.setText("Vérification");
+				outputLabel.setText("Analyse");
 			}
 		});
 		

@@ -28,17 +28,17 @@ public class Inode {
 			byte[] tab=new byte[32];
 			byte[] tab2=new byte[28];
 			i.read(tab,0,32);
-			this.name=Projets4.inverserByte(tab);
-			this.size=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.uid=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.uright=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.oright=Projets4.BigEndianToLittleEndianint(i.readInt());
+			this.name=AnalyseFichier.inverserByte(tab);
+			this.size=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.uid=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.uright=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.oright=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			i.read(tab2,0,28);
-			this.ctime=Projets4.inverserByte(tab2);
+			this.ctime=AnalyseFichier.inverserByte(tab2);
 			i.read(tab2,0,28);
-			this.mtime=Projets4.inverserByte(tab2);
-			this.nblock=Projets4.BigEndianToLittleEndianint(i.readInt());
-			this.first_byte=Projets4.BigEndianToLittleEndianint(i.readInt());
+			this.mtime=AnalyseFichier.inverserByte(tab2);
+			this.nblock=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			this.first_byte=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			
 			
 		}catch(IOException e) {
@@ -51,14 +51,14 @@ public class Inode {
 	public void write_Inode(RandomAccessFile i) {
 		try {
 			i.writeBytes(name);
-			i.writeInt(Projets4.BigEndianToLittleEndianint(size));
-			i.writeInt(Projets4.BigEndianToLittleEndianint(uid));
-			i.writeInt(Projets4.BigEndianToLittleEndianint(uright));
-			i.writeInt(Projets4.BigEndianToLittleEndianint(oright));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(size));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(uid));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(uright));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(oright));
 			i.writeBytes(ctime);
 			i.writeBytes(mtime);
-			i.writeInt(Projets4.BigEndianToLittleEndianint(nblock));
-			i.writeInt(Projets4.BigEndianToLittleEndianint(first_byte));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(nblock));
+			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(first_byte));
 			
 		}catch(IOException e) {
 			System.out.println("Erreur d'écriture d'une inode");
