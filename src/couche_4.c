@@ -24,6 +24,7 @@ int get_file_id(char* filename){
 
 // Guilhem
 void write_content(char *filename,file_t *fich,int uright,int oright){
+  printf("what\n");
 	int unused_inode = get_unused_inode();
 	init_inode(filename, fich->size , disk.super_block.first_free_byte);
 
@@ -36,6 +37,8 @@ void write_content(char *filename,file_t *fich,int uright,int oright){
 	write_mult_blocks((char *)fich->data, disk.inodes[unused_inode].nblock, &disk.super_block.first_free_byte,fich->size);
   disk.super_block.nb_blocks_used+=disk.inodes[unused_inode].nblock;
  	disk.super_block.number_of_files ++;
+  disk.super_block.nb_blocks_used+=disk.inodes[unused_inode].nblock;
+
 }
 // Guilhem
 void overwrite_content(char *filename, file_t *fich, int i_fich){
@@ -49,6 +52,7 @@ void overwrite_content(char *filename, file_t *fich, int i_fich){
 		write_mult_blocks((char *)fich->data, disk.inodes[i_fich].nblock, &disk.inodes[i_fich].first_byte,fich->size);
     disk.super_block.nb_blocks_used+=disk.inodes[i_fich].nblock;
 		disk.inodes[i_fich].first_byte=stock;
+    disk.super_block.nb_blocks_used+=disk.inodes[i_fich].nblock;
 	}
 	else {
 		int uright=disk.inodes[i_fich].uright,oright=disk.inodes[i_fich].oright;

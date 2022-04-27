@@ -189,7 +189,7 @@ void delete_inode(int indice){
 	int j = indice+1;
 
 	// update du super bloc
-	disk.super_block.number_of_files -= 1;
+	disk.super_block.number_of_files --;
 	disk.super_block.nb_blocks_used -= disk.inodes[indice].nblock;
 
 	// suppression
