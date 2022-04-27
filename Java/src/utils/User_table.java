@@ -1,14 +1,13 @@
 /**
  * 
  */
-package analyseFichier;
+package utils;
 
 /**
  * @author xenoswifts
  *
  */
 public class User_table {
-	private static final int max_user=5;
 	private int nb_user_max;
 	private int nb_user=0;
 	private int[] user_table;
@@ -37,12 +36,10 @@ public class User_table {
 	}
 	
 	
-	public boolean Insert_new_user(int id) {
-		if(nb_user==max_user || nb_user==nb_user_max) {
-			return false;
+	public void Insert_new_user(int id) {
+		if(nb_user<nb_user_max) {
+			user_table[nb_user++]=id;
 		}
-		user_table[nb_user++]=id;
-		return true;
 	}
 
 }

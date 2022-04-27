@@ -1,7 +1,8 @@
 /**
  * 
  */
-package analyseFichier;
+package utils;
+import analyseFichier.*;
 import java.io.*;
 import java.nio.*;
 

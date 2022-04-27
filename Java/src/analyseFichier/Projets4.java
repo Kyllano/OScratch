@@ -5,6 +5,8 @@ package analyseFichier;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+import utils.*;
+
 /**
  * @author xenoswifts
  *
@@ -30,15 +32,16 @@ public class Projets4 {
 	    return result; 
 	}
 
-	public static void verificationInode(Inode_table it) {
+	public static void verificationInode(Inode_table it,int nb_i) {
 		int nb_inode=it.getNb_inode();
 		Inode in=it.getInode(0);
 		Inode in_1;
-		for(int i=1;i<nb_inode;i++) {
+		for(int i=1;i<nb_i;i++) {
 			in_1=it.getInode(i);
-			System.out.println("suisse "+i+" "+in.getFirst_byte()+" "+in_1.getFirst_byte()+" "+in.getNblock()+"\n");
-			if(in.getFirst_byte()+in.getNblock()*4!=in_1.getFirst_byte()) {
-				System.out.println("Catalogue incorrect\n");
+			System.out.println("\n"+nb_inode+"\nbiam"+in.getFirst_byte()+" "+in.getNblock()*4);
+			System.out.println("\nboum"+in_1.getFirst_byte()+" "+in_1.getNblock()*4);
+			if((in.getFirst_byte()+in.getNblock()*4)!=in_1.getFirst_byte()) {
+				System.out.println("problème de fragmentation \n");
 				System.exit(6);
 			}
 			in=in_1;
@@ -47,15 +50,15 @@ public class Projets4 {
 	
 	public static void verificationUsertable(RandomAccessFile reader,Super_block sb,Inode i_passwd) {
 		long pos=(long)i_passwd.getFirst_byte();
-		int nb_user=0;String s;
+		int nb_user=0,size=i_passwd.getSize();String s;
 		
 		try {
 			
 			reader.seek(pos);
 			s=reader.readLine();
-			while(s!=null) {
-				/*System.out.println(s);*/
-				if(s.length()>65) {nb_user++;}
+			while(size>65) {
+				nb_user++;
+				size-=s.length();
 				s=reader.readLine();
 			}
 			if(nb_user!=sb.getNb_user()){
@@ -72,28 +75,26 @@ public class Projets4 {
 		
 	}
 	public static void verification(RandomAccessFile reader,Super_block sb) {
-		Inode_table it=new Inode_table(10);
-		int nb_i=0,i_passwd=0;
-		int nb_block=0;
-		User_table ut= new User_table(5);
-		Inode i=it.getInode(nb_i);
-		i.set_Inode(reader);
+		Inode_table it=new Inode_table();Inode i;
+		int nb_i=0,i_passwd=0,nb_block=0;
+		User_table ut= new User_table(6);
 		while(nb_i<sb.getNb_fichier()) {
-			i.printInode();
-			if(cpy_passwd.compareTo(i.getName())==0) {i_passwd=nb_i;}
-			nb_block+=i.getNblock();
-			nb_i++;
 			i=it.getInode(nb_i);
 			i.set_Inode(reader);
+			i.printInode();
+			if(cpy_passwd.compareTo(i.getName())==0) {i_passwd=nb_i;}
+			if(ut.IsInTable(i.getUid())==false) {ut.Insert_new_user(i.getUid());}
+			nb_block+=i.getNblock();
+			nb_i++;
 			
 		}
-		if(nb_i!=sb.getNb_fichier() || nb_block!=sb.getNb_block_disk() || it.getInode(nb_i-1).getFirst_byte()+
+		if(nb_block!=sb.getNb_block_disk() || it.getInode(nb_i-1).getFirst_byte()+
 				(it.getInode(nb_i-1).getNblock())*4!=sb.getFirst_free_byte()) {
 			System.out.println("Le super bloc n'est pas valide");
 			System.exit(4);	
 		}
 		verificationUsertable(reader,sb,it.getInode(i_passwd));
-		verificationInode(it);
+		verificationInode(it,nb_i);
 		
 		
 			
@@ -111,7 +112,7 @@ public class Projets4 {
 			d0.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 			System.out.println("Erreur ouverture fichier");
 			System.exit(2);
 		}

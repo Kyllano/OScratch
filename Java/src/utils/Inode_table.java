@@ -1,7 +1,7 @@
 /**
  * 
  */
-package analyseFichier;
+package utils;
 
 /**
  * @author xenoswifts
@@ -11,20 +11,20 @@ public class Inode_table {
 	private int nb_inode;
 	private Inode[] table_inode;
 	
-	public Inode_table(int nb_fichier) {
-		this.nb_inode=nb_fichier;
+	public Inode_table() {
+		this.nb_inode=10;
 		table_inode= new Inode[10];
-		for(int i=0;i<nb_inode;i++) {
+		for(int i=0;i<10;i++) {
 			table_inode[i]=new Inode();
 		}
 	}
 	
 	
 	public Inode getInode(int inode) {
-		if(inode>=nb_inode) {
-			return table_inode[nb_inode-1];
+		if(inode<nb_inode) {
+			return table_inode[inode];
 		}
-		return table_inode[inode];
+		return table_inode[0];
 		
 	}
 	
