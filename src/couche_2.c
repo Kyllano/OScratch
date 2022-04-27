@@ -172,7 +172,7 @@ int read_super_block(){
 //A n'appeler que si la table d'inode a été initialisée
 void update_first_free_byte(){
 	if (get_unused_inode() == 0){
-		disk.super_block.first_free_byte = 2000;
+		disk.super_block.first_free_byte = 1136;
 	}
 	else {
 		int i=0;
