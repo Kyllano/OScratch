@@ -45,7 +45,7 @@ public class GUIMain extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {		
 				
 				// Retour dans outputLabel
-				outputLabel.setText(Defragmentation.run());
+				outputLabel.setText("Défragmentation : " + Defragmentation.run());
 				
 			}
 		});
@@ -56,7 +56,7 @@ public class GUIMain extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 
 				// Retour dans outputLabel
-				outputLabel.setText(AnalyseFichier.run());
+				outputLabel.setText("Analyse : " + AnalyseFichier.run());
 				
 			}
 		});
