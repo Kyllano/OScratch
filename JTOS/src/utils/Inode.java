@@ -23,7 +23,7 @@ public class Inode {
 	
 	
 	
-	public void set_Inode(RandomAccessFile i) {
+	public String set_Inode(RandomAccessFile i) {
 		try {
 			byte[] tab=new byte[32];
 			byte[] tab2=new byte[28];
@@ -39,16 +39,16 @@ public class Inode {
 			this.mtime=AnalyseFichier.inverserByte(tab2);
 			this.nblock=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			this.first_byte=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			return "tout est ok!";
 			
 			
 		}catch(IOException e) {
-			System.out.println("Erreur de lecture d'une inode");
-			System.exit(1);
+			return "Erreur de lecture du catalogue";
 		}
 	}
 	
 	
-	public void write_Inode(RandomAccessFile i) {
+	public String write_Inode(RandomAccessFile i) {
 		try {
 			i.writeBytes(name);
 			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(size));
@@ -59,10 +59,10 @@ public class Inode {
 			i.writeBytes(mtime);
 			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(nblock));
 			i.writeInt(AnalyseFichier.BigEndianToLittleEndianint(first_byte));
+			return "tout est ok!";
 			
 		}catch(IOException e) {
-			System.out.println("Erreur d'écriture d'une inode");
-			System.exit(2);
+			return "Erreur d'écriture du catalogue";
 		}
 	}
 
@@ -77,123 +77,51 @@ public class Inode {
 		return name;
 	}
 
-
-	/**
-	 * @return the size
-	 */
 	public int getSize() {
 		return size;
 	}
 
-
-
-	/**
-	 * @return the uid
-	 */
 	public int getUid() {
 		return uid;
 	}
 
-
-
-	/**
-	 * @return the uright
-	 */
 	public int getUright() {
 		return uright;
 	}
 
-
-
-	/**
-	 * @return the oright
-	 */
 	public int getOright() {
 		return oright;
 	}
 
-
-
-
-
-
-	/**
-	 * @return the nblock
-	 */
 	public int getNblock() {
 		return nblock;
 	}
 
-
-
-	/**
-	 * @return the first_byte
-	 */
 	public int getFirst_byte() {
 		return first_byte;
 	}
 
-
-
-
-
-
-
-	/**
-	 * @param size the size to set
-	 */
 	public void setSize(int size) {
 		this.size = size;
 	}
 
-
-
-	/**
-	 * @param uid the uid to set
-	 */
 	public void setUid(int uid) {
 		this.uid = uid;
 	}
 
-
-
-	/**
-	 * @param uright the uright to set
-	 */
 	public void setUright(int uright) {
 		this.uright = uright;
 	}
 
-
-
-	/**
-	 * @param oright the oright to set
-	 */
 	public void setOright(int oright) {
 		this.oright = oright;
 	}
 
-
-
-
-	/**
-	 * @param nblock the nblock to set
-	 */
 	public void setNblock(int nblock) {
 		this.nblock = nblock;
 	}
 
-
-
-	/**
-	 * @param first_byte the first_byte to set
-	 */
 	public void setFirst_byte(int first_byte) {
 		this.first_byte = first_byte;
 	}
-
-	
-	
-	
-
 }

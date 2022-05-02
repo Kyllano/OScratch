@@ -1,6 +1,3 @@
-/**
- * 
- */
 package défragmentation;
 
 import java.io.RandomAccessFile;
@@ -13,9 +10,6 @@ import utils.*;
  */
 public class Defragmentation {
 
-	/**
-	 * 
-	 */
 	public static Inode_table init_Inode_table(RandomAccessFile fd,Super_block sb) {
 		Inode_table it=new Inode_table();
 		for(int i=0;i<sb.getNb_fichier();i++) {
@@ -24,10 +18,7 @@ public class Defragmentation {
 		return it;
 	}
 	
-
-	
-	
-	public static void defragmentation(RandomAccessFile fd,Super_block sb,Inode_table it) {
+	public static String defragmentation(RandomAccessFile fd,Super_block sb,Inode_table it) {
 		int byte_start=1136;
 		try {
 		  for(int i=0;i<sb.getNb_fichier();i++) {
@@ -46,28 +37,30 @@ public class Defragmentation {
 		  for(int j=0;j<sb.getNb_fichier();j++) {
 			  it.getInode(j).write_Inode(fd);
 		  }
+		  return "tout est ok!";
 		  
 		}
 		catch(Exception e) {
-			System.out.println("Erreur défragmentation fichier");
-			System.exit(2);
+			return "Erreur défragmentation fichier";
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static String run() {
 		Super_block sb= new Super_block();
+		String err;
 		try {
 			//modifier le chemin pour que le programme puisse être utilisé sur un autre pc
 			RandomAccessFile d0    = new RandomAccessFile("/home/xenoswifts/Bureau/OScratch/OScratch/d0","rw");
-			sb.set_super_block(d0);
+			err=sb.set_super_block(d0);
+			if(err.compareTo("tout est ok!")!=0) {return err;}
 			sb.printsb();
-			defragmentation(d0,sb,init_Inode_table(d0,sb));
+			err=defragmentation(d0,sb,init_Inode_table(d0,sb));
+			if(err.compareTo("tout est ok!")!=0) {return err;}
 			d0.close();
+			return err;
 		}
 		catch(Exception e) {
-			e.getStackTrace();
-			System.out.println("Erreur ouverture fichier");
-			System.exit(2);
+			return "Erreur d'ouverture du disque";
 		}
 
 	}

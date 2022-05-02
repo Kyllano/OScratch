@@ -1,10 +1,9 @@
-/**
- * 
- */
 package utils;
-import analyseFichier.*;
-import java.io.*;
-import java.nio.*;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+import analyseFichier.AnalyseFichier;
 
 /**
  * @author xenoswifts
@@ -19,17 +18,17 @@ public class Super_block {
 	
 	
 	
-	public void set_super_block(RandomAccessFile i){
+	public String set_super_block(RandomAccessFile i){
 		try {
 			
 			this.nb_fichier=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			this.nb_user=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			this.nb_block_disk=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
 			this.first_free_byte=AnalyseFichier.BigEndianToLittleEndianint(i.readInt());
+			return "tout est ok!";
 			
 		}catch(IOException e) {
-			System.out.println("Erreur de lecture du super bloc");
-			System.exit(3);
+			return "Problème de lecture du super_block";
 		}
 		
 	}
@@ -39,42 +38,19 @@ public class Super_block {
 	}
 
 
-
-	/**
-	 * @return the nb_fichier
-	 */
 	public int getNb_fichier() {
 		return nb_fichier;
 	}
 
-
-
-	/**
-	 * @return the nb_user
-	 */
 	public int getNb_user() {
 		return nb_user;
 	}
 
-
-
-	/**
-	 * @return the nb_block_disk
-	 */
 	public int getNb_block_disk() {
 		return nb_block_disk;
 	}
 
-
-
-	/**
-	 * @return the first_free_byte
-	 */
 	public int getFirst_free_byte() {
 		return first_free_byte;
 	}
-	
-	
-	
-
 }

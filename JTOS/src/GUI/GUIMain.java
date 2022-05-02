@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import analyseFichier.AnalyseFichier;
+import défragmentation.Defragmentation;
 
 
 /* Help from :
@@ -33,8 +34,6 @@ public class GUIMain extends JFrame{
 	public GUIMain (String title) {
 		super(title);
 		
-		int retour = 0;
-		
 		setLayout(new FlowLayout());		
 		
 		// Creating the main panel
@@ -43,14 +42,11 @@ public class GUIMain extends JFrame{
 		butDefrag = new JButton("Défragmentation");
 		butDefrag.setPreferredSize(new Dimension(200, 100));
 		butDefrag.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				// Code défragmentation
-				System.out.println("Défragmentation");
-				
+			public void actionPerformed(ActionEvent arg0) {		
 				
 				// Retour dans outputLabel
-				outputLabel.setText("Défragmentation");
+				outputLabel.setText(Defragmentation.run());
+				
 			}
 		});
 
@@ -58,14 +54,10 @@ public class GUIMain extends JFrame{
 		butVerif.setPreferredSize(new Dimension(200, 100));
 		butVerif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				retour = AnalyseFichier.run();
-				
-				// Code vérification
-				System.out.println("Analyse");
-				
+
 				// Retour dans outputLabel
-				outputLabel.setText("Analyse");
+				outputLabel.setText(AnalyseFichier.run());
+				
 			}
 		});
 		
