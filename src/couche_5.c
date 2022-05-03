@@ -419,7 +419,7 @@ void flush(){
 
 // Victor
 int cmd_jtos(){
-	// Il faut faire un system call ici de java GUI.GUIMain dans OScratch/JTOS/bin/
+	system("./launchJTOS.sh");
 	return NO_ERROR;
 }
 
