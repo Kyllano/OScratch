@@ -220,6 +220,7 @@ int cmd_rmuser();
 int cmd_su(char *username);
 int cmd_whoami();
 int cmd_help();
+int cmd_jtos();
 
 void flush();
 void clear_screen();
