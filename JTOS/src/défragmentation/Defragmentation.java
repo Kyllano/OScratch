@@ -53,7 +53,6 @@ public class Defragmentation {
 			RandomAccessFile d0    = new RandomAccessFile("../../d0","rw");
 			err=sb.set_super_block(d0);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
-			sb.printsb();
 			err=defragmentation(d0,sb,init_Inode_table(d0,sb));
 			if(err.compareTo("tout est ok!")!=0) {return err;}
 			d0.close();

@@ -38,8 +38,6 @@ public class AnalyseFichier {
 		Inode in_1;
 		for(int i=1;i<nb_i;i++) {
 			in_1=it.getInode(i);
-			System.out.println("\n"+nb_inode+"\nbiam"+in.getFirst_byte()+" "+in.getNblock()*4);
-			System.out.println("\nboum"+in_1.getFirst_byte()+" "+in_1.getNblock()*4);
 			if((in.getFirst_byte()+in.getNblock()*4)!=in_1.getFirst_byte()) {
 				return "problème de fragmentation";
 			}
@@ -81,7 +79,6 @@ public class AnalyseFichier {
 		while(nb_i<sb.getNb_fichier()) {
 			i=it.getInode(nb_i);
 			i.set_Inode(reader);
-			i.printInode();
 			if(cpy_passwd.compareTo(i.getName())==0) {i_passwd=nb_i;}
 			if(ut.IsInTable(i.getUid())==false) {ut.Insert_new_user(i.getUid());}
 			nb_block+=i.getNblock();
@@ -111,7 +108,6 @@ public class AnalyseFichier {
 			RandomAccessFile d0    = new RandomAccessFile("../../d0","r");
 			err=sb.set_super_block(d0);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
-			sb.printsb();
 			err=verification(d0,sb);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
 			d0.close();
