@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <math.h>
 #include <unistd.h>
+#include <sys/syscall.h>
 #include "sha256.h"
 #include "sha256_utils.h"
 #include "timestamp.h"
@@ -220,6 +221,7 @@ int cmd_rmuser();
 int cmd_su(char *username);
 int cmd_whoami();
 int cmd_help();
+int cmd_jtos();
 
 void flush();
 void clear_screen();

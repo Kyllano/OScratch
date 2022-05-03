@@ -37,7 +37,6 @@ void write_content(char *filename,file_t *fich,int uright,int oright){
 	write_mult_blocks((char *)fich->data, disk.inodes[unused_inode].nblock, &disk.super_block.first_free_byte,fich->size);
   disk.super_block.nb_blocks_used+=disk.inodes[unused_inode].nblock;
  	disk.super_block.number_of_files ++;
-  disk.super_block.nb_blocks_used+=disk.inodes[unused_inode].nblock;
 
 }
 // Guilhem

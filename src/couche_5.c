@@ -342,6 +342,7 @@ int cmd_help(){
 		WHITE BOLD "clear "DEF"\n\tVide l'affichage\n\n"
 		WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
 		WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
+		WHITE BOLD "jtos"DEF"\n\tLance JTOS (Java Tool for OScratch)\n\n"
 		WHITE BOLD "listusers"DEF"\n\tAffiche la liste des utilisateurs.\n\n"
 		WHITE BOLD "load "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système ”hôte” sur le système avec le même nom (assimilé à une création).\n\n"
 		WHITE BOLD "ls [-l | -s]"DEF"\n\tAffiche la liste des fichiers du disque.\n\n"
@@ -414,6 +415,12 @@ void flush(){
     do {
         c=getchar();
     } while (c!='\n' && c!=EOF);
+}
+
+// Victor
+int cmd_jtos(){
+	system("./launchJTOS.sh");
+	return NO_ERROR;
 }
 
 // Victor

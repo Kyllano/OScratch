@@ -165,6 +165,9 @@ int main(int argc, char* argv[]){
 		else if (!strcmp(cmd.tabArgs[0], "help")){
 			retour = cmd_help();
 		}
+		else if (!strcmp(cmd.tabArgs[0], "jtos")){
+			retour = cmd_jtos();
+		}
 		else if (!strcmp(cmd.tabArgs[0], "")){}
 		else {
 			printf(YELLOW"commande non reconnue\n"DEF);
