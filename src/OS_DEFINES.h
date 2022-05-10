@@ -227,6 +227,7 @@ void flush();
 void clear_screen();
 void error_message(int i);
 void splash();
+void secret_splash();
 int check_rights(int id, int uid, char* rights);
 
 /*------------------------------------------------------------

@@ -419,6 +419,7 @@ void flush(){
 
 // Victor
 int cmd_jtos(){
+	printf("Java Tool for OScratch lancé.\n");
 	system("./launchJTOS.sh");
 	return NO_ERROR;
 }
@@ -493,7 +494,7 @@ void error_message(int i){
 
 
 // Victor
-void splash(){
+void secret_splash(){
 	clear_screen();
 	printf(BLUE"\n"
 	"   ▒█████    ██████  ▄████▄   ██▀███   ▄▄▄     ▄▄▄█████▓ ▄████▄   ██░ ██ \n"
@@ -506,6 +507,21 @@ void splash(){
 	"  ░ ░ ░ ▒  ░  ░  ░  ░          ░░   ░   ░   ▒    ░      ░         ░  ░░ ░\n"
 	"      ░ ░        ░  ░ ░         ░           ░  ░        ░ ░       ░  ░  ░\n"
 	"                    ░                                   ░                \n"
+	DEF);
+	//usleep(750000);
+	//clear_screen();
+}
+
+// Victor
+void splash(){
+	clear_screen();
+	printf(BLUE"\n"
+	"  ██████╗ ███████╗ ██████╗██████╗  █████╗ ████████╗ ██████╗██╗  ██╗\n"
+	" ██╔═══██╗██╔════╝██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██║  ██║\n"
+	" ██║   ██║███████╗██║     ██████╔╝███████║   ██║   ██║     ███████║\n"
+	" ██║   ██║╚════██║██║     ██╔══██╗██╔══██║   ██║   ██║     ██╔══██║\n"
+	" ╚██████╔╝███████║╚██████╗██║  ██║██║  ██║   ██║   ╚██████╗██║  ██║\n"
+	"  ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝\n\n"
 	DEF);
 	//usleep(750000);
 	//clear_screen();
