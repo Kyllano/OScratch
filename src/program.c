@@ -29,13 +29,15 @@ int main(int argc, char* argv[]){
 	char* strToken;
 	cmd_t cmd;
 	int loop = 1;
+	int ssON = 0;
 	int retour = NO_ERROR;
 
 	// Tests
 	user.userid = 0;
 
 	//clear_screen();
-	splash();
+	if (ssON) secret_splash();
+	else splash();
 
 	while (loop){
 		for (int i=0; i<MAX_ARGS; i++){
@@ -158,9 +160,13 @@ int main(int argc, char* argv[]){
 		else if (!strcmp(cmd.tabArgs[0], "whoami")){
 			retour = cmd_whoami();
 		}
+		else if (!strcmp(cmd.tabArgs[0], "OScrack")){
+			ssON = !ssON;
+		}
 		else if (!strcmp(cmd.tabArgs[0], "clear")){
 			clear_screen();
-			splash();
+			if (ssON) secret_splash();
+			else splash();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "help")){
 			retour = cmd_help();
