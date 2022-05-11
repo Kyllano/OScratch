@@ -10,9 +10,9 @@
 // the file is initialized with 0
 // dirname must be a valid directory
 // 0 <= diskid < 10
-void format(char *dirname, int size, int diskid){
-	char filename[strlen(dirname)+4];
-	snprintf(filename, strlen(dirname)+4, "%s/d%d", dirname, diskid);
+void format(char *dirname, int size, char* diskname){
+	char filename[strlen(dirname)+strlen(diskname)+2];
+	snprintf(filename, strlen(dirname)+strlen(diskname)+2, "%s/%s", dirname, diskname);
 	printf("Initialisation de %s...\n", filename);
 	FILE *fp = fopen(filename, "w+");
 	assert(fp!=NULL);
@@ -26,17 +26,17 @@ void format(char *dirname, int size, int diskid){
 
 
 int main(int argc, char **argv) {
-	if (argc!=2) {
-		printf(YELLOW"usage : %s disk_size\n"DEF, argv[0]);
+	if (argc!=3) {
+		printf(YELLOW"usage : %s disk_name disk_size\n"DEF, argv[0]);
 		return 0;
 	}
-	int size = atoi(argv[1]);
-	if(argc==2) {
-		int diskid = 0;
-		format(".", size, diskid);
+	int size;
+	if((size=atoi(argv[2]))==0){printf("la taille du disque doit être un entier non nul\n");return 1;}
+	if(argc==3){
+		format(".", size, argv[1]);
 	}
 
-	if (init_disk_sos("d0")){
+	if (init_disk_sos(argv[1])){
 		printf(RED"Erreur d'accès au disque.\n"DEF);
 		return ERROR_FILE_ACCESS;
 	}
