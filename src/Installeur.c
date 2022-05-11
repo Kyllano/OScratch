@@ -36,10 +36,10 @@ int main(int argc, char **argv) {
 	}
 	//int size = atoi(argv[2]);
 	int size = atoi(argv[1]);
-	if(argc==3) {
+	if(argc==2) {
 		int diskid = 0;
 		//format(argv[1], size, diskid);
-		format("./", size, diskid);
+		format(".", size, diskid);
 	}
 
 	if (init_disk_sos("d0")){
