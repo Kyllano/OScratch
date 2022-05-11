@@ -21,7 +21,13 @@ public class GUIMain extends JFrame{
 	JPanel buttonsPanel;
 	JButton butDefrag;
 	JButton butVerif;
+	
 	JLabel outputLabel;
+	
+	JPanel textPanel;
+	JLabel indicator;
+	JTextField textField;
+	String diskname;
 	
 	public static void main(String args[]){
 		GUIMain window = new GUIMain("OSCratch management tool");
@@ -45,7 +51,8 @@ public class GUIMain extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {		
 				
 				// Retour dans outputLabel
-				outputLabel.setText("Défragmentation : " + Defragmentation.run());
+				diskname = textField.getText();
+				outputLabel.setText("Défragmentation : " + Defragmentation.run(diskname));
 				
 			}
 		});
@@ -56,7 +63,8 @@ public class GUIMain extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 
 				// Retour dans outputLabel
-				outputLabel.setText("Analyse : " + AnalyseFichier.run());
+				diskname = textField.getText();
+				outputLabel.setText("Analyse : " + AnalyseFichier.run(diskname));
 				
 			}
 		});
@@ -69,7 +77,16 @@ public class GUIMain extends JFrame{
 		outputLabel = new JLabel("");
 		
 		
+		//Creating a text field for the disk name
+		indicator = new JLabel("Nom du disque :");
+		//textPanel.add(BorderLayout.WEST, indicator);
+		textField = new JTextField(5);
+		textField.setText("d0");
+		//textPanel.add(BorderLayout.CENTER, textField);
+		
 		// Adding components to the frame
+		add(BorderLayout.NORTH, indicator);
+		add(BorderLayout.NORTH, textField);
 		add(BorderLayout.CENTER, buttonsPanel);
 		add(BorderLayout.SOUTH, outputLabel);
 	}

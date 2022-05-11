@@ -4,9 +4,7 @@
 	\date 	11 mai 2022
 */
 
-
 #include "OS_DEFINES.h"
-// Guilhem
 
 // create a file named di (i = diskid) in directory dirname of size bytes
 // the file is initialized with 0
@@ -15,7 +13,7 @@
 void format(char *dirname, int size, int diskid){
 	char filename[strlen(dirname)+4];
 	snprintf(filename, strlen(dirname)+4, "%s/d%d", dirname, diskid);
-	printf("%s\n", filename);
+	printf("Initialisation de %s...\n", filename);
 	FILE *fp = fopen(filename, "w+");
 	assert(fp!=NULL);
 	unsigned char zero=0;
@@ -28,17 +26,13 @@ void format(char *dirname, int size, int diskid){
 
 
 int main(int argc, char **argv) {
-	//if (argc!=3) {
 	if (argc!=2) {
-		//printf("usage %s  existing_dir_to_store_disk disk_size\n", argv[0]);
 		printf(YELLOW"usage : %s disk_size\n"DEF, argv[0]);
 		return 0;
 	}
-	//int size = atoi(argv[2]);
 	int size = atoi(argv[1]);
 	if(argc==2) {
 		int diskid = 0;
-		//format(argv[1], size, diskid);
 		format(".", size, diskid);
 	}
 

@@ -1,7 +1,7 @@
 /*! \file couche_5.c
 	\brief  fichier regroupant les fonctions de la couche 5
 	\author JUAN Victor, CHEVALLIER Guilhem, ALI-CHERIF Keylan
-	\date 	10 mai 2022
+	\date 	11 mai 2022
 */
 
 #include "OS_DEFINES.h"
@@ -419,7 +419,7 @@ void flush(){
 
 // Victor
 int cmd_jtos(){
-	printf("Java Tool for OScratch lancé.\n");
+	printf("Java Tool for OScratch en cours d'exécution.\n");
 	system("./launchJTOS.sh");
 	return NO_ERROR;
 }
