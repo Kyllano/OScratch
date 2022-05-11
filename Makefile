@@ -58,3 +58,4 @@ distrib:
 	make install
 	make $(EXEC)
 	rm -f $(OBJDIR)/*.o
+	rm -f d[0-9]

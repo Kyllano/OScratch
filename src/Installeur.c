@@ -27,7 +27,7 @@ void format(char *dirname, int size, char* diskname){
 
 int main(int argc, char **argv) {
 	if (argc!=3) {
-		printf(YELLOW"usage : %s disk_name disk_size\n"DEF, argv[0]);
+		printf(YELLOW"usage : %s "UNDR"disk_name"DEF YELLOW" "UNDR"disk_size\n"DEF, argv[0]);
 		return 0;
 	}
 	int size;
