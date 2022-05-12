@@ -5,9 +5,9 @@ OScratch est le projet du semestre 4 de Licence Informatique réalisé en début
 
 ## Comment démarrer
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pour démarrer OScratch, décompressez l'archive à l'emplacement de votre choix. Ensuite, lancez l'installation avec `./install <size>`, size étant la taille souhaitée pour le disque. Si l'exécutable n'existe pas, vous pouvez le créer à l'aide de la commande `make install`.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pour démarrer OScratch, décompressez l'archive à l'emplacement de votre choix. Ensuite, lancez l'installation avec `./install <nom> <taille>`, nom étant le nom du disque, et size étant la taille souhaitée pour le disque. Si l'exécutable n'existe pas, vous pouvez le créer à l'aide de la commande `make install`.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Une fois que l'installation s'est correctement déroulée, vous pouvez lancer OScratch avec la commande `./OScratch d0`. Si l'exécutable n'existe pas, vous pouvez le créer à l'aide de la commande `make`.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Une fois que l'installation s'est correctement déroulée, vous pouvez lancer OScratch avec la commande `./OScratch d0`. Si l'exécutable n'existe pas, vous pouvez le créer à l'aide de la commande `make` ou `make distrib`.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OScratch est maintenant lancé, vous pouvez rentrer des commandes après le prompt (►).
 

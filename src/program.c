@@ -162,6 +162,9 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "OScrack")){
 			ssON = !ssON;
+			clear_screen();
+			if (ssON) secret_splash();
+			else splash();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "clear")){
 			clear_screen();
