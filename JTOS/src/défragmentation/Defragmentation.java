@@ -50,9 +50,9 @@ public class Defragmentation {
 		String err;
 		try {
 			//modifier le chemin pour que le programme puisse être utilisé sur un autre pc
-			RandomAccessFile opencheck = new RandomAccessFile("../../"+diskname,"r");
+			RandomAccessFile opencheck = new RandomAccessFile("../../disk/"+diskname,"r");
 			opencheck.close();
-			RandomAccessFile d0 = new RandomAccessFile("../../"+diskname,"rw");
+			RandomAccessFile d0 = new RandomAccessFile("../../disk/"+diskname,"rw");
 			err=sb.set_super_block(d0);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
 			err=defragmentation(d0,sb,init_Inode_table(d0,sb));

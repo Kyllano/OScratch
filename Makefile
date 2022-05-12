@@ -2,6 +2,7 @@ CC=gcc
 OPT=-Wall -lm
 OBJDIR=bin
 SRCDIR=src
+DISKDIR=disk
 EXEC=OScratch
 TARGET=	bin/sha256.o\
 		bin/sha256_utils.o\
@@ -58,4 +59,4 @@ distrib:
 	make install
 	make $(EXEC)
 	rm -f $(OBJDIR)/*.o
-	rm -f d[0-9]
+	rm -f $(DISKDIR)/*
