@@ -10,12 +10,16 @@
 
 int main(int argc, char* argv[]){
 
+
 	if (argc != 2){
-		printf(YELLOW"usage : %s "UNDR"disk path"DEF"\n", argv[0]);
+		printf(YELLOW"usage : %s "UNDR"disk name"DEF"\n", argv[0]);
 		return ERROR_ARGS;
 	}
 
-	if (init_disk_sos(argv[1])){
+	char pathdisk[strlen(argv[1])+6];
+	strcpy(pathdisk,"disk/");
+	strcat(pathdisk,argv[1]);
+	if (init_disk_sos(pathdisk)){
 		return ERROR_FILE_ACCESS;
 	}
 

@@ -117,7 +117,13 @@ int delete_file(char* filename){
 // Keylan
 int load_file_from_host(char* filename_on_host, file_t* empty_file){
 
-	FILE* fichier_hote = fopen(filename_on_host, "r");
+
+  char new_file[strlen(filename_on_host)+7];
+  strcpy(new_file,"store/");
+  strcat(new_file,filename_on_host);
+
+
+	FILE* fichier_hote = fopen(new_file, "r");
 	if (fichier_hote == NULL){
 		return ERROR_FILE_ACCESS;
 	}
@@ -146,7 +152,11 @@ int store_file_to_host(char* filename){
 	file_t file;
 	if (read_file(filename, &file)!=0) return ERROR_FILE_ACCESS;
 
-	FILE* host_file = fopen(filename, "w+");
+  char new_file[strlen(filename)+7];
+  strcpy(new_file,"store/");
+  strcat(new_file,filename);
+
+	FILE* host_file = fopen(new_file, "w+");
 	if (host_file == NULL) return ERROR_RIGHTS;
 
 	for (int i=0; i < file.size; i++){
