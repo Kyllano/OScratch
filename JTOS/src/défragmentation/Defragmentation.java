@@ -45,12 +45,14 @@ public class Defragmentation {
 		}
 	}
 	
-	public static String run() {
+	public static String run(String diskname) {
 		Super_block sb= new Super_block();
 		String err;
 		try {
 			//modifier le chemin pour que le programme puisse être utilisé sur un autre pc
-			RandomAccessFile d0    = new RandomAccessFile("../../d0","rw");
+			RandomAccessFile opencheck = new RandomAccessFile("../../disk/"+diskname,"r");
+			opencheck.close();
+			RandomAccessFile d0 = new RandomAccessFile("../../disk/"+diskname,"rw");
 			err=sb.set_super_block(d0);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
 			err=defragmentation(d0,sb,init_Inode_table(d0,sb));
@@ -61,7 +63,5 @@ public class Defragmentation {
 		catch(Exception e) {
 			return "Erreur d'ouverture du disque";
 		}
-
 	}
-
 }

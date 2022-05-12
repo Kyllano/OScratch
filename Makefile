@@ -2,6 +2,7 @@ CC=gcc
 OPT=-Wall -lm
 OBJDIR=bin
 SRCDIR=src
+DISKDIR=disk
 EXEC=OScratch
 TARGET=	bin/sha256.o\
 		bin/sha256_utils.o\
@@ -35,7 +36,6 @@ Installeur.o: Installeur.c
 # cmd_dump_inodes : src/cmd_dump_inodes.c
 # 	$(CC) src/cmd_dump_inodes.c -o cmd_dump_inodes $(OPT)
 
-#link main avec liste et element
 $(EXEC): $(TARGET) $(OBJDIR)/program.o
 	$(CC) $(TARGET) $(OBJDIR)/program.o -o $(EXEC) $(OPT)
 
@@ -53,6 +53,10 @@ clean:
 	rm -f $(OBJDIR)/*.o
 	rm -rf $(EXEC)
 
-again:
-	make clean
-	make
+distrib:
+	rm -f $(OBJDIR)/*.o
+	rm -rf $(EXEC)
+	make install
+	make $(EXEC)
+	rm -f $(OBJDIR)/*.o
+	rm -f $(DISKDIR)/*

@@ -10,12 +10,16 @@
 
 int main(int argc, char* argv[]){
 
+
 	if (argc != 2){
-		printf(YELLOW"usage : %s "UNDR"disk path"DEF"\n", argv[0]);
+		printf(YELLOW"usage : %s "UNDR"disk name"DEF"\n", argv[0]);
 		return ERROR_ARGS;
 	}
 
-	if (init_disk_sos(argv[1])){
+	char pathdisk[strlen(argv[1])+6];
+	strcpy(pathdisk,"disk/");
+	strcat(pathdisk,argv[1]);
+	if (init_disk_sos(pathdisk)){
 		return ERROR_FILE_ACCESS;
 	}
 
@@ -118,6 +122,14 @@ int main(int argc, char* argv[]){
 				if (retour == NO_ERROR) printf("Le fichier %s a été enregistré avec succès.\n", cmd.tabArgs[1]);
 			}
 		}
+		else if (!strcmp(cmd.tabArgs[0], "delete")){
+			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : delete "UNDR"nom de fichier"DEF"\n");
+			else {
+				retour = cmd_delete(cmd.tabArgs[1]);
+				if (retour == NO_ERROR) printf("Le fichier %s a été supprimé avec succès.\n", cmd.tabArgs[1]);
+			}
+		}
+
 		else if (!strcmp(cmd.tabArgs[0], "chown")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 			else {
@@ -162,6 +174,9 @@ int main(int argc, char* argv[]){
 		}
 		else if (!strcmp(cmd.tabArgs[0], "OScrack")){
 			ssON = !ssON;
+			clear_screen();
+			if (ssON) secret_splash();
+			else splash();
 		}
 		else if (!strcmp(cmd.tabArgs[0], "clear")){
 			clear_screen();
