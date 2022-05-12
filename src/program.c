@@ -80,6 +80,11 @@ int main(int argc, char* argv[]){
 			else if (!strcmp(cmd.tabArgs[1], "-l")) retour = cmd_ls(2);
 			else printf(YELLOW"usage : ls [-l | -s]\n");
 		}
+		else if (!strcmp(cmd.tabArgs[0], "simplechat")){
+			if		(!strcmp(cmd.tabArgs[1], "-c")) retour = start_chat(1);
+			else if (!strcmp(cmd.tabArgs[1], "-h")) retour = start_chat(2);
+			else printf(YELLOW"usage : simplechat [-c | -h]\n");
+		}
 		else if (!strcmp(cmd.tabArgs[0], "ll")){
 			retour = cmd_ls(2);
 		}

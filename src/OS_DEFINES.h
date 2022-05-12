@@ -33,8 +33,11 @@
 #include "sha256_utils.h"
 #include "timestamp.h"
 #include "formatting.h"
-
-
+//pour le chat seulement
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
 
 
 
@@ -58,6 +61,7 @@
 #define CMDLINE_MAX_SIZE 128
 #define ARG_MAX_SIZE 32
 #define MAX_ARGS 3
+#define NB_LIGNE_HISTORIQUE_MAX 15
 
 #define BLOCK_SIZE 4
 #define SUPER_BLOCK_SIZE 4
@@ -80,6 +84,7 @@
 #define ERROR_USERNAME_TAKEN	-12
 #define ERROR_PASSWORD			-13
 #define ERROR_RIGHTS_SYNTAX		-14
+#define ERROR_SOCKET			-15
 
 
 
@@ -234,6 +239,19 @@ void error_message(int i);
 void splash();
 void secret_splash();
 int check_rights(int id, int uid, char* rights);
+
+/*------------------------------------------------------------
+  FONCTION SOCKET
+------------------------------------------------------------*/
+int create_socket_heberger(int* server_fd,int* my_socket, int port);
+int create_socket_connexion(int* my_socket, char* addresse_char, int port);
+
+/*------------------------------------------------------------
+  FONCTION CHAT
+------------------------------------------------------------*/
+int start_chat(int mode);
+int chat(int* socket, char* name_distant_user, char* your_name);
+
 
 /*------------------------------------------------------------
   VARIABLES GLOBALES
