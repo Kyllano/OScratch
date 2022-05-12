@@ -325,6 +325,19 @@ int cmd_su(char *username){
     return NO_ERROR;
 }
 
+int cmd_delete(char* filename){
+
+	if (user.userid != 0) return ERROR_RIGHTS;
+
+	char* path = malloc(strlen(filename) + strlen("store/"));
+	strcpy(path, "store/");
+	strcat(path, filename);
+
+	if (unlink(path)) return ERROR_FILE_ACCESS;
+	free(path);
+	return NO_ERROR;
+}
+
 // Victor
 int cmd_whoami(){
 	printf("%s\n", disk.users_table[user.userid].login);
@@ -341,6 +354,7 @@ int cmd_help(){
 		WHITE BOLD "chmod "UNDR"droits"DEF" "WHITE BOLD UNDR"nom du fichier"DEF"\n\tchange les droits d’un fichier pour tous les autres utilisateurs si le demandeur a les droits.\n\n"
 		WHITE BOLD "clear "DEF"\n\tVide l'affichage\n\n"
 		WHITE BOLD "cr "UNDR"nom de fichier"DEF"\n\tCrée un nouveau fichier sur le système, le propriétaire est l’utilisateur.\n\n"
+		WHITE BOLD "delete "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du dossier de stockage (root uniquement).\n\n"
 		WHITE BOLD "edit "UNDR"nom de fichier"DEF"\n\tÉdite un fichier pour modifier son contenu si l’utilisateur a les droits.\n\n"
 		WHITE BOLD "jtos"DEF"\n\tLance JTOS (Java Tool for OScratch)\n\n"
 		WHITE BOLD "listusers"DEF"\n\tAffiche la liste des utilisateurs.\n\n"
@@ -408,6 +422,7 @@ int check_rights(int id, int uid, char* rights){
 void clear_screen(){
 	printf("\e[1;1H\e[2J");
 }
+
 
 // Victor
 void flush(){

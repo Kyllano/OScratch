@@ -122,6 +122,14 @@ int main(int argc, char* argv[]){
 				if (retour == NO_ERROR) printf("Le fichier %s a été enregistré avec succès.\n", cmd.tabArgs[1]);
 			}
 		}
+		else if (!strcmp(cmd.tabArgs[0], "delete")){
+			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : delete "UNDR"nom de fichier"DEF"\n");
+			else {
+				retour = cmd_delete(cmd.tabArgs[1]);
+				if (retour == NO_ERROR) printf("Le fichier %s a été supprimé avec succès.\n", cmd.tabArgs[1]);
+			}
+		}
+
 		else if (!strcmp(cmd.tabArgs[0], "chown")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 			else {

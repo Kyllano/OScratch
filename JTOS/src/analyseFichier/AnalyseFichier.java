@@ -105,7 +105,7 @@ public class AnalyseFichier {
 		String err;
 		try {
 			//modifier le chemin pour que le programme puisse être utilisé sur un autre pc
-			RandomAccessFile d0    = new RandomAccessFile("../../disk"+diskname,"r");
+			RandomAccessFile d0    = new RandomAccessFile("../../disk/"+diskname,"r");
 			err=sb.set_super_block(d0);
 			if(err.compareTo("tout est ok!")!=0) {return err;}
 			err=verification(d0,sb);
