@@ -338,6 +338,21 @@ int cmd_delete(char* filename){
 	return NO_ERROR;
 }
 
+int cmd_storelist(){
+	DIR* Rep;
+    struct dirent *Element;
+
+    Rep = opendir("store");
+    if (Rep == NULL) return ERROR_FILE_ACCESS;
+
+    while ((Element = readdir(Rep)) != NULL){
+        if (strcmp(Element->d_name, ".") && strcmp(Element->d_name,".."))
+            printf("%s\n", Element->d_name);
+    }
+
+	return NO_ERROR;
+}
+
 // Victor
 int cmd_whoami(){
 	printf("%s\n", disk.users_table[user.userid].login);
@@ -363,7 +378,9 @@ int cmd_help(){
 		WHITE BOLD "quit"DEF"\n\tSort de l’interprète de commande et du programme en sauvegardant le système de fichiers sur le disque.\n\n"
 		WHITE BOLD "rm "UNDR"nom de fichier"DEF"\n\tSupprime un fichier du système si l’utilisateur a les droits.\n\n"
 		WHITE BOLD "rmuser "UNDR"login"DEF"\n\tSupprime un utilisateur.\n\n"
+		WHITE BOLD "simplechat [-h | -c]"DEF"\n\tLance Simplechat, le système de chat intégré d'OScratch. Utilisez l'option -h pour être hôte, et l'option -c pour vous connecter à un hôte.\n\n"
 		WHITE BOLD "store "UNDR"nom de fichier"DEF"\n\tCopie le contenu d’un fichier du système sur ”hôte” avec le même nom.\n\n"
+		WHITE BOLD "storelist"DEF"\n\tListe les fichiers du dossier de stockage.\n\n"
 		WHITE BOLD "su "UNDR"nom d'utilisateur"DEF"\n\tChange d'utilisateur.\n\n"
 		WHITE BOLD "whoami"DEF"\n\tAffiche le nom de l'utilisateur courant.\n\n"
 	);

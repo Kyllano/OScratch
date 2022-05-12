@@ -40,7 +40,7 @@ int start_chat(int mode){
 
         //connexion initialisée
         //demarer le chat
-        chat(&socket, "you", "me");
+        chat(&socket, "distant", "local");
         close(server_fd);
     }
     else{
@@ -66,7 +66,7 @@ int chat(int* socket, char* name_distant_user, char* your_name){
 
     while (strcmp(input_user, "/quit\n")){
         if (read(*socket, input_distant, 128) != -1){
-            printf(RED"\a[%s]"DEF"\t%s\n", name_distant_user, input_distant);
+            printf(GREEN"\a[%s]"DEF"\t%s\n", name_distant_user, input_distant);
             memset(input_user, 0, CMDLINE_MAX_SIZE);
         }
         if (read(0, input_user, CMDLINE_MAX_SIZE) != -1 && strcmp(input_user, "/quit\n")!= 0){

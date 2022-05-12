@@ -134,7 +134,9 @@ int main(int argc, char* argv[]){
 				if (retour == NO_ERROR) printf("Le fichier %s a été supprimé avec succès.\n", cmd.tabArgs[1]);
 			}
 		}
-
+		else if (!strcmp(cmd.tabArgs[0], "storelist")){
+			retour = cmd_storelist();
+		}
 		else if (!strcmp(cmd.tabArgs[0], "chown")){
 			if (!strcmp(cmd.tabArgs[1], "")) printf(YELLOW"usage : chown "UNDR"nom du fichier"DEF" "UNDR YELLOW"login autre utilisateur"DEF"\n");
 			else {

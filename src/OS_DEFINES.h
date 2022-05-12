@@ -232,6 +232,7 @@ int cmd_whoami();
 int cmd_help();
 int cmd_jtos();
 int cmd_delete(char* filename);
+int cmd_storelist();
 
 void flush();
 void clear_screen();
